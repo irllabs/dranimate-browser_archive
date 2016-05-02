@@ -123,24 +123,17 @@ void ValidateConstraints()
 }
 
 extern "C" {
-	/* test c calls */
-	void setupMesh(void) {
-		std::cout << "setup!\n";
-		MakeSquareMesh();
-	    std::cout << "setup done!\n";
-	}
-	
 	/* test array access/return arrays */
 	int float_multiply_array(float factor, float *arr, int length) {
 		for (int i = 0; i <  length; i++) {
 			arr[i] = factor * arr[i];
 		}
-		return 0;
+		return 1;
 	}
 
-	int resetMesh() {
+	int resetMesh(void) {
 		m_mesh.Clear();
-		return 0;
+		return 1;
 	}
 
 	int setMeshVertexData(float *arr, int length) {
@@ -148,7 +141,7 @@ extern "C" {
 			Wml::Vector3f vVert(arr[i], arr[i+1], 0);
 			m_mesh.AppendVertexData( vVert );
 		}
-		return 0;
+		return 1;
 	}
 
 	int setMeshTriangleData(float *arr, int length) {
@@ -156,10 +149,36 @@ extern "C" {
 			unsigned int nTri[3] = { arr[i], arr[i+1], arr[i+2] };
 			m_mesh.AppendTriangleData( nTri );
 		}
-		return 0;
+		return 1;
 	}
 
-	int setupMesh() {
+	int getMeshVertexData(float *arr, int length) {
+		for(int i = 0; i < length/2; i++) {
+			Wml::Vector3f vert;
+			m_mesh.GetVertex(i, vert);
+
+			arr[i*2] = vert.X();
+			arr[i*2+1] = vert.Y();
+		}
+
+		return 1;
+	}
+
+	int getMeshTriangleData(float *arr, int length) {
+		for (int i = 0; i <  length; i+=3) {
+			unsigned int nTriangle[3];
+			m_mesh.GetTriangle(i,nTriangle);
+
+			arr[i] = nTriangle[0];
+			arr[i+1] = nTriangle[1];
+			arr[i+2] = nTriangle[2];
+		}
+		return 1;
+	}
+
+	int setupMeshDeformer(void) {
+		std::cout << "setup!\n";
+
 		m_deformedMesh.Clear();
 	
 		unsigned int nVerts = m_mesh.GetNumVertices();
@@ -178,46 +197,44 @@ extern "C" {
 
 		m_deformer.InitializeFromMesh( &m_mesh );
 		InvalidateConstraints();
+
+		std::cout << "setup done!\n";
+
+		return 1;
 	}
 
-	int addControlPoint(int index, float x, float y) {
-		m_vSelected.insert(nHit);
+	int addControlPoint(int index) {
+		m_vSelected.insert(index);
 		InvalidateConstraints();
-		return 0;
+
+		return 1;
 	}
 
 	int removeControlPoint(int index) {
-		m_vSelected.erase(nHit);
-		m_deformer.RemoveHandle(nHit);
+		m_vSelected.erase(index);
+		m_deformer.RemoveHandle(index);
 
 		// restore position
 		Wml::Vector3f vVertex;
-		m_mesh.GetVertex(nHit,vVertex);
-		m_deformedMesh.SetVertex(nHit, vVertex);
+		m_mesh.GetVertex(index, vVertex);
+		m_deformedMesh.SetVertex(index, vVertex);
+
+		return 1;
 	}
 
-	int setControlPoint(int index, float x, float y) {
+	int setControlPointPosition(int index, float x, float y) {
 		
 		Wml::Vector3f vNewPos( x, y, 0.0f );
 		m_deformedMesh.SetVertex( m_nSelected, vNewPos );
 		InvalidateConstraints();
+
+		return 1;
 	}
 
-	int updateMeshDeformation() {
+	int updateMeshDeformation(void) {
 		UpdateDeformedMesh();
-		return 0;
-	}
 
-	int getMeshVertexData(float *arr, int length) {
-		for(int i = 0; i < length/2; i++) {
-			Wml::Vector3f vert;
-			m_mesh.GetVertex(i, vert);
-
-			arr[i*2] = vert.X();
-			arr[i*2+1] = vert.Y();
-		}
-
-		return 0;
+		return 1;
 	}
 
 }

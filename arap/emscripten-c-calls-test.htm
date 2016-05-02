@@ -1,34 +1,6 @@
 <script src="arap-test.js"></script>
 
 <script>
-setupMesh = Module.cwrap('setupMesh','[null]')
-setupMesh();
-
-/*
-// Import function from Emscripten generated file
-float_multiply_array = Module.cwrap(
-  'float_multiply_array', 'number', ['number', 'number', 'number']
-);
-
-// Create example data to test float_multiply_array
-var data = new Float32Array([1, 2, 3, 4, 5]);
-console.log(data)
-
-// Get data byte size, allocate memory on Emscripten heap, and get pointer
-var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
-var dataPtr = Module._malloc(nDataBytes);
-
-// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
-var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
-dataHeap.set(new Uint8Array(data.buffer));
-
-// Call function and get result
-float_multiply_array(2, dataHeap.byteOffset, data.length);
-var result = new Float32Array(dataHeap.buffer, dataHeap.byteOffset, data.length);
-
-// Free memory
-Module._free(dataHeap.byteOffset);
-*/
 
 setMeshVertexData = Module.cwrap(
   'setMeshVertexData', 'number', ['number', 'number']
@@ -36,14 +8,35 @@ setMeshVertexData = Module.cwrap(
 getMeshVertexData = Module.cwrap(
   'getMeshVertexData', 'number', ['number', 'number']
 );
+
+setMeshTriangleData = Module.cwrap(
+  'setMeshTriangleData', 'number', ['number', 'number']
+);
+getMeshTriangleData = Module.cwrap(
+  'getMeshTriangleData', 'number', ['number', 'number']
+);
+
 resetMesh = Module.cwrap(
   'resetMesh', 'number', ['number', 'number']
 );
 
+setupMeshDeformer = Module.cwrap(
+	'setupMeshDeformer','[number]'
+);
+
+addControlPoint = Module.cwrap(
+	'addControlPoint','[number]'
+);
+setControlPointPosition = Module.cwrap(
+	'addControlPoint','[number]', ['number', 'number', 'number']
+);
+
+/* Small helper function that handles all the nasty memory stuff for you. */
 function doArrayFunction(arr, func) {
 	// Create data
 	var data = new Float32Array(arr);
-	console.log(data)
+
+	console.log(data);
 
 	// Get data byte size, allocate memory on Emscripten heap, and get pointer
 	var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
@@ -60,15 +53,31 @@ function doArrayFunction(arr, func) {
 	// Free memory
 	Module._free(dataHeap.byteOffset);
 
-	// print da thing (remove this)
 	console.log(result);
 
 	return result;
 }
 
+/* Actual code to put in the three demo */
+
+// clear mesh data
 resetMesh();
 
+// add vertices
 doArrayFunction([1, 2, 3, 4, 5, 6], setMeshVertexData);
 doArrayFunction([0, 0, 0, 0, 0, 0], getMeshVertexData);
+
+// add faces
+doArrayFunction([7, 8, 9, 9, 9, 9], setMeshTriangleData);
+doArrayFunction([0, 0, 0, 0, 0, 0], getMeshTriangleData);
+
+// setup mesh deformer
+setupMeshDeformer();
+
+// add control point
+addControlPoint(0);
+
+// move that control point
+setControlPointPosition(0, 0, 0);
 
 </script>

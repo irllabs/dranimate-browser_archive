@@ -21,9 +21,9 @@
 	</head>
 
 	<body>
-		<script src="three.min.js"></script>
-		<script src="OBJLoader.js"></script>
-		<script src="stats.min.js"></script>
+		<script src="three/three.min.js"></script>
+		<script src="three/OBJLoader.js"></script>
+		<script src="three/stats.min.js"></script>
 
 		<script>
 
@@ -85,7 +85,7 @@
 				var onError = function ( xhr ) {
 				};
 
-
+				/*
 				var loader = new THREE.ImageLoader( manager );
 				loader.load( 'UV_Grid_Sm.jpg', function ( image ) {
 
@@ -93,11 +93,12 @@
 					texture.needsUpdate = true;
 
 				} );
+				*/
 
 				// model
 
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'dranimate-mesh.obj', function ( object ) {
+				loader.load( 'arap/dranimate-mesh.obj', function ( object ) {
 
 					object.traverse( function ( child ) {
 
