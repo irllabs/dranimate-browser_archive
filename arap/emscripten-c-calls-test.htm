@@ -2,41 +2,39 @@
 
 <script>
 
-setMeshVertexData = Module.cwrap(
+var setMeshVertexData = Module.cwrap(
   'setMeshVertexData', 'number', ['number', 'number']
 );
-getMeshVertexData = Module.cwrap(
+var getMeshVertexData = Module.cwrap(
   'getMeshVertexData', 'number', ['number', 'number']
 );
 
-setMeshTriangleData = Module.cwrap(
+var setMeshTriangleData = Module.cwrap(
   'setMeshTriangleData', 'number', ['number', 'number']
 );
-getMeshTriangleData = Module.cwrap(
+var getMeshTriangleData = Module.cwrap(
   'getMeshTriangleData', 'number', ['number', 'number']
 );
 
-resetMesh = Module.cwrap(
+var resetMesh = Module.cwrap(
   'resetMesh', 'number', ['number', 'number']
 );
 
-setupMeshDeformer = Module.cwrap(
+var setupMeshDeformer = Module.cwrap(
 	'setupMeshDeformer','[number]'
 );
 
-addControlPoint = Module.cwrap(
+var addControlPoint = Module.cwrap(
 	'addControlPoint','[number]'
 );
-setControlPointPosition = Module.cwrap(
+var setControlPointPosition = Module.cwrap(
 	'addControlPoint','[number]', ['number', 'number', 'number']
 );
 
-/* Small helper function that handles all the nasty memory stuff for you. */
+/* Small helper functions that handles all the nasty memory stuff for you. */
 function doArrayFunction(arr, func) {
 	// Create data
 	var data = new Float32Array(arr);
-
-	console.log(data);
 
 	// Get data byte size, allocate memory on Emscripten heap, and get pointer
 	var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
@@ -53,8 +51,6 @@ function doArrayFunction(arr, func) {
 	// Free memory
 	Module._free(dataHeap.byteOffset);
 
-	console.log(result);
-
 	return result;
 }
 
@@ -64,12 +60,14 @@ function doArrayFunction(arr, func) {
 resetMesh();
 
 // add vertices
-doArrayFunction([1, 2, 3, 4, 5, 6], setMeshVertexData);
-doArrayFunction([0, 0, 0, 0, 0, 0], getMeshVertexData);
+doArrayFunction([1, 2, 3, 4, 5, 6, 7, 8, 9], setMeshVertexData);
+var verts = doArrayFunction([0, 0, 0, 0, 0, 0, 0, 0, 0], getMeshVertexData).slice(); // slice() copies an array
+console.log(verts);
 
 // add faces
-doArrayFunction([7, 8, 9, 9, 9, 9], setMeshTriangleData);
-doArrayFunction([0, 0, 0, 0, 0, 0], getMeshTriangleData);
+doArrayFunction([0, 1, 2, 3, 4, 5, 6, 7, 8], setMeshTriangleData);
+var tris = doArrayFunction([0, 0, 0, 0, 0, 0, 0, 0, 0], getMeshTriangleData).slice(); // slice() copies an array
+console.log(tris);
 
 // setup mesh deformer
 setupMeshDeformer();

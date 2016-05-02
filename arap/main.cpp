@@ -145,9 +145,15 @@ extern "C" {
 	}
 
 	int setMeshTriangleData(float *arr, int length) {
-		for (int i = 0; i <  length; i+=3) {
-			unsigned int nTri[3] = { arr[i], arr[i+1], arr[i+2] };
+		for (int i = 0; i < length; i+=3) {
+
+			unsigned int t1 = arr[i];
+			unsigned int t2 = arr[i+1];
+			unsigned int t3 = arr[i+2];
+
+			unsigned int nTri[3] = { t1, t2, t3 };
 			m_mesh.AppendTriangleData( nTri );
+
 		}
 		return 1;
 	}
@@ -165,10 +171,10 @@ extern "C" {
 	}
 
 	int getMeshTriangleData(float *arr, int length) {
-		for (int i = 0; i <  length; i+=3) {
+		for (int i = 0; i < length; i+=3) {
 			unsigned int nTriangle[3];
-			m_mesh.GetTriangle(i,nTriangle);
-
+			m_mesh.GetTriangle(i/3,nTriangle);
+			
 			arr[i] = nTriangle[0];
 			arr[i+1] = nTriangle[1];
 			arr[i+2] = nTriangle[2];
