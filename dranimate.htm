@@ -22,8 +22,12 @@
 
 	<body>
 		<script src="three/three.min.js"></script>
-		<script src="three/OBJLoader.js"></script>
 		<script src="three/stats.min.js"></script>
+
+		<script src="arap/arap-test.js"></script>
+		<script src="arap/arap.js"></script>
+
+		<script src="testmesh.js"></script>
 
 		<script>
 
@@ -38,6 +42,8 @@
 
 			var testMesh;
 
+			var testValueBOGO;
+
 			stats = new Stats();
 			document.body.appendChild( stats.domElement );
 
@@ -46,6 +52,8 @@
 
 
 			function init() {
+
+				testValueBOGO = 400;
 
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
@@ -97,29 +105,32 @@
 
 				// model
 
-				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'arap/dranimate-mesh.obj', function ( object ) {
+				var geometry = new THREE.Geometry();
 
-					object.traverse( function ( child ) {
+				for(var i = 0; i < testMeshVertices.length; i+=2) {
+					var x = testMeshVertices[i];
+					var y = testMeshVertices[i+1];
+					geometry.vertices.push( new THREE.Vector3( x, y, 0 ) );
+				}
+				for(var i = 0; i < testMeshFaces.length; i+=3) {
+					var f1 = testMeshFaces[i];
+					var f2 = testMeshFaces[i+1];
+					var f3 = testMeshFaces[i+2];
+					geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
+				}
 
-						if ( child instanceof THREE.Mesh ) {
+				geometry.dynamic = true;
 
-							//child.material.map = texture;
+				var material = new THREE.MeshBasicMaterial({
+				                color: 0xFFFFFF,
+				                wireframe: true,
+				                wireframeLinewidth: 1
+				            });
 
-							child.material = new THREE.MeshBasicMaterial( { color: 0xffaa00, wireframe: true } );
-							
-							child.geometry.dynamic = true;
+				var mesh = new THREE.Mesh(geometry, material);
+				scene.add(mesh);
 
-							testMesh = child;
-
-						}
-
-					} );
-
-					object.position.y = - 95;
-					scene.add( object );
-
-				}, onProgress, onError );
+				testMesh = mesh;
 
 				//
 
@@ -129,11 +140,60 @@
 				container.appendChild( renderer.domElement );
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-				//
+				document.addEventListener( 'mousedown', onMouseDown, false );
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
+				/* Setup ARAP on mesh */
+
+				// clear mesh data
+				ARAP.resetMesh();
+
+				// add vertices
+				ARAP.doArrayFunction(testMeshVertices, ARAP.setMeshVertexData);
+
+				// add faces
+				ARAP.doArrayFunction(testMeshFaces, ARAP.setMeshTriangleData);
+
+				// setup mesh deformer
+				ARAP.setupMeshDeformer();
+
+				// add control point
+				ARAP.addControlPoint(10);
+				ARAP.addControlPoint(70);
+
+				testControlPoints(0);
+				testControlPoints(100);
+				testControlPoints(200);
+				testControlPoints(300);
+				testControlPoints(400);
+
+			}
+
+			function testControlPoints(testvalue) {
+				// move that control point
+				ARAP.setControlPointPosition(10, testvalue, 0);
+				ARAP.setControlPointPosition(70, 100, 100);
+
+				// update ARAP deformer
+				ARAP.updateMeshDeformation();
+
+				var empty = [];
+				for(var i = 0; i < testMeshVertices.length; i++) {
+					empty.push(0);
+				}
+				var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexData);
+
+				for(var i = 0; i < deformedVerts.length; i+=2) {
+					var x = deformedVerts[i];
+					var y = deformedVerts[i+1];
+					testMesh.geometry.vertices[i/2].x = x;
+					testMesh.geometry.vertices[i/2].y = y;
+				}
+				testMesh.geometry.dynamic = true;
+				testMesh.geometry.verticesNeedUpdate = true;
+
+				//console.log(testMesh.geometry.vertices[0].x)
 			}
 
 			function onWindowResize() {
@@ -153,32 +213,39 @@
 				mouseX = ( event.clientX - windowHalfX ) / 2;
 				mouseY = ( event.clientY - windowHalfY ) / 2;
 
+				testControlPoints(mouseX);
+
+			}
+
+			function onMouseDown( event ) {
+				
 			}
 
 			function animate() {
 
 				requestAnimationFrame( animate );
 
-				/* test update geometry */
-				if(testMesh) {
-					var positions = testMesh.geometry.attributes.position.array;
-					var newX = 100;
-					var newY = 100;
-					var newZ = 100;
-					positions[ vertUpdateIndex * 3 + 0 ] = newX;
-					positions[ vertUpdateIndex * 3 + 1 ] = newY;
-					positions[ vertUpdateIndex * 3 + 2 ] = newZ;
-					testMesh.geometry.attributes.position.needsUpdate = true;
-					vertUpdateIndex++;
-				}
-
+				update();
 				render();
 
 				stats.update();
 
 			}
 
-			var vertUpdateIndex = 0;
+			function update() {
+				/* test update geometry */
+				
+				if(testMesh) {
+					var vertUpdateIndex = 33;
+					var newX = mouseX;
+					var newY = mouseY;
+					var newZ = 0;
+					testMesh.geometry.vertices[ vertUpdateIndex ].x = newX;
+					testMesh.geometry.vertices[ vertUpdateIndex ].y = newY;
+					testMesh.geometry.verticesNeedUpdate = true;
+				}
+				
+			}
 
 			function render() {
 

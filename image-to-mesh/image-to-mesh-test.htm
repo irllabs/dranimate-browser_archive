@@ -108,11 +108,11 @@ function redraw() {
     }
 
     if(triangles) {
-        for(var i = triangles.length; i; ) {
+        for(var i = 0; i < triangles.length; ) {
             context.beginPath();
-            --i; context.moveTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
-            --i; context.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
-            --i; context.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+            context.moveTo(vertices[triangles[i]][0], vertices[triangles[i]][1]); i++;
+            context.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]); i++;
+            context.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]); i++;
             context.closePath();
             context.stroke();
         }
@@ -157,10 +157,26 @@ function recalculateContourPoints() {
 
     contourPoints = [];
 
-    var resampleAmount = 10;
-    for(var i = 0; i < contourPointsRaw.length; i+=resampleAmount) {
-        contourPoints.push(contourPointsRaw[i]);
+    var resampleDist = 20;
+    for(var i = 0; i < contourPointsRaw.length; i++) {
+        var a = contourPointsRaw[i];
+        for(var j = 0; j < contourPointsRaw.length; j++) {
+            if(i != j) {
+                var b = contourPointsRaw[j];
+                var ax = a[0];
+                var ay = a[1];
+                var bx = b[0];
+                var by = b[1];
+                var dx = Math.abs(bx - ax);
+                var dy = Math.abs(by - ay);
+                if(Math.sqrt(dx*dx+dy*dy) < resampleDist) {
+                    contourPointsRaw.splice(j, 1);
+                    j--;
+                }
+            }
+        }
     }
+    contourPoints = contourPointsRaw;
 
     redraw();
 
@@ -396,6 +412,22 @@ function generateMesh() {
         }
     }
 
+    var vertsString = "";
+    for(var i = 0; i < vertices.length; i++) {
+        vertsString += vertices[i][0];
+        vertsString += ",";
+        vertsString += vertices[i][1];
+        vertsString += ",";
+    }
+    console.log(vertsString);
+
+    var trisString = "";
+    for(var i = 0; i < triangles.length; i++) {
+        trisString += triangles[i];
+        trisString += ",";
+    }
+    console.log(trisString);
+
 }
 
 canvas.addEventListener('mousemove', function(evt) {
@@ -453,7 +485,7 @@ document.getElementById("genMeshButton").onclick = function() {
 };
 
 image = new Image();
-image.src = "testImage.jpg";
+image.src = "images/testImage.jpg";
 image.onload = function() {
     doSLICOnImage();
 }

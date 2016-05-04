@@ -105,8 +105,9 @@ void InvalidateConstraints()
 
 void ValidateConstraints()
 {
-	if ( m_bConstraintsValid )
+	if ( m_bConstraintsValid ) {
 		return;
+	}
 
 	size_t nConstraints = m_vSelected.size();
 	std::set<unsigned int>::iterator cur(m_vSelected.begin()), end(m_vSelected.end());
@@ -161,7 +162,7 @@ extern "C" {
 	int getMeshVertexData(float *arr, int length) {
 		for(int i = 0; i < length/2; i++) {
 			Wml::Vector3f vert;
-			m_mesh.GetVertex(i, vert);
+			m_deformedMesh.GetVertex(i, vert);
 
 			arr[i*2] = vert.X();
 			arr[i*2+1] = vert.Y();
@@ -174,7 +175,7 @@ extern "C" {
 		for (int i = 0; i < length; i+=3) {
 			unsigned int nTriangle[3];
 			m_mesh.GetTriangle(i/3,nTriangle);
-			
+
 			arr[i] = nTriangle[0];
 			arr[i+1] = nTriangle[1];
 			arr[i+2] = nTriangle[2];
@@ -210,6 +211,7 @@ extern "C" {
 	}
 
 	int addControlPoint(int index) {
+
 		m_vSelected.insert(index);
 		InvalidateConstraints();
 
@@ -231,14 +233,21 @@ extern "C" {
 	int setControlPointPosition(int index, float x, float y) {
 		
 		Wml::Vector3f vNewPos( x, y, 0.0f );
-		m_deformedMesh.SetVertex( m_nSelected, vNewPos );
+		m_deformedMesh.SetVertex( index, vNewPos );
 		InvalidateConstraints();
 
 		return 1;
 	}
 
 	int updateMeshDeformation(void) {
+
 		UpdateDeformedMesh();
+
+		/*for ( unsigned int i = 0; i < 1; ++i ) {
+			Wml::Vector3f vVerts[3];
+			m_deformedMesh.GetTriangle(i, vVerts);
+			std::cout << vVerts[0].X() << "\n";
+		}*/
 
 		return 1;
 	}
@@ -246,7 +255,5 @@ extern "C" {
 }
 
 int main() {
-	std::cout << "main method!\n";
-
-    std::cout << "main method done!\n";
+	
 }

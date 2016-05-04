@@ -50,13 +50,15 @@ THREE.OBJLoader.prototype = {
 		var vertices = [];
 		var normals = [];
 		var uvs = [];
+		var faces = [];
 
 		function addObject( name ) {
 
 			var geometry = {
 				vertices: [],
 				normals: [],
-				uvs: []
+				uvs: [],
+				faces: []
 			};
 
 			var material = {
@@ -238,27 +240,31 @@ THREE.OBJLoader.prototype = {
 
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 
-				vertices.push(
+				object.geometry.vertices.push(
+					THREE.Vector3(
 					parseFloat( result[ 1 ] ),
 					parseFloat( result[ 2 ] ),
 					parseFloat( result[ 3 ] )
+					)
 				);
 
 			} else if ( ( result = normal_pattern.exec( line ) ) !== null ) {
 
 				// ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 
-				normals.push(
+				object.geometry.normals.push(
+					THREE.Vector3(
 					parseFloat( result[ 1 ] ),
 					parseFloat( result[ 2 ] ),
 					parseFloat( result[ 3 ] )
+					)
 				);
 
 			} else if ( ( result = uv_pattern.exec( line ) ) !== null ) {
 
 				// ["vt 0.1 0.2", "0.1", "0.2"]
 
-				uvs.push(
+				object.geometry.uvs.push(
 					parseFloat( result[ 1 ] ),
 					parseFloat( result[ 2 ] )
 				);
@@ -266,9 +272,25 @@ THREE.OBJLoader.prototype = {
 			} else if ( ( result = face_pattern1.exec( line ) ) !== null ) {
 
 				// ["f 1 2 3", "1", "2", "3", undefined]
-
-				addFace(
+				
+				/*addFace(
 					result[ 1 ], result[ 2 ], result[ 3 ], result[ 4 ]
+				);*/
+
+				var normal = new THREE.Vector3( 0, 1, 0 );
+				var color = new THREE.Color( 0xffaa00 );
+
+				var face = THREE.Face3(
+					parseFloat( result[ 1 ] ),
+					parseFloat( result[ 2 ] ),
+					parseFloat( result[ 3 ] ),
+					normal, color, 0
+				);
+
+				console.log(face)
+	
+				object.geometry.faces.push(
+					face
 				);
 
 			} else if ( ( result = face_pattern2.exec( line ) ) !== null ) {
