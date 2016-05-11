@@ -11,7 +11,6 @@ Currently in development.
 
 ### Image segmentation
 * Click and drag to select area; control-click and drag to subtract area
-* 
 
 ### Puppeteering
 * Click and drag to move control points
