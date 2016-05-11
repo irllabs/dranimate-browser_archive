@@ -19,6 +19,9 @@ var contourImage = new Image();
 
 var contourPoints;
 
+var controlPoints = [];
+var controlPointIndices = [];
+
 var vertices;
 var triangles;
 
@@ -80,6 +83,17 @@ function redraw() {
             context.beginPath();
             context.arc(centroidX, centroidY, 3, 0, 2 * Math.PI, false);
             context.fillStyle = '#00FF00';
+            context.fill();
+        }
+    }
+    if(controlPoints) {
+        for(var i = 0; i < controlPoints.length; i++) {
+            var cpx = controlPoints[i][0];
+            var cpy = controlPoints[i][1];
+
+            context.beginPath();
+            context.arc(cpx, cpy, 3, 0, 2 * Math.PI, false);
+            context.fillStyle = '#00FFFF';
             context.fill();
         }
     }
@@ -361,6 +375,13 @@ function generateMesh() {
         }
     }
 
+    /* Add vertices for requested control points as well */
+
+    for(var i = 0; i < controlPoints.length; i++) {
+        controlPointIndices.push(vertices.length);
+        vertices.push(controlPoints[i]);
+    }
+
     /* Run delaunay on vertices to generate mesh */
 
     var rawTriangles = Delaunay.triangulate(vertices);
@@ -425,10 +446,11 @@ canvas.addEventListener('contextmenu', function(evt) {
     return false;
 }, false);
 
-canvas.addEventListener( 'keydown', function(evt) {
-    console.log(evt.keyCode)
+document.addEventListener('keydown', function(evt) {
     if(evt.keyCode == 80) {
-        console.log("bogo")
+        console.log("daadsdasdasdsadsa");
+        controlPoints.push([mouse.x, mouse.y]);
+        redraw();
     }
 });
 

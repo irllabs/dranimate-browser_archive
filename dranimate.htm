@@ -137,8 +137,11 @@
 
 			function testControlPoints(x, y) {
 				// move that control point
-				ARAP.setControlPointPosition(0, x, y);
-				ARAP.setControlPointPosition(vertsFlatArray.length/2-1, 100, 100);
+				ARAP.setControlPointPosition(controlPointIndices[0], x, y);
+				for(var i = 1; i < controlPointIndices.length; i++) {
+					var cpi = controlPointIndices[i];
+					ARAP.setControlPointPosition(cpi, vertices[cpi][0], vertices[cpi][1]);
+				}
 
 				// update ARAP deformer
 				ARAP.updateMeshDeformation();
@@ -292,14 +295,9 @@
 				ARAP.setupMeshDeformer();
 
 				// add control point
-				ARAP.addControlPoint(0);
-				ARAP.addControlPoint(vertsFlatArray.length/2-1);
-
-				testControlPoints(0, 0);
-				testControlPoints(100, 0);
-				testControlPoints(200, 0);
-				testControlPoints(300, 0);
-				testControlPoints(400, 0);
+				for(var i = 0; i < controlPointIndices.length; i++) {
+					ARAP.addControlPoint(controlPointIndices[i]);
+				}
 
 			}
 
