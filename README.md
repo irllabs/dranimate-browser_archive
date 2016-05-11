@@ -9,8 +9,9 @@ Currently in development.
 * Open terminal in the folder and run a python webserver using: `python -m SimpleHTTPServer`
 * Open a browser window, and go to `http://localhost:8000/`
 
-### Image segmentation
+### Image segmentation + Mesh generation
 * Click and drag to select area; control-click and drag to subtract area
-
+* Press 'p' to add a new control point
+ 
 ### Puppeteering
 * Click and drag to move control points
