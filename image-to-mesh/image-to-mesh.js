@@ -389,22 +389,6 @@ function generateMesh() {
         }
     }
 
-    var vertsString = "";
-    for(var i = 0; i < vertices.length; i++) {
-        vertsString += vertices[i][0];
-        vertsString += ",";
-        vertsString += vertices[i][1];
-        vertsString += ",";
-    }
-    console.log(vertsString);
-
-    var trisString = "";
-    for(var i = 0; i < triangles.length; i++) {
-        trisString += triangles[i];
-        trisString += ",";
-    }
-    console.log(trisString);
-
 }
 
 canvas.addEventListener('mousemove', function(evt) {
@@ -449,14 +433,3 @@ canvas.addEventListener('mouseup', function(evt) {
         mouse.leftClickDown = false;
     }
 });
-
-document.getElementById("calcContoursButton").onclick = function() {     
-    recalculateCentroids(); 
-    findEdgesOfImage();
-    recalculateContourPoints();
-};
-
-document.getElementById("genMeshButton").onclick = function() {     
-    generateMesh();
-    redraw();
-};

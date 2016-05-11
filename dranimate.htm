@@ -20,7 +20,6 @@
 			#meshGenerationWindow {
 				margin-top: 50px;
 				position: absolute; 
-				background-color: #FFFFFF;
 			}
 		</style>
 	</head>
@@ -48,8 +47,6 @@
 		<script src="arap/arap-test.js"></script>
 		<script src="arap/arap.js"></script>
 
-		<script src="testmesh.js"></script>
-
 		<script>
 
 			image = new Image();
@@ -57,6 +54,21 @@
 			image.onload = function() {
 			    doSLICOnImage();
 			}
+
+			document.getElementById("calcContoursButton").onclick = function() {     
+			    recalculateCentroids(); 
+			    findEdgesOfImage();
+			    recalculateContourPoints();
+			};
+
+			document.getElementById("genMeshButton").onclick = function() {     
+			    generateMesh();
+			    redraw();
+
+			    setupMeshAndARAP(vertices, triangles);
+
+			    document.getElementById("meshGenerationWindow").style.display = "none";
+			};
 
 			var container;
 
@@ -68,6 +80,9 @@
 			var windowHalfY = window.innerHeight / 2;
 
 			var testMesh;
+
+			var vertsFlatArray;
+			var facesFlatArray;
 
 			var testValueBOGO;
 
@@ -99,39 +114,6 @@
 				directionalLight.position.set( 0, 0, 1 );
 				scene.add( directionalLight );
 
-				// texture
-
-				var manager = new THREE.LoadingManager();
-				manager.onProgress = function ( item, loaded, total ) {
-
-					console.log( item, loaded, total );
-
-				};
-
-				var texture = new THREE.Texture();
-
-				var onProgress = function ( xhr ) {
-					if ( xhr.lengthComputable ) {
-						var percentComplete = xhr.loaded / xhr.total * 100;
-						console.log( Math.round(percentComplete, 2) + '% downloaded' );
-					}
-				};
-
-				var onError = function ( xhr ) {
-				};
-
-				/*
-				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'UV_Grid_Sm.jpg', function ( image ) {
-
-					texture.image = image;
-					texture.needsUpdate = true;
-
-				} );
-				*/
-
-				//
-
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -147,13 +129,13 @@
 			function testControlPoints(x, y) {
 				// move that control point
 				ARAP.setControlPointPosition(0, x, y);
-				ARAP.setControlPointPosition(100, 100, 100);
+				ARAP.setControlPointPosition(vertsFlatArray.length/2-1, 100, 100);
 
 				// update ARAP deformer
 				ARAP.updateMeshDeformation();
 
 				var empty = [];
-				for(var i = 0; i < testMeshVertices.length; i++) {
+				for(var i = 0; i < vertsFlatArray.length; i++) {
 					empty.push(0);
 				}
 				var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexData);
@@ -234,32 +216,53 @@
 
 			}
 
-			function setupMeshAndARAP() {
+			function setupMeshAndARAP(verts, faces) {
 
 				/* Setup ARAP on mesh */
 
-				// model
+				/* Make flat arrays to pass to ARAP.js */
+				/* Eventually this should be handled inside ARAP.js
+				   (ARAP.js makes the three.js geometry for you) */
+			    vertsFlatArray = [];
+			    for(var i = 0; i < vertices.length; i++) {
+			        vertsFlatArray.push(vertices[i][0]);
+			        vertsFlatArray.push(vertices[i][1]);
+			    }
 
+			    facesFlatArray = [];
+			    for(var i = 0; i < faces.length; i++) {
+			        facesFlatArray.push(faces[i]);
+			    }
+
+			    /* Create the three.js geometry */
 				var geometry = new THREE.Geometry();
 
-				for(var i = 0; i < testMeshVertices.length; i+=2) {
-					var x = testMeshVertices[i];
-					var y = testMeshVertices[i+1];
+				for(var i = 0; i < vertsFlatArray.length; i+=2) {
+					var x = vertsFlatArray[i];
+					var y = vertsFlatArray[i+1];
 					geometry.vertices.push( new THREE.Vector3( x, y, 0 ) );
 				}
-				for(var i = 0; i < testMeshFaces.length; i+=3) {
-					var f1 = testMeshFaces[i];
-					var f2 = testMeshFaces[i+1];
-					var f3 = testMeshFaces[i+2];
+				for(var i = 0; i < facesFlatArray.length; i+=3) {
+					var f1 = facesFlatArray[i];
+					var f2 = facesFlatArray[i+1];
+					var f3 = facesFlatArray[i+2];
 					geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
+
+					geometry.faceVertexUvs[0].push( [
+			            new THREE.Vector2(geometry.vertices[f1].x/canvas.width,1-geometry.vertices[f1].y/canvas.height),
+			            new THREE.Vector2(geometry.vertices[f2].x/canvas.width,1-geometry.vertices[f2].y/canvas.height),
+			            new THREE.Vector2(geometry.vertices[f3].x/canvas.width,1-geometry.vertices[f3].y/canvas.height)
+			        ]);
 				}
 
 				geometry.dynamic = true;
 
 				var material = new THREE.MeshBasicMaterial({
-				                color: 0xFFFFFF,
+				                /*color: 0xFFFFFF,
 				                wireframe: true,
-				                wireframeLinewidth: 1
+				                wireframeLinewidth: 1*/
+
+				                map: THREE.ImageUtils.loadTexture("image-to-mesh/images/testImage.jpg")
 				            });
 
 				var mesh = new THREE.Mesh(geometry, material);
@@ -271,17 +274,17 @@
 				ARAP.resetMesh();
 
 				// add vertices
-				ARAP.doArrayFunction(testMeshVertices, ARAP.setMeshVertexData);
+				ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexData);
 
 				// add faces
-				ARAP.doArrayFunction(testMeshFaces, ARAP.setMeshTriangleData);
+				ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleData);
 
 				// setup mesh deformer
 				ARAP.setupMeshDeformer();
 
 				// add control point
 				ARAP.addControlPoint(0);
-				ARAP.addControlPoint(100);
+				ARAP.addControlPoint(vertsFlatArray.length/2-1);
 
 				testControlPoints(0, 0);
 				testControlPoints(100, 0);
