@@ -28,8 +28,11 @@
 
 		<div id="meshGenerationWindow">
 
-		    <input type="file" id="imageLoader" name="imageLoader"/><br /> 
-		    <button type="button" id="calcContoursButton">Recalc contour points and superpixel centroids</button> <br />
+			Browser puppet creation demo:<br />
+			Image Segmentation + Mesh Generation + As Rigid as Possible<br />
+			<br />
+
+		    Image: <input type="file" id="imageLoader" name="imageLoader"><br /> 
 		    <button type="button" id="genMeshButton">Generate Mesh</button> <br />
 
 		    <canvas id="myCanvas" width="578" height="400"></canvas><br />
@@ -55,13 +58,19 @@
 			    doSLICOnImage();
 			}
 
+			/*
 			document.getElementById("calcContoursButton").onclick = function() {     
 			    recalculateCentroids(); 
 			    findEdgesOfImage();
 			    recalculateContourPoints();
 			};
+			*/
 
-			document.getElementById("genMeshButton").onclick = function() {     
+			document.getElementById("genMeshButton").onclick = function() {  
+				recalculateCentroids(); 
+			    findEdgesOfImage();
+			    recalculateContourPoints();
+
 			    generateMesh();
 			    redraw();
 

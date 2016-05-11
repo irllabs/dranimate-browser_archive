@@ -425,6 +425,13 @@ canvas.addEventListener('contextmenu', function(evt) {
     return false;
 }, false);
 
+canvas.addEventListener( 'keydown', function(evt) {
+    console.log(evt.keyCode)
+    if(evt.keyCode == 80) {
+        console.log("bogo")
+    }
+});
+
 canvas.addEventListener('mouseup', function(evt) {
     evt.preventDefault(); 
     if(evt.which == 3) {
