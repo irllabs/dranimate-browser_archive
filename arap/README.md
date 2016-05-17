@@ -2,7 +2,7 @@
 
 Currently in development. This will eventually be a standalone repo.
 
-[Here's a video of it working][https://www.youtube.com/watch?v=Ls1YAKmUPIw]
+[Here's a video of it working](https://www.youtube.com/watch?v=Ls1YAKmUPIw)
 
 ### How to build
 
