@@ -110,7 +110,7 @@
 				document.body.appendChild( container );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-				camera.position.z = -1000;
+				camera.position.z = -600;
 
 				// scene
 
@@ -182,7 +182,7 @@
 				mouseY = ( event.clientY - windowHalfY ) / 2;
 
 				if(testMesh) {
-					testControlPoints(mouseX, mouseY);
+					testControlPoints(mouseX*3, mouseY*3);
 				}
 
 			}
@@ -221,7 +221,8 @@
 
 			function render() {
 
-				camera.lookAt( scene.position );                
+				//camera.lookAt( scene.position );
+				camera.lookAt( new THREE.Vector3(canvas.width/2, canvas.height/2, 0) );                
 				camera.rotation.z = 0;
 
 				renderer.render( scene, camera );
