@@ -1,6 +1,6 @@
 # ARAP.js
 
-Currently in development.
+Currently in development. This will eventually be a standalone repo.
 
 ### How to build
 
