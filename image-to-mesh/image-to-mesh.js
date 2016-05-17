@@ -448,7 +448,6 @@ canvas.addEventListener('contextmenu', function(evt) {
 
 document.addEventListener('keydown', function(evt) {
     if(evt.keyCode == 80) {
-        console.log("daadsdasdasdsadsa");
         controlPoints.push([mouse.x, mouse.y]);
         redraw();
     }

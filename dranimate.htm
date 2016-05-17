@@ -1,3 +1,13 @@
+<!--- 
+woah honey!
+this code is a bit crazy as I work on it!
+watch out!
+
+current TODO:
+ - multiple ARAP mesh support
+ - draggable control points w/ mouse
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -137,20 +147,20 @@
 
 			function testControlPoints(x, y) {
 				// move that control point
-				ARAP.setControlPointPosition(controlPointIndices[0], x, y);
+				ARAP.setControlPointPositionWrapper(controlPointIndices[0], x, y);
 				for(var i = 1; i < controlPointIndices.length; i++) {
 					var cpi = controlPointIndices[i];
-					ARAP.setControlPointPosition(cpi, vertices[cpi][0], vertices[cpi][1]);
+					ARAP.setControlPointPositionWrapper(cpi, vertices[cpi][0], vertices[cpi][1]);
 				}
 
 				// update ARAP deformer
-				ARAP.updateMeshDeformation();
+				ARAP.updateMeshDeformationWrapper();
 
 				var empty = [];
 				for(var i = 0; i < vertsFlatArray.length; i++) {
 					empty.push(0);
 				}
-				var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexData);
+				var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexDataWrapper);
 
 				for(var i = 0; i < deformedVerts.length; i+=2) {
 					var x = deformedVerts[i];
@@ -284,20 +294,20 @@
 				testMesh = mesh;
 
 				// clear mesh data
-				ARAP.resetMesh();
+				ARAP.resetMeshWrapper();
 
 				// add vertices
-				ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexData);
+				ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexDataWrapper);
 
 				// add faces
-				ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleData);
+				ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleDataWrapper);
 
 				// setup mesh deformer
-				ARAP.setupMeshDeformer();
+				ARAP.setupMeshDeformerWrapper();
 
 				// add control point
 				for(var i = 0; i < controlPointIndices.length; i++) {
-					ARAP.addControlPoint(controlPointIndices[i]);
+					ARAP.addControlPointWrapper(controlPointIndices[i]);
 				}
 
 			}
