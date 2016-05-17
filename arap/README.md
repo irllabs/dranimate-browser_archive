@@ -2,6 +2,8 @@
 
 Currently in development. This will eventually be a standalone repo.
 
+[Here's a video of it working][https://www.youtube.com/watch?v=Ls1YAKmUPIw]
+
 ### How to build
 
 * Install [emscripten][1]
@@ -14,3 +16,4 @@ Currently in development. This will eventually be a standalone repo.
 
 [1]: https://github.com/kripken/emscripten
 [2]: http://www.dgp.toronto.edu/~rms/software/Deform2D/
+[3]: https://www.youtube.com/watch?v=Ls1YAKmUPIw
