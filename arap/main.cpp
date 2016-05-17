@@ -255,5 +255,5 @@ extern "C" {
 }
 
 int main() {
-	
+	std::cout << "deform2d: Looks like everything built correctly!\n";
 }
