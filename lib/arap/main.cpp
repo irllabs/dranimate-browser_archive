@@ -28,80 +28,80 @@ void UpdateDeformedMesh();
 void InvalidateConstraints();
 void ValidateConstraints();
 
-void InitializeDeformedMesh()
+void InitializeDeformedMesh(int meshIndex)
 {
-	meshes[0].m_deformedMesh.Clear();
+	meshes[meshIndex].m_deformedMesh.Clear();
 	
-	unsigned int nVerts = meshes[0].m_mesh.GetNumVertices();
+	unsigned int nVerts = meshes[meshIndex].m_mesh.GetNumVertices();
 	for ( unsigned int i = 0; i < nVerts; ++i ) {
 		Wml::Vector3f vVertex;
-		meshes[0].m_mesh.GetVertex(i, vVertex);
-		meshes[0].m_deformedMesh.AppendVertexData(vVertex);
+		meshes[meshIndex].m_mesh.GetVertex(i, vVertex);
+		meshes[meshIndex].m_deformedMesh.AppendVertexData(vVertex);
 	}
 
-	unsigned int nTris = meshes[0].m_mesh.GetNumTriangles();
+	unsigned int nTris = meshes[meshIndex].m_mesh.GetNumTriangles();
 	for ( unsigned int i = 0; i < nTris; ++i ) {
 		unsigned int nTriangle[3];
-		meshes[0].m_mesh.GetTriangle(i,nTriangle);
-		meshes[0].m_deformedMesh.AppendTriangleData(nTriangle);
+		meshes[meshIndex].m_mesh.GetTriangle(i,nTriangle);
+		meshes[meshIndex].m_deformedMesh.AppendTriangleData(nTriangle);
 	}
 
-	meshes[0].m_deformer.InitializeFromMesh( &meshes[0].m_mesh );
-	InvalidateConstraints();
+	meshes[meshIndex].m_deformer.InitializeFromMesh( &meshes[meshIndex].m_mesh );
+	InvalidateConstraints(meshIndex);
 }
 
-
-
-void UpdateDeformedMesh() 
+void UpdateDeformedMesh(int meshIndex) 
 {
-	ValidateConstraints();
-	meshes[0].m_deformer.UpdateDeformedMesh( &meshes[0].m_deformedMesh, true );
+	ValidateConstraints(meshIndex);
+	meshes[meshIndex].m_deformer.UpdateDeformedMesh( &meshes[meshIndex].m_deformedMesh, true );
 }
 
-
-// deformer stuff
-void InvalidateConstraints() 
+void InvalidateConstraints(int meshIndex) 
 { 
-	meshes[0].m_bConstraintsValid = false; 
+	meshes[meshIndex].m_bConstraintsValid = false; 
 }
 
-void ValidateConstraints()
+void ValidateConstraints(int meshIndex)
 {
-	if ( meshes[0].m_bConstraintsValid ) {
+	if ( meshes[meshIndex].m_bConstraintsValid ) {
 		return;
 	}
 
-	size_t nConstraints = meshes[0].m_vSelected.size();
-	std::set<unsigned int>::iterator cur(meshes[0].m_vSelected.begin()), end(meshes[0].m_vSelected.end());
+	size_t nConstraints = meshes[meshIndex].m_vSelected.size();
+	std::set<unsigned int>::iterator cur(meshes[meshIndex].m_vSelected.begin()), end(meshes[meshIndex].m_vSelected.end());
 	while ( cur != end ) {
 		unsigned int nVertex = *cur++;
 		Wml::Vector3f vVertex;
-		meshes[0].m_deformedMesh.GetVertex( nVertex, vVertex);
-		meshes[0].m_deformer.SetDeformedHandle( nVertex, Wml::Vector2f( vVertex.X(), vVertex.Y() ) );
+		meshes[meshIndex].m_deformedMesh.GetVertex( nVertex, vVertex);
+		meshes[meshIndex].m_deformer.SetDeformedHandle( nVertex, Wml::Vector2f( vVertex.X(), vVertex.Y() ) );
 	}
 
-	meshes[0].m_deformer.ForceValidation();
+	meshes[meshIndex].m_deformer.ForceValidation();
 
-	meshes[0].m_bConstraintsValid = true;
+	meshes[meshIndex].m_bConstraintsValid = true;
 }
 
 extern "C" {
-	int resetMesh(void) {
+	int createNewMesh(void) {
+		int newMeshIndex = meshes.size();
+
 		DeformableMesh newMesh;
 		meshes.push_back(newMesh);
-		meshes[0].m_mesh.Clear();
-		return 1;
+
+		meshes[newMeshIndex].m_mesh.Clear();
+
+		return newMeshIndex;
 	}
 
-	int setMeshVertexData(float *arr, int length) {
-		for (int i = 0; i <  length; i+=2) {
+	int setMeshVertexData(int meshIndex, float *arr, int length) {
+		for (int i = 0; i < length; i+=2) {
 			Wml::Vector3f vVert(arr[i], arr[i+1], 0);
-			meshes[0].m_mesh.AppendVertexData( vVert );
+			meshes[meshIndex].m_mesh.AppendVertexData( vVert );
 		}
 		return 1;
 	}
 
-	int setMeshTriangleData(float *arr, int length) {
+	int setMeshTriangleData(int meshIndex, float *arr, int length) {
 		for (int i = 0; i < length; i+=3) {
 
 			unsigned int t1 = arr[i];
@@ -109,16 +109,16 @@ extern "C" {
 			unsigned int t3 = arr[i+2];
 
 			unsigned int nTri[3] = { t1, t2, t3 };
-			meshes[0].m_mesh.AppendTriangleData( nTri );
+			meshes[meshIndex].m_mesh.AppendTriangleData( nTri );
 
 		}
 		return 1;
 	}
 
-	int getMeshVertexData(float *arr, int length) {
+	int getMeshVertexData(int meshIndex, float *arr, int length) {
 		for(int i = 0; i < length/2; i++) {
 			Wml::Vector3f vert;
-			meshes[0].m_deformedMesh.GetVertex(i, vert);
+			meshes[meshIndex].m_deformedMesh.GetVertex(i, vert);
 
 			arr[i*2] = vert.X();
 			arr[i*2+1] = vert.Y();
@@ -127,10 +127,10 @@ extern "C" {
 		return 1;
 	}
 
-	int getMeshTriangleData(float *arr, int length) {
+	int getMeshTriangleData(int meshIndex, float *arr, int length) {
 		for (int i = 0; i < length; i+=3) {
 			unsigned int nTriangle[3];
-			meshes[0].m_mesh.GetTriangle(i/3,nTriangle);
+			meshes[meshIndex].m_mesh.GetTriangle(i/3,nTriangle);
 
 			arr[i] = nTriangle[0];
 			arr[i+1] = nTriangle[1];
@@ -139,65 +139,66 @@ extern "C" {
 		return 1;
 	}
 
-	int setupMeshDeformer(void) {
+	int setupMeshDeformer(int meshIndex) {
 		std::cout << "setup!\n";
 
-		meshes[0].m_deformedMesh.Clear();
+		meshes[meshIndex].m_deformedMesh.Clear();
 	
-		unsigned int nVerts = meshes[0].m_mesh.GetNumVertices();
+		unsigned int nVerts = meshes[meshIndex].m_mesh.GetNumVertices();
 		for ( unsigned int i = 0; i < nVerts; ++i ) {
 			Wml::Vector3f vVertex;
-			meshes[0].m_mesh.GetVertex(i, vVertex);
-			meshes[0].m_deformedMesh.AppendVertexData(vVertex);
+			meshes[meshIndex].m_mesh.GetVertex(i, vVertex);
+			meshes[meshIndex].m_deformedMesh.AppendVertexData(vVertex);
 		}
 
-		unsigned int nTris = meshes[0].m_mesh.GetNumTriangles();
+		unsigned int nTris = meshes[meshIndex].m_mesh.GetNumTriangles();
 		for ( unsigned int i = 0; i < nTris; ++i ) {
 			unsigned int nTriangle[3];
-			meshes[0].m_mesh.GetTriangle(i,nTriangle);
-			meshes[0].m_deformedMesh.AppendTriangleData(nTriangle);
+			meshes[meshIndex].m_mesh.GetTriangle(i,nTriangle);
+			meshes[meshIndex].m_deformedMesh.AppendTriangleData(nTriangle);
 		}
 
-		meshes[0].m_deformer.InitializeFromMesh( &meshes[0].m_mesh );
-		InvalidateConstraints();
+		meshes[meshIndex].m_deformer.InitializeFromMesh( &meshes[meshIndex].m_mesh );
+		InvalidateConstraints(meshIndex);
 
 		std::cout << "setup done!\n";
 
 		return 1;
 	}
 
-	int addControlPoint(int index) {
+	int addControlPoint(int meshIndex, int controlPointIndex) {
 
-		meshes[0].m_vSelected.insert(index);
-		InvalidateConstraints();
+		meshes[meshIndex].m_vSelected.insert(controlPointIndex);
+		InvalidateConstraints(meshIndex);
 
 		return 1;
 	}
 
-	int removeControlPoint(int index) {
-		meshes[0].m_vSelected.erase(index);
-		meshes[0].m_deformer.RemoveHandle(index);
+	int removeControlPoint(int meshIndex, int controlPointIndex) {
+
+		meshes[meshIndex].m_vSelected.erase(controlPointIndex);
+		meshes[meshIndex].m_deformer.RemoveHandle(controlPointIndex);
 
 		// restore position
 		Wml::Vector3f vVertex;
-		meshes[0].m_mesh.GetVertex(index, vVertex);
-		meshes[0].m_deformedMesh.SetVertex(index, vVertex);
+		meshes[meshIndex].m_mesh.GetVertex(controlPointIndex, vVertex);
+		meshes[meshIndex].m_deformedMesh.SetVertex(controlPointIndex, vVertex);
 
 		return 1;
 	}
 
-	int setControlPointPosition(int index, float x, float y) {
+	int setControlPointPosition(int meshIndex, int controlPointIndex, float x, float y) {
 		
 		Wml::Vector3f vNewPos( x, y, 0.0f );
-		meshes[0].m_deformedMesh.SetVertex( index, vNewPos );
-		InvalidateConstraints();
+		meshes[meshIndex].m_deformedMesh.SetVertex( controlPointIndex, vNewPos );
+		InvalidateConstraints(meshIndex);
 
 		return 1;
 	}
 
 	int updateMeshDeformation(void) {
 
-		UpdateDeformedMesh();
+		UpdateDeformedMesh(meshIndex);
 
 		return 1;
 	}
