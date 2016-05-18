@@ -23,10 +23,10 @@ public:
 };
 std::vector<DeformableMesh> meshes;
 
-void InitializeDeformedMesh();
-void UpdateDeformedMesh();
-void InvalidateConstraints();
-void ValidateConstraints();
+void InitializeDeformedMesh(int meshIndex);
+void UpdateDeformedMesh(int meshIndex);
+void InvalidateConstraints(int meshIndex);
+void ValidateConstraints(int meshIndex);
 
 void InitializeDeformedMesh(int meshIndex)
 {
@@ -115,33 +115,7 @@ extern "C" {
 		return 1;
 	}
 
-	int getMeshVertexData(int meshIndex, float *arr, int length) {
-		for(int i = 0; i < length/2; i++) {
-			Wml::Vector3f vert;
-			meshes[meshIndex].m_deformedMesh.GetVertex(i, vert);
-
-			arr[i*2] = vert.X();
-			arr[i*2+1] = vert.Y();
-		}
-
-		return 1;
-	}
-
-	int getMeshTriangleData(int meshIndex, float *arr, int length) {
-		for (int i = 0; i < length; i+=3) {
-			unsigned int nTriangle[3];
-			meshes[meshIndex].m_mesh.GetTriangle(i/3,nTriangle);
-
-			arr[i] = nTriangle[0];
-			arr[i+1] = nTriangle[1];
-			arr[i+2] = nTriangle[2];
-		}
-		return 1;
-	}
-
 	int setupMeshDeformer(int meshIndex) {
-		std::cout << "setup!\n";
-
 		meshes[meshIndex].m_deformedMesh.Clear();
 	
 		unsigned int nVerts = meshes[meshIndex].m_mesh.GetNumVertices();
@@ -160,8 +134,6 @@ extern "C" {
 
 		meshes[meshIndex].m_deformer.InitializeFromMesh( &meshes[meshIndex].m_mesh );
 		InvalidateConstraints(meshIndex);
-
-		std::cout << "setup done!\n";
 
 		return 1;
 	}
@@ -196,9 +168,21 @@ extern "C" {
 		return 1;
 	}
 
-	int updateMeshDeformation(void) {
+	int updateMeshDeformation(int meshIndex) {
 
 		UpdateDeformedMesh(meshIndex);
+
+		return 1;
+	}
+
+	int getMeshVertexData(int meshIndex, float *arr, int length) {
+		for(int i = 0; i < length/2; i++) {
+			Wml::Vector3f vert;
+			meshes[meshIndex].m_deformedMesh.GetVertex(i, vert);
+
+			arr[i*2] = vert.X();
+			arr[i*2+1] = vert.Y();
+		}
 
 		return 1;
 	}

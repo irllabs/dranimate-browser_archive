@@ -126,10 +126,10 @@
 
 			// move that control point
 			var controlPointIndices = ImageToMesh.getControlPointIndices();
-			ARAP.setControlPointPositionWrapper(controlPointIndices[0], x, y);
+			ARAP.setControlPointPositionWrapper(0, controlPointIndices[0], x, y);
 			for(var i = 1; i < controlPointIndices.length; i++) {
 				var cpi = controlPointIndices[i];
-				ARAP.setControlPointPositionWrapper(cpi, vertices[cpi][0], vertices[cpi][1]);
+				ARAP.setControlPointPositionWrapper(0, cpi, vertices[cpi][0], vertices[cpi][1]);
 			}
 
 			// update ARAP deformer
@@ -261,7 +261,8 @@
 			canvasTexture.needsUpdate = true;
 
 			var material = new THREE.MeshBasicMaterial({
-			                /*color: 0xFFFFFF,
+							// uncomment if you need a wireframe...
+			                /* color: 0xFFFFFF,
 			                wireframe: true,
 			                wireframeLinewidth: 1*/
 							map: canvasTexture
@@ -273,21 +274,15 @@
 			testMesh = mesh;
 
 			// clear mesh data
-			ARAP.resetMeshWrapper();
-
-			// add vertices
-			ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexDataWrapper);
-
-			// add faces
-			ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleDataWrapper);
+			ARAP.createNewARAPMesh(vertsFlatArray, facesFlatArray);
 
 			// setup mesh deformer
-			ARAP.setupMeshDeformerWrapper();
+			ARAP.setupMeshDeformerWrapper(0);
 
 			// add control point
 			var controlPointIndices = ImageToMesh.getControlPointIndices();
 			for(var i = 0; i < controlPointIndices.length; i++) {
-				ARAP.addControlPointWrapper(controlPointIndices[i]);
+				ARAP.addControlPointWrapper(0, controlPointIndices[i]);
 			}
 
 		}
