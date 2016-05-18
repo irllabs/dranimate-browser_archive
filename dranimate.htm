@@ -1,309 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js arap test</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				font-family: Monospace;
-				background-color: #000;
-				color: #fff;
-				margin: 0px;
-				overflow: hidden;
-			}
-			#stats { 
-				position: absolute; 
-				top: 0; 
-				left: 0;
-			} 
-			#meshGenerationWindow {
-				margin-top: 50px;
-				position: absolute; 
-			}
-		</style>
-	</head>
+<head>
+	<title>Dranimate Dev</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			font-family: Monospace;
+			background-color: #000;
+			color: #fff;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#stats { 
+			position: absolute;
+			top: 0; 
+			left: 0;
+		} 
+		#meshGenerationWindow {
+			margin-top: 50px;
+			position: absolute; 
+		}
+	</style>
+</head>
 
-	<body>
+<body>
 
-		<div id="meshGenerationWindow">
+	<div id="meshGenerationWindow">
 
-			Browser puppet creation demo:<br />
-			Image Segmentation + Mesh Generation + As Rigid as Possible<br />
-			<br />
+		Browser puppet creation demo:<br />
+		Image Segmentation + Mesh Generation + As Rigid as Possible<br />
+		<br />
 
-		    Image: <input type="file" id="imageLoader" name="imageLoader"><br /> 
-		    <button type="button" id="genMeshButton">Generate Mesh</button> <br />
-		    <button type="button" id="testARAPButton">Test ARAP</button> <br />
+	    Image: <input type="file" id="imageLoader" name="imageLoader"><br /> 
+	    <button type="button" id="genMeshButton">Generate Mesh</button> <br />
+	    <button type="button" id="testARAPButton">Test ARAP</button> <br />
 
-		    <canvas id="myCanvas" width="578" height="400"></canvas><br />
+	    <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
 
-		</div>
+	</div>
 
-		<script src="image-to-mesh/slic.js"></script>
-		<script src="image-to-mesh/delaunay.js"></script>
-		<script src="image-to-mesh/canvasutils.js"></script>
-		<script src="image-to-mesh/image-to-mesh.js"></script>
+	<script src="imagetomesh/slic.js"></script>
+	<script src="imagetomesh/delaunay.js"></script>
+	<script src="imagetomesh/canvasutils.js"></script>
+	<script src="imagetomesh/imagetomesh.js"></script>
 
-		<script src="three/three.min.js"></script>
-		<script src="three/stats.min.js"></script>
+	<script src="three/three.min.js"></script>
+	<script src="three/stats.min.js"></script>
 
-		<script src="arap/deform2d.js"></script>
-		<script src="arap/arap.js"></script>
+	<script src="arap/deform2d.js"></script>
+	<script src="arap/arap.js"></script>
 
-		<script>
-			/*
-			document.getElementById("calcContoursButton").onclick = function() {     
-			    recalculateCentroids(); 
-			    findEdgesOfImage();
-			    recalculateContourPoints();
-			};
-			*/
+	<script>
+		ImageToMesh.setup();
 
-			document.getElementById("genMeshButton").onclick = function() {  
-				recalculateCentroids(); 
-			    findEdgesOfImage();
-			    recalculateContourPoints();
+		document.getElementById("genMeshButton").onclick = function() {
+		    ImageToMesh.generateMesh();
+		    ImageToMesh.redraw();
+		};
 
-			    generateMesh();
-			    redraw();
-			};
+		document.getElementById("testARAPButton").onclick = function() {
+			setupMeshAndARAP(ImageToMesh.getVertices(), 
+				             ImageToMesh.getTriangles());
+		    document.getElementById("meshGenerationWindow").style.display = "none";
+		}
 
-			document.getElementById("testARAPButton").onclick = function() {
-				setupMeshAndARAP(vertices, triangles);
+		var container;
 
-			    document.getElementById("meshGenerationWindow").style.display = "none";
-			}
+		var camera, scene, renderer;
 
-			var container;
+		var mouseX = 0, mouseY = 0;
 
-			var camera, scene, renderer;
+		var windowHalfX = window.innerWidth / 2;
+		var windowHalfY = window.innerHeight / 2;
 
-			var mouseX = 0, mouseY = 0;
+		var testMesh;
 
-			var windowHalfX = window.innerWidth / 2;
-			var windowHalfY = window.innerHeight / 2;
+		var vertsFlatArray;
+		var facesFlatArray;
 
-			var testMesh;
+		var testValueBOGO;
 
-			var vertsFlatArray;
-			var facesFlatArray;
+		stats = new Stats();
+		document.body.appendChild( stats.domElement );
 
-			var testValueBOGO;
-
-			stats = new Stats();
-			document.body.appendChild( stats.domElement );
-
-			init();
-			animate();
+		init();
+		animate();
 
 
-			function init() {
+		function init() {
 
-				testValueBOGO = 400;
+			testValueBOGO = 400;
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+			container = document.createElement( 'div' );
+			document.body.appendChild( container );
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-				camera.position.z = -600;
+			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+			camera.position.z = -600;
 
-				// scene
+			// scene
 
-				scene = new THREE.Scene();
+			scene = new THREE.Scene();
 
-				var ambient = new THREE.AmbientLight( 0x101030 );
-				scene.add( ambient );
+			var ambient = new THREE.AmbientLight( 0x101030 );
+			scene.add( ambient );
 
-				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-				directionalLight.position.set( 0, 0, 1 );
-				scene.add( directionalLight );
+			var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+			directionalLight.position.set( 0, 0, 1 );
+			scene.add( directionalLight );
 
-				renderer = new THREE.WebGLRenderer();
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
+			renderer = new THREE.WebGLRenderer();
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			container.appendChild( renderer.domElement );
 
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'mousedown', onMouseDown, false );
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+			document.addEventListener( 'mousedown', onMouseDown, false );
 
-				window.addEventListener( 'resize', onWindowResize, false );
+			window.addEventListener( 'resize', onWindowResize, false );
 
-			}
+		}
 
-			function testControlPoints(x, y) {
-				// move that control point
-				ARAP.setControlPointPositionWrapper(controlPointIndices[0], x, y);
-				for(var i = 1; i < controlPointIndices.length; i++) {
-					var cpi = controlPointIndices[i];
-					ARAP.setControlPointPositionWrapper(cpi, vertices[cpi][0], vertices[cpi][1]);
-				}
+		function testControlPoints(x, y) {
+			var vertices = ImageToMesh.getVertices();
 
-				// update ARAP deformer
-				ARAP.updateMeshDeformationWrapper();
-
-				var empty = [];
-				for(var i = 0; i < vertsFlatArray.length; i++) {
-					empty.push(0);
-				}
-				var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexDataWrapper);
-
-				for(var i = 0; i < deformedVerts.length; i+=2) {
-					var x = deformedVerts[i];
-					var y = deformedVerts[i+1];
-					testMesh.geometry.vertices[i/2].x = x;
-					testMesh.geometry.vertices[i/2].y = y;
-				}
-				testMesh.geometry.dynamic = true;
-				testMesh.geometry.verticesNeedUpdate = true;
-
-				//console.log(testMesh.geometry.vertices[0].x)
+			// move that control point
+			var controlPointIndices = ImageToMesh.getControlPointIndices();
+			ARAP.setControlPointPositionWrapper(controlPointIndices[0], x, y);
+			for(var i = 1; i < controlPointIndices.length; i++) {
+				var cpi = controlPointIndices[i];
+				ARAP.setControlPointPositionWrapper(cpi, vertices[cpi][0], vertices[cpi][1]);
 			}
 
-			function onWindowResize() {
+			// update ARAP deformer
+			ARAP.updateMeshDeformationWrapper();
 
-				windowHalfX = window.innerWidth / 2;
-				windowHalfY = window.innerHeight / 2;
+			var empty = [];
+			for(var i = 0; i < vertsFlatArray.length; i++) {
+				empty.push(0);
+			}
+			var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexDataWrapper);
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+			for(var i = 0; i < deformedVerts.length; i+=2) {
+				var x = deformedVerts[i];
+				var y = deformedVerts[i+1];
+				testMesh.geometry.vertices[i/2].x = x;
+				testMesh.geometry.vertices[i/2].y = y;
+			}
+			testMesh.geometry.dynamic = true;
+			testMesh.geometry.verticesNeedUpdate = true;
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+			//console.log(testMesh.geometry.vertices[0].x)
+		}
 
+		function onWindowResize() {
+
+			windowHalfX = window.innerWidth / 2;
+			windowHalfY = window.innerHeight / 2;
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		}
+
+		function onDocumentMouseMove( event ) {
+
+			mouseX = ( event.clientX - windowHalfX ) / 2;
+			mouseY = ( event.clientY - windowHalfY ) / 2;
+
+			if(testMesh) {
+				testControlPoints(mouseX*3, mouseY*3);
 			}
 
-			function onDocumentMouseMove( event ) {
+		}
 
-				mouseX = ( event.clientX - windowHalfX ) / 2;
-				mouseY = ( event.clientY - windowHalfY ) / 2;
+		function onMouseDown( event ) {
+			
+		}
 
-				if(testMesh) {
-					testControlPoints(mouseX*3, mouseY*3);
-				}
+		function animate() {
 
+			requestAnimationFrame( animate );
+
+			update();
+			render();
+
+			stats.update();
+
+		}
+
+		function update() {
+			
+		}
+
+		function render() {
+
+			//camera.lookAt( scene.position );
+			camera.lookAt( new THREE.Vector3(ImageToMesh.getCanvas().width/2,
+				                             ImageToMesh.getCanvas().height/2,
+				                             0) );                
+			camera.rotation.z = 0;
+
+			renderer.render( scene, camera );
+
+		}
+
+		function setupMeshAndARAP(verts, faces) {
+
+			/* Setup ARAP on mesh */
+
+			var vertices = ImageToMesh.getVertices();
+			var faces = ImageToMesh.getTriangles();
+
+			var canvas = ImageToMesh.getCanvas();
+			var context = canvas.getContext('2d');
+
+			var image = ImageToMesh.getImage();
+
+			/* Make flat arrays to pass to ARAP.js */
+		    vertsFlatArray = [];
+		    for(var i = 0; i < vertices.length; i++) {
+		        vertsFlatArray.push(vertices[i][0]);
+		        vertsFlatArray.push(vertices[i][1]);
+		    }
+
+		    facesFlatArray = [];
+		    for(var i = 0; i < faces.length; i++) {
+		        facesFlatArray.push(faces[i]);
+		    }
+
+		    /* Create the three.js geometry */
+			var geometry = new THREE.Geometry();
+
+			for(var i = 0; i < vertsFlatArray.length; i+=2) {
+				var x = vertsFlatArray[i];
+				var y = vertsFlatArray[i+1];
+				geometry.vertices.push( new THREE.Vector3( x, y, 0 ) );
+			}
+			for(var i = 0; i < facesFlatArray.length; i+=3) {
+				var f1 = facesFlatArray[i];
+				var f2 = facesFlatArray[i+1];
+				var f3 = facesFlatArray[i+2];
+				geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
+
+				geometry.faceVertexUvs[0].push( [
+		            new THREE.Vector2(geometry.vertices[f1].x/canvas.width,1-geometry.vertices[f1].y/canvas.height),
+		            new THREE.Vector2(geometry.vertices[f2].x/canvas.width,1-geometry.vertices[f2].y/canvas.height),
+		            new THREE.Vector2(geometry.vertices[f3].x/canvas.width,1-geometry.vertices[f3].y/canvas.height)
+		        ]);
 			}
 
-			function onMouseDown( event ) {
-				
+			geometry.dynamic = true;
+
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.drawImage(image, 0, 0, image.width, image.height,
+                                     0, 0, canvas.width, canvas.height);
+			var canvasTexture = new THREE.Texture(document.getElementById("imageToMeshCanvas"));
+			canvasTexture.needsUpdate = true;
+
+			var material = new THREE.MeshBasicMaterial({
+			                /*color: 0xFFFFFF,
+			                wireframe: true,
+			                wireframeLinewidth: 1*/
+							map: canvasTexture
+			            });
+
+			var mesh = new THREE.Mesh(geometry, material);
+			scene.add(mesh);
+
+			testMesh = mesh;
+
+			// clear mesh data
+			ARAP.resetMeshWrapper();
+
+			// add vertices
+			ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexDataWrapper);
+
+			// add faces
+			ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleDataWrapper);
+
+			// setup mesh deformer
+			ARAP.setupMeshDeformerWrapper();
+
+			// add control point
+			var controlPointIndices = ImageToMesh.getControlPointIndices();
+			for(var i = 0; i < controlPointIndices.length; i++) {
+				ARAP.addControlPointWrapper(controlPointIndices[i]);
 			}
 
-			function animate() {
+		}
 
-				requestAnimationFrame( animate );
+	</script>
 
-				update();
-				render();
-
-				stats.update();
-
-			}
-
-			function update() {
-				/* test update geometry */
-				
-				/*
-				if(testMesh) {
-					var vertUpdateIndex = 33;
-					var newX = mouseX;
-					var newY = mouseY;
-					var newZ = 0;
-					testMesh.geometry.vertices[ vertUpdateIndex ].x = newX;
-					testMesh.geometry.vertices[ vertUpdateIndex ].y = newY;
-					testMesh.geometry.verticesNeedUpdate = true;
-				}
-				*/
-				
-			}
-
-			function render() {
-
-				//camera.lookAt( scene.position );
-				camera.lookAt( new THREE.Vector3(canvas.width/2, canvas.height/2, 0) );                
-				camera.rotation.z = 0;
-
-				renderer.render( scene, camera );
-
-			}
-
-			function setupMeshAndARAP(verts, faces) {
-
-				/* Setup ARAP on mesh */
-
-				/* Make flat arrays to pass to ARAP.js */
-				/* Eventually this should be handled inside ARAP.js
-				   (ARAP.js makes the three.js geometry for you) */
-			    vertsFlatArray = [];
-			    for(var i = 0; i < vertices.length; i++) {
-			        vertsFlatArray.push(vertices[i][0]);
-			        vertsFlatArray.push(vertices[i][1]);
-			    }
-
-			    facesFlatArray = [];
-			    for(var i = 0; i < faces.length; i++) {
-			        facesFlatArray.push(faces[i]);
-			    }
-
-			    /* Create the three.js geometry */
-				var geometry = new THREE.Geometry();
-
-				for(var i = 0; i < vertsFlatArray.length; i+=2) {
-					var x = vertsFlatArray[i];
-					var y = vertsFlatArray[i+1];
-					geometry.vertices.push( new THREE.Vector3( x, y, 0 ) );
-				}
-				for(var i = 0; i < facesFlatArray.length; i+=3) {
-					var f1 = facesFlatArray[i];
-					var f2 = facesFlatArray[i+1];
-					var f3 = facesFlatArray[i+2];
-					geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
-
-					geometry.faceVertexUvs[0].push( [
-			            new THREE.Vector2(geometry.vertices[f1].x/canvas.width,1-geometry.vertices[f1].y/canvas.height),
-			            new THREE.Vector2(geometry.vertices[f2].x/canvas.width,1-geometry.vertices[f2].y/canvas.height),
-			            new THREE.Vector2(geometry.vertices[f3].x/canvas.width,1-geometry.vertices[f3].y/canvas.height)
-			        ]);
-				}
-
-				geometry.dynamic = true;
-
-				context.clearRect(0, 0, canvas.width, canvas.height);
-				context.drawImage(image, 0, 0, image.width, image.height,
-                                         0, 0, canvas.width, canvas.height);
-				var canvasTexture = new THREE.Texture(document.getElementById("myCanvas"));
-				canvasTexture.needsUpdate = true;
-
-				var material = new THREE.MeshBasicMaterial({
-				                /*color: 0xFFFFFF,
-				                wireframe: true,
-				                wireframeLinewidth: 1*/
-								map: canvasTexture
-				            });
-
-				var mesh = new THREE.Mesh(geometry, material);
-				scene.add(mesh);
-
-				testMesh = mesh;
-
-				// clear mesh data
-				ARAP.resetMeshWrapper();
-
-				// add vertices
-				ARAP.doArrayFunction(vertsFlatArray, ARAP.setMeshVertexDataWrapper);
-
-				// add faces
-				ARAP.doArrayFunction(facesFlatArray, ARAP.setMeshTriangleDataWrapper);
-
-				// setup mesh deformer
-				ARAP.setupMeshDeformerWrapper();
-
-				// add control point
-				for(var i = 0; i < controlPointIndices.length; i++) {
-					ARAP.addControlPointWrapper(controlPointIndices[i]);
-				}
-
-			}
-
-		</script>
-
-	</body>
+</body>
 </html>
