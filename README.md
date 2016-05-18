@@ -3,8 +3,9 @@
 Experimental browser-based version of <a href="http://www.dranimate.com">Dranimate</a>.
 
 Currently in development.
+Check out the demo [here](http://www.zrispo.co/dranimate-browser/).
 
-### Installation
+### Installation + How to run locally
 * Clone or download and unzip this repo
 * Open terminal in the newly made `dranimate-browser` folder and run a python webserver using: `python -m SimpleHTTPServer`
 * Open a browser window, and go to `http://localhost:8000/`
