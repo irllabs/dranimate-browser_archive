@@ -1,13 +1,3 @@
-<!--- 
-woah honey!
-this code is a bit crazy as I work on it!
-watch out!
-
-current TODO:
- - multiple ARAP mesh support
- - draggable control points w/ mouse
--->
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -44,6 +34,7 @@ current TODO:
 
 		    Image: <input type="file" id="imageLoader" name="imageLoader"><br /> 
 		    <button type="button" id="genMeshButton">Generate Mesh</button> <br />
+		    <button type="button" id="testARAPButton">Test ARAP</button> <br />
 
 		    <canvas id="myCanvas" width="578" height="400"></canvas><br />
 
@@ -61,13 +52,6 @@ current TODO:
 		<script src="arap/arap.js"></script>
 
 		<script>
-
-			image = new Image();
-			image.src = "image-to-mesh/images/testImage.jpg";
-			image.onload = function() {
-			    doSLICOnImage();
-			}
-
 			/*
 			document.getElementById("calcContoursButton").onclick = function() {     
 			    recalculateCentroids(); 
@@ -83,11 +67,13 @@ current TODO:
 
 			    generateMesh();
 			    redraw();
+			};
 
-			    setupMeshAndARAP(vertices, triangles);
+			document.getElementById("testARAPButton").onclick = function() {
+				setupMeshAndARAP(vertices, triangles);
 
 			    document.getElementById("meshGenerationWindow").style.display = "none";
-			};
+			}
 
 			var container;
 
@@ -280,12 +266,17 @@ current TODO:
 
 				geometry.dynamic = true;
 
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				context.drawImage(image, 0, 0, image.width, image.height,
+                                         0, 0, canvas.width, canvas.height);
+				var canvasTexture = new THREE.Texture(document.getElementById("myCanvas"));
+				canvasTexture.needsUpdate = true;
+
 				var material = new THREE.MeshBasicMaterial({
 				                /*color: 0xFFFFFF,
 				                wireframe: true,
 				                wireframeLinewidth: 1*/
-
-				                map: THREE.ImageUtils.loadTexture("image-to-mesh/images/testImage.jpg")
+								map: canvasTexture
 				            });
 
 				var mesh = new THREE.Mesh(geometry, material);

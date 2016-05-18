@@ -25,6 +25,19 @@ var controlPointIndices = [];
 var vertices;
 var triangles;
 
+
+image = new Image();
+image.src = "image-to-mesh/images/testImage.jpg";
+image.onload = function() {
+    dummyCanvas.width = image.width;
+    dummyCanvas.height = image.height;
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    doSLICOnImage();
+}
+
 var imageLoader = document.getElementById('imageLoader');
 imageLoader.addEventListener('change', function(e){
         var reader = new FileReader();
@@ -34,14 +47,18 @@ imageLoader.addEventListener('change', function(e){
                         doSLICOnImage();
                 }
                 image.src = event.target.result;
+
+                dummyCanvas.width = image.width;
+                dummyCanvas.height = image.height;
+
+                canvas.width = image.width;
+                canvas.height = image.height;
         }
         reader.readAsDataURL(e.target.files[0]);     
 }, false);
 
 
 var dummyCanvas = document.createElement("canvas");
-dummyCanvas.width = 578;
-dummyCanvas.height = 400;
 var dummyContext = dummyCanvas.getContext("2d");
 
 function redraw() {
