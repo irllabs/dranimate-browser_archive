@@ -126,20 +126,16 @@
 
 			// move that control point
 			var controlPointIndices = ImageToMesh.getControlPointIndices();
-			ARAP.setControlPointPositionWrapper(0, controlPointIndices[0], x, y);
+			ARAP.setControlPointPosition(0, controlPointIndices[0], x, y);
 			for(var i = 1; i < controlPointIndices.length; i++) {
 				var cpi = controlPointIndices[i];
-				ARAP.setControlPointPositionWrapper(0, cpi, vertices[cpi][0], vertices[cpi][1]);
+				ARAP.setControlPointPosition(0, cpi, vertices[cpi][0], vertices[cpi][1]);
 			}
 
 			// update ARAP deformer
-			ARAP.updateMeshDeformationWrapper();
+			ARAP.updateMeshDeformation(0);
 
-			var empty = [];
-			for(var i = 0; i < vertsFlatArray.length; i++) {
-				empty.push(0);
-			}
-			var deformedVerts = ARAP.doArrayFunction(empty, ARAP.getMeshVertexDataWrapper);
+			var deformedVerts = ARAP.getDeformedVertices(0, vertsFlatArray.length);
 
 			for(var i = 0; i < deformedVerts.length; i+=2) {
 				var x = deformedVerts[i];
@@ -273,16 +269,13 @@
 
 			testMesh = mesh;
 
-			// clear mesh data
+			// make new mesh
 			ARAP.createNewARAPMesh(vertsFlatArray, facesFlatArray);
-
-			// setup mesh deformer
-			ARAP.setupMeshDeformerWrapper(0);
 
 			// add control point
 			var controlPointIndices = ImageToMesh.getControlPointIndices();
 			for(var i = 0; i < controlPointIndices.length; i++) {
-				ARAP.addControlPointWrapper(0, controlPointIndices[i]);
+				ARAP.addControlPoint(0, controlPointIndices[i]);
 			}
 
 		}
