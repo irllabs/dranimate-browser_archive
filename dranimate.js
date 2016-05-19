@@ -22,6 +22,7 @@ document.getElementById("genMeshButton").onclick = function() {
 document.getElementById("testARAPButton").onclick = function() {
 	setupMeshAndARAP();
     document.getElementById("meshGenerationWindow").style.display = "none";
+    //ImageToMesh.setup();
 }
 
 var arapThreeMesh;
