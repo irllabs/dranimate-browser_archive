@@ -27,6 +27,8 @@ document.getElementById("testARAPButton").onclick = function() {
 
 var arapThreeMesh;
 
+var controlPointToControl = 0;
+
 init();
 animate();
 
@@ -53,11 +55,6 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	container.appendChild( renderer.domElement );
-
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'mousedown', onMouseDown, false );
-
-	window.addEventListener( 'resize', onWindowResize, false );
 
 }
 
@@ -104,20 +101,35 @@ function testControlPoints(x, y) {
 
 }
 
-function onDocumentMouseMove( event ) {
+document.addEventListener( 'mousemove', function ( event ) {
 
 	mouseX = ( event.clientX - windowHalfX ) / 2;
 	mouseY = ( event.clientY - windowHalfY ) / 2;
 
 	if(arapThreeMesh) {
-		arapThreeMesh.setControlPointPosition(0, mouseX*3, mouseY*3);
+		arapThreeMesh.setControlPointPosition(controlPointToControl, mouseX*3, mouseY*3);
 	}
 
-}
+}, false );
 
-function onMouseDown( event ) {
-	
-}
+document.addEventListener( 'mousedown', function( event ) {
+		
+} , false );
+
+document.addEventListener('keydown', function(evt) {
+	if(evt.keyCode == 39) { // right arrow
+		controlPointToControl++;
+		if(controlPointToControl >= arapThreeMesh.controlPoints.length) {
+			controlPointToControl = 0;
+		}
+	}
+	if(evt.keyCode == 37) { // left arrow
+		controlPointToControl--;
+		if(controlPointToControl < 0) {
+			controlPointToControl = arapThreeMesh.controlPoints.length-1;
+		}
+	}
+});
 
 function animate() {
 
@@ -150,7 +162,7 @@ function render() {
 
 }
 
-function onWindowResize() {
+window.addEventListener( 'resize', function () {
 
 	windowHalfX = window.innerWidth / 2;
 	windowHalfY = window.innerHeight / 2;
@@ -160,4 +172,4 @@ function onWindowResize() {
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
-}
+}, false );
