@@ -1,8 +1,10 @@
 # ARAP.js
 
-Currently in development. This will eventually be a standalone repo.
+[As Rigid As Possible Shape Deformation](http://www.igl.ethz.ch/projects/ARAP/arap_web.pdf) for the browser.
 
-[Here's a video of it working](https://www.youtube.com/watch?v=Ls1YAKmUPIw)
+![Scene example](example.gif)
+
+Currently in development. This will eventually be a standalone repo.
 
 ### How to build
 
