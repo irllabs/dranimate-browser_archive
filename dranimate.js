@@ -96,11 +96,6 @@ function setupMeshAndARAP() {
 
 }
 
-function testControlPoints(x, y) {
-
-
-}
-
 document.addEventListener( 'mousemove', function ( event ) {
 
 	mouseX = ( event.clientX - windowHalfX ) / 2;
