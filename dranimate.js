@@ -22,7 +22,6 @@ document.getElementById("genMeshButton").onclick = function() {
 document.getElementById("testARAPButton").onclick = function() {
 	setupMeshAndARAP();
     document.getElementById("meshGenerationWindow").style.display = "none";
-    //ImageToMesh.setup();
 }
 
 var arapThreeMesh;
@@ -126,6 +125,18 @@ document.addEventListener('keydown', function(evt) {
 	}
 });
 
+window.addEventListener( 'resize', function () {
+
+	windowHalfX = window.innerWidth / 2;
+	windowHalfY = window.innerHeight / 2;
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}, false );
+
 function animate() {
 
 	requestAnimationFrame( animate );
@@ -156,15 +167,3 @@ function render() {
 	renderer.render( scene, camera );
 
 }
-
-window.addEventListener( 'resize', function () {
-
-	windowHalfX = window.innerWidth / 2;
-	windowHalfY = window.innerHeight / 2;
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-}, false );
