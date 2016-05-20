@@ -234,4 +234,5 @@ chrome.tabs.getSelected(null, function(tab) {
     } else {
         show('invalid');
     }
+    
 });

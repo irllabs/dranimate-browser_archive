@@ -2,7 +2,57 @@
 var CAPTURE_DELAY = 150;
 
 function onMessage(request, sender, callback) {
-    if (request.msg === 'scrollPage') {
+
+    if (!document.getElementById("cropbox")) {
+
+        var dranimateImageCropperContainer = document.createElement('span');
+        dranimateImageCropperContainer.style.width = '100%';
+        dranimateImageCropperContainer.style.height = '100%';
+        dranimateImageCropperContainer.id = 'dranimateImageCropperContainer';
+        document.getElementsByTagName('body')[0].style.width = '100%';
+        document.getElementsByTagName('body')[0].style.height = '100%';
+        document.getElementsByTagName('body')[0].appendChild(dranimateImageCropperContainer);
+
+        /* Add a div that takes up the whole screen so user knows we're cropping */
+
+        var transparentCover = document.createElement('span');
+        transparentCover.id = 'transparentCover';
+        transparentCover.style.position = 'fixed';
+        transparentCover.style.width = '100%';
+        transparentCover.style.height = '100%';
+        transparentCover.style.top = '0';
+        transparentCover.style.left = '0';
+        //transparentCover.style.opacity = '0.5';
+        transparentCover.style.backgroundColor = 'white';
+        transparentCover.style.zIndex = '10000';
+        document.getElementById('dranimateImageCropperContainer').appendChild(transparentCover);
+
+        /* Make the cropbox */
+
+        var cropbox = document.createElement('span');
+        cropbox.id = 'cropbox';
+        cropbox.style.position = 'fixed';
+        cropbox.style.width = '150px';
+        cropbox.style.height = '100px';
+        //cropbox.style.opacity = '0.5';
+        cropbox.style.backgroundColor = "red";
+        cropbox.style.zIndex = '10000';
+        document.getElementById('transparentCover').appendChild(cropbox);
+
+        /* Add mouse events to control cropbox */
+
+        document.addEventListener( 'mousemove', function ( event ) {
+
+            var mouseX = event.clientX - 150/2;
+            var mouseY = event.clientY - 100/2;
+
+            var cropbox = document.getElementById('cropbox');
+            cropbox.style.left = mouseX + 'px';
+            cropbox.style.top = mouseY + 'px';
+
+        }, false );
+
+    } else if (request.msg === 'scrollPage') {
         getPositions(callback);
     } else if (request.msg == 'logMessage') {
         console.log('[POPUP LOG]', request.data);
