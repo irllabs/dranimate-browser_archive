@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Dranimate Dev</title>
+	<title>Browser Dranimate Demo</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<style>
 		body {
 			font-family: Monospace;
-			background-color: #000;
-			color: #fff;
+			background-color: #fff;
 			margin: 0px;
 			overflow: hidden;
 		}
-		#stats { 
+		#stats {
 			position: absolute;
 			top: 0; 
 			left: 0;
@@ -21,19 +20,22 @@
 			margin-top: 50px;
 			position: absolute; 
 		}
+
+		#newPuppetWindow {
+			margin-top: 50px;
+			position: absolute;
+		}
 	</style>
 </head>
 
 <body>
+	<div id="newPuppetWindow">
+		Create new puppet from file: <input type="file" id="imageLoader" name="imageLoader"><br /> 
+	</div>
 
 	<div id="meshGenerationWindow">
-		<strong>Browser dranimate demo</strong><br />
-		Image Segmentation + Mesh Generation + As Rigid as Possible<br />
-		<br />
-
-	    Image: <input type="file" id="imageLoader" name="imageLoader"><br /> 
-	    <button type="button" id="genMeshButton">Generate Mesh</button> <br />
-	    <button type="button" id="testARAPButton">Test ARAP</button> <br />
+	    <button type="button" id="showMeshButton">Show Mesh</button>
+	    <button type="button" id="createPuppetButton">Create Puppet</button> <br />
 
 	    <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
 	</div>
@@ -50,7 +52,7 @@
 	<script src="lib/arap/arap.js"></script>
 	<script src="lib/arap/arap-three.js"></script>
 
-	<script src="dranimate.js"></script>
+	<script src="src/dranimate.js"></script>
 
 </body>
 </html>

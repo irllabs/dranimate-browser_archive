@@ -14,14 +14,34 @@ document.body.appendChild( stats.domElement );
 
 ImageToMesh.setup();
 
-document.getElementById("genMeshButton").onclick = function() {
+var START_WITH_TEST_IMAGE = false;
+if(START_WITH_TEST_IMAGE) {
+	ImageToMesh.loadTestImage();
+	document.getElementById("meshGenerationWindow").style.visibility = "visible";
+    document.getElementById("newPuppetWindow").style.visibility = "hidden";
+} else {
+	document.getElementById("meshGenerationWindow").style.visibility = "hidden";
+    document.getElementById("newPuppetWindow").style.visibility = "visible";
+}
+
+ImageToMesh.setup();
+
+var imageLoader = document.getElementById('imageLoader');
+imageLoader.addEventListener('change', function(e){
+	document.getElementById("meshGenerationWindow").style.visibility = "visible";
+    document.getElementById("newPuppetWindow").style.visibility = "hidden";
+});
+
+document.getElementById("showMeshButton").onclick = function() {
     ImageToMesh.generateMesh();
     ImageToMesh.redraw();
 };
 
-document.getElementById("testARAPButton").onclick = function() {
+document.getElementById("createPuppetButton").onclick = function() {
+	ImageToMesh.generateMesh();
 	setupMeshAndARAP();
-    document.getElementById("meshGenerationWindow").style.display = "none";
+    document.getElementById("meshGenerationWindow").style.visibility = "hidden";
+    document.getElementById("newPuppetWindow").style.visibility = "visible";
 }
 
 var arapThreeMesh;
@@ -53,6 +73,7 @@ function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setClearColor( 0xFFFFFF, 1 );
 	container.appendChild( renderer.domElement );
 
 }
