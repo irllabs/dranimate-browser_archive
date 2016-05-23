@@ -248,6 +248,8 @@ void RigidMeshDeformer2D::ValidateSetup()
 	
 	//printf("Computing matrices for mesh with %i verts....this might take a while...\n", m_vInitialVerts.size() );
 	
+	std::cout << "Computing matrices for mesh with" << m_vInitialVerts.size() << "verts....this might take a while...\n";
+
 	PrecomputeOrientationMatrix();
 	
 	// ok, now scale triangles
@@ -257,7 +259,7 @@ void RigidMeshDeformer2D::ValidateSetup()
 	
 	PrecomputeFittingMatrices();
 	
-	//printf("Done!\n" );
+	std::cout << "Done!\n";
 	
 	
 	m_bSetupValid = true;

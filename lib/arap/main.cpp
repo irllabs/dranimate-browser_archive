@@ -182,6 +182,8 @@ extern "C" {
 
 			arr[i*2] = vert.X();
 			arr[i*2+1] = vert.Y();
+
+			std::cout << vert.X() << ", " << vert.Y() << "\n";
 		}
 
 		return 1;

@@ -7,6 +7,8 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
+var activeControlPoint = { hoveredOver: false };
+
 stats = new Stats();
 document.body.appendChild( stats.domElement );
 
@@ -14,7 +16,7 @@ document.body.appendChild( stats.domElement );
 
 ImageToMesh.setup();
 
-var START_WITH_TEST_IMAGE = false;
+var START_WITH_TEST_IMAGE = true;
 if(START_WITH_TEST_IMAGE) {
 	ImageToMesh.loadTestImage();
 	document.getElementById("meshGenerationWindow").style.visibility = "visible";
@@ -30,6 +32,7 @@ var imageLoader = document.getElementById('imageLoader');
 imageLoader.addEventListener('change', function(e){
 	document.getElementById("meshGenerationWindow").style.visibility = "visible";
     document.getElementById("newPuppetWindow").style.visibility = "hidden";
+    ImageToMesh.reset();
 });
 
 document.getElementById("showMeshButton").onclick = function() {
@@ -44,7 +47,7 @@ document.getElementById("createPuppetButton").onclick = function() {
     document.getElementById("newPuppetWindow").style.visibility = "visible";
 }
 
-var arapThreeMesh;
+var puppets = [];
 
 var controlPointToControl = 0;
 
@@ -56,10 +59,15 @@ function init() {
 	/* Initialize THREE canvas and scene */
 
 	container = document.createElement( 'div' );
+	container.id = "THREEContainer";
 	document.body.appendChild( container );
 
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-	camera.position.z = -600;
+	camera = new THREE.OrthographicCamera( 0, 
+		                                   window.innerWidth, 
+		                                   0, 
+		                                   window.innerHeight, 
+		                                   0.1, 1000 );
+	camera.updateProjectionMatrix();
 
 	scene = new THREE.Scene();
 
@@ -101,59 +109,122 @@ function setupMeshAndARAP() {
 
 	/* Create THREE material using that image */
 
-	var material = new THREE.MeshBasicMaterial({
-					// uncomment if you need a wireframe...
-	                /* color: 0xFFFFFF,
-	                wireframe: true,
-	                wireframeLinewidth: 1*/
-					map: canvasTexture
-	            });
+	var wireframeMaterial = new THREE.MeshBasicMaterial({
+        color: 0xFF0000,
+        wireframe: true,
+        wireframeLinewidth: 1
+    });
+
+	var texturedMaterial = new THREE.MeshBasicMaterial({
+		map: canvasTexture
+    });
 
 	/* Create the new ARAPThreeMesh */
 
-	arapThreeMesh = new ARAPThreeMesh(vertices, faces, controlPoints, material, image.width, image.height);
+	var arapThreeMesh = new ARAPThreeMesh(
+		vertices, faces, controlPoints, wireframeMaterial, image.width, image.height
+	);
 	scene.add(arapThreeMesh.threeMesh);
+	puppets.push(arapThreeMesh);
 
 }
 
-document.addEventListener( 'mousemove', function ( event ) {
+document.getElementById("THREEContainer").addEventListener( 'mousemove', function ( event ) {
 
-	mouseX = ( event.clientX - windowHalfX ) / 2;
-	mouseY = ( event.clientY - windowHalfY ) / 2;
+	mouseX = event.clientX;
+	mouseY = event.clientY;
 
-	if(arapThreeMesh) {
-		arapThreeMesh.setControlPointPosition(controlPointToControl, mouseX*3, mouseY*3);
+	/* Find control point closest to the mouse */
+
+	if(!activeControlPoint.beingDragged) {
+
+		var foundControlPoint = false;
+
+		for(var p = 0; p < puppets.length; p++) {
+
+			var verts = puppets[p].threeMesh.geometry.vertices;
+			var controlPoints = puppets[p].controlPoints;
+
+			for(var c = 0; c < controlPoints.length; c++) {
+
+				var vert = verts[controlPoints[c]];
+				var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
+				var dist = vert.distanceTo(mouseVec);
+
+				if(dist < 40) {
+					activeControlPoint = { puppetIndex: p, hoveredOver: true, beingDragged: false, controlPointIndex: c };
+					foundControlPoint = true;
+					break;
+				}
+			}
+			/*
+			for(var c = 0; c < verts.length; c++) {
+				var vert = verts[c];
+				var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
+				var dist = vert.distanceTo(mouseVec);
+				if(dist < 5) {
+					
+					console.log(c)
+					
+				}
+			}*/
+		}
+
+		if(foundControlPoint) {
+			document.getElementById("THREEContainer").style.cursor = "pointer";
+		} else {
+			document.getElementById("THREEContainer").style.cursor = "default";
+			activeControlPoint.hoveredOver = false;
+		}
 	}
 
 }, false );
 
-document.addEventListener( 'mousedown', function( event ) {
-		
+document.getElementById("THREEContainer").addEventListener( 'mousedown', function( event ) {
+	
+	mouseX = event.clientX;
+	mouseY = event.clientY;
+
+	if(activeControlPoint.hoveredOver) {
+		activeControlPoint.beingDragged = true;
+	}
+
 } , false );
+
+document.getElementById("THREEContainer").addEventListener( 'mouseup', function( event ) {
+	
+	mouseX = event.clientX;
+	mouseY = event.clientY;
+
+	if(activeControlPoint) {
+		activeControlPoint.beingDragged = false;
+		document.getElementById("THREEContainer").style.cursor = "default";
+	}
+
+});
 
 document.addEventListener('keydown', function(evt) {
 	if(evt.keyCode == 39) { // right arrow
 		controlPointToControl++;
-		if(controlPointToControl >= arapThreeMesh.controlPoints.length) {
+		if(controlPointToControl >= puppets[puppets.length-1].controlPoints.length) {
 			controlPointToControl = 0;
 		}
 	}
 	if(evt.keyCode == 37) { // left arrow
 		controlPointToControl--;
 		if(controlPointToControl < 0) {
-			controlPointToControl = arapThreeMesh.controlPoints.length-1;
+			controlPointToControl = puppets[puppets.length-1].controlPoints.length-1;
 		}
 	}
 });
 
 window.addEventListener( 'resize', function () {
 
-	windowHalfX = window.innerWidth / 2;
-	windowHalfY = window.innerHeight / 2;
-
-	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.left = 0;
+	camera.right = window.innerWidth;
+	camera.top = 0;
+	camera.bottom = window.innerHeight;
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
 }, false );
@@ -170,20 +241,29 @@ function animate() {
 }
 
 function update() {
-	
-	if(arapThreeMesh) {
-		arapThreeMesh.update();
+
+	if(activeControlPoint) {
+		if(activeControlPoint.beingDragged) {
+			var pi = activeControlPoint.puppetIndex;
+			var ci = activeControlPoint.controlPointIndex;
+			puppets[pi].setControlPointPosition(ci, mouseX, mouseY);
+		}
+	}
+
+	for(var i = 0; i < puppets.length; i++) {
+		if(activeControlPoint.beingDragged && activeControlPoint.puppetIndex == i) {
+			puppets[i].update();
+		}
 	}
 
 }
 
 function render() {
 
-	//camera.lookAt( scene.position );
-	camera.lookAt( new THREE.Vector3(ImageToMesh.getCanvas().width/2,
-		                             ImageToMesh.getCanvas().height/2,
-		                             0) );                
-	camera.rotation.z = 0;
+	camera.position.x = 0;
+	camera.position.y = 0;
+	camera.position.z = 100;
+	camera.lookAt( window.innerWidth/2, window.innerHeight/2, 0 );
 
 	renderer.render( scene, camera );
 
