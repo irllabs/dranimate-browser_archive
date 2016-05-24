@@ -99,11 +99,10 @@ function setupMeshAndARAP() {
 
 	var image = ImageToMesh.getImage();
 
+	ImageToMesh.eraseUnselectedPixels();
+
 	/* Create THREE texture from image used by ImageToMesh */
 
-	i2mContext.clearRect(0, 0, i2mCanvas.width, i2mCanvas.height);
-	i2mContext.drawImage(image, 0, 0, image.width, image.height,
-                             0, 0, i2mCanvas.width, i2mCanvas.height);
 	var canvasTexture = new THREE.Texture(document.getElementById("imageToMeshCanvas"));
 	canvasTexture.needsUpdate = true;
 
@@ -122,7 +121,7 @@ function setupMeshAndARAP() {
 	/* Create the new ARAPThreeMesh */
 
 	var arapThreeMesh = new ARAPThreeMesh(
-		vertices, faces, controlPoints, wireframeMaterial, image.width, image.height
+		vertices, faces, controlPoints, texturedMaterial, image.width, image.height
 	);
 	scene.add(arapThreeMesh.threeMesh);
 	puppets.push(arapThreeMesh);
@@ -152,7 +151,12 @@ document.getElementById("THREEContainer").addEventListener( 'mousemove', functio
 				var dist = vert.distanceTo(mouseVec);
 
 				if(dist < 40) {
-					activeControlPoint = { puppetIndex: p, hoveredOver: true, beingDragged: false, controlPointIndex: c };
+					activeControlPoint = { 
+						puppetIndex: p, 
+						hoveredOver: true, 
+						beingDragged: false, 
+						controlPointIndex: c 
+					};
 					foundControlPoint = true;
 					break;
 				}
