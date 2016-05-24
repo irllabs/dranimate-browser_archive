@@ -248,7 +248,7 @@ void RigidMeshDeformer2D::ValidateSetup()
 	
 	//printf("Computing matrices for mesh with %i verts....this might take a while...\n", m_vInitialVerts.size() );
 	
-	std::cout << "Computing matrices for mesh with" << m_vInitialVerts.size() << "verts....this might take a while...\n";
+	std::cout << "Computing matrices for mesh with " << m_vInitialVerts.size() << " verts....this might take a while...\n";
 
 	PrecomputeOrientationMatrix();
 	

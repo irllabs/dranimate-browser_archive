@@ -10,10 +10,6 @@ ARAP.setControlPointPosition(0, 227, 100, 100);
 ARAP.updateMeshDeformation(0);
 ARAP.getDeformedVertices(0, bigVerts.length)
 
-
-
-
-
 var container;
 
 var camera, scene, renderer;
@@ -32,7 +28,7 @@ document.body.appendChild( stats.domElement );
 
 ImageToMesh.setup();
 
-var START_WITH_TEST_IMAGE = true;
+var START_WITH_TEST_IMAGE = false;
 if(START_WITH_TEST_IMAGE) {
 	ImageToMesh.loadTestImage();
 	document.getElementById("meshGenerationWindow").style.visibility = "visible";
