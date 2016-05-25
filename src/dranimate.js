@@ -10,6 +10,10 @@ ARAP.setControlPointPosition(0, 227, 100, 100);
 ARAP.updateMeshDeformation(0);
 ARAP.getDeformedVertices(0, bigVerts.length)
 
+document.getElementById("meshGenerationWindow").style.visibility = "visible";
+document.getElementById("newPuppetWindow").style.visibility = "visible";
+document.getElementById("loading").style.visibility = "hidden";
+
 var container;
 
 var camera, scene, renderer;
@@ -32,10 +36,10 @@ var START_WITH_TEST_IMAGE = false;
 if(START_WITH_TEST_IMAGE) {
 	ImageToMesh.loadTestImage();
 	document.getElementById("meshGenerationWindow").style.visibility = "visible";
-    document.getElementById("newPuppetWindow").style.visibility = "hidden";
+	document.getElementById("newPuppetWindow").style.visibility = "hidden";
 } else {
 	document.getElementById("meshGenerationWindow").style.visibility = "hidden";
-    document.getElementById("newPuppetWindow").style.visibility = "visible";
+	document.getElementById("newPuppetWindow").style.visibility = "visible";
 }
 
 ImageToMesh.setup();
@@ -43,21 +47,52 @@ ImageToMesh.setup();
 var imageLoader = document.getElementById('imageLoader');
 imageLoader.addEventListener('change', function(e){
 	document.getElementById("meshGenerationWindow").style.visibility = "visible";
-    document.getElementById("newPuppetWindow").style.visibility = "hidden";
-    ImageToMesh.reset();
+	document.getElementById("newPuppetWindow").style.visibility = "hidden";
+	ImageToMesh.reset();
 });
-
-document.getElementById("showMeshButton").onclick = function() {
-    ImageToMesh.generateMesh();
-    ImageToMesh.redraw();
-};
 
 document.getElementById("createPuppetButton").onclick = function() {
 	ImageToMesh.generateMesh();
-	setupMeshAndARAP();
-    document.getElementById("meshGenerationWindow").style.visibility = "hidden";
-    document.getElementById("newPuppetWindow").style.visibility = "visible";
+
+	var vertices = ImageToMesh.getVertices();
+	var faces = ImageToMesh.getTriangles();
+	var controlPoints = ImageToMesh.getControlPointIndices();
+	var image = ImageToMesh.getImage();
+
+	ImageToMesh.eraseUnselectedPixels();
+
+	setupMeshAndARAP(vertices, faces, controlPoints, document.getElementById("imageToMeshCanvas"));
+
+	document.getElementById("meshGenerationWindow").style.visibility = "hidden";
+	document.getElementById("newPuppetWindow").style.visibility = "visible";
 }
+
+document.getElementById("useDemoPuppetButton").onclick = function() {
+	var vertices = [[78,391],[85,410],[90,374],[105,415],[106,361],[120,344],[123,404],[137,332],[143,398],[154,320],[160,78],[160,387],[162,98],[166,118],[170,138],[170,308],[172,62],[177,157],[180,383],[183,177],[188,297],[192,66],[193,195],[199,85],[199,375],[202,213],[207,288],[212,101],[213,230],[219,369],[225,246],[225,279],[226,116],[237,133],[237,262],[239,366],[253,145],[258,359],[267,160],[278,353],[282,174],[297,188],[298,356],[301,376],[305,396],[306,416],[307,538],[308,436],[309,492],[310,464],[310,517],[313,200],[317,556],[327,538],[331,188],[337,556],[340,169],[351,152],[352,538],[361,133],[361,520],[368,485],[373,116],[374,414],[375,444],[376,394],[376,466],[380,374],[385,98],[394,359],[399,82],[403,254],[409,234],[411,65],[414,359],[415,212],[420,192],[420,265],[425,48],[426,172],[432,150],[433,366],[436,277],[439,128],[442,36],[445,108],[450,88],[453,371],[454,286],[455,68],[459,47],[471,297],[472,378],[491,301],[492,383],[508,312],[512,385],[523,326],[532,389],[539,338],[551,396],[558,345],[571,401],[574,357],[588,372],[591,401],[435.3515151515152,42.4],[433.00041339396444,70.03183133526251],[424.28418230563005,96.08847184986595],[176.89820359281438,83.85748502994012],[189.68328298086607,108.39073514602215],[412.00119047619046,122.29563492063492],[200.46575342465752,132.4637964774951],[396.7291875626881,130.71013039117352],[217.10059835452506,153.4513836948392],[198.41369047619048,149.54166666666666],[372.3714591127739,161.64617851416355],[390.0816326530612,169.34948979591837],[265.0247838616715,186.64726224783863],[406.5187891440501,189.178496868476],[357.89702427564606,202.89036805011747],[227.15515151515152,205.90989898989898],[299.7580893682589,208.64149974319466],[256.0543259557344,207.62776659959758],[253.15321180555554,244.2265625],[391.81705342687536,247.90825688073394],[362.43809523809523,219.66666666666666],[333.4648148148148,249.1],[287.4949944382647,280.3604004449388],[312.8158253751705,273.4665757162347],[418.3302825308396,291.8173497811381],[228.70821256038647,306.24830917874397],[358.05231259968104,301.541307814992],[465.9596848934198,316.7289156626506],[341.9867374005305,319.6657824933687],[405.71496437054634,312.6413301662708],[178.16244725738397,330.2035864978903],[309.26553911205076,331.8139534883721],[260.7354285714286,340.67885714285717],[243.95679012345678,323.27777777777777],[241.44654088050314,323.62893081761007],[429.80625,323.96875],[422.67910447761193,342.93407960199005],[518.4676616915423,340.4636815920398],[200.24681238615665,351.00774134790527],[151.44158878504672,358.0907320872274],[370.18890300720034,355.3108852181279],[472.2542735042735,342.11752136752136],[510.06635071090045,364.53554502369667],[493.326362135388,367.5189873417722],[564.3716734325666,378.94587280108254],[109.75308641975309,373.5679012345679],[170.82420749279538,354.64553314121036],[111.33093894304771,385.331965110313],[325.3185550082102,367.4039408866995],[556.1308411214953,391.4897196261682],[340.86315789473684,381.0342105263158],[543.8421052631579,371.53739612188366],[335.98234349919744,402.3073836276084],[105.45114345114345,389.7837837837838],[376.43548387096774,458.1774193548387],[344.0618021293171,465.5492079979226],[346.87786259541986,443.30916030534354],[338.5273311897106,499.68167202572346],[334.59377593360995,525.4186721991701],[112,390],[184,100],[439,62],[564,379],[330,519],[333,286]];
+	var faces = [61,60,66,150,102,104,104,102,105,103,150,104,168,155,150,150,155,102,157,168,103,101,157,103,168,150,103,155,100,102,157,155,168,157,100,155,99,157,101,157,98,100,148,98,157,99,143,157,143,148,157,148,96,98,97,143,99,95,143,97,95,147,143,149,148,143,147,149,143,148,149,96,149,94,96,93,133,95,133,147,95,91,133,93,92,94,149,147,92,149,81,87,147,142,81,147,141,142,147,133,141,147,87,92,147,88,133,91,88,141,133,130,141,88,84,106,90,106,167,90,167,89,90,82,130,88,107,86,89,167,107,89,78,106,84,108,85,86,107,108,86,111,83,85,108,111,85,106,78,167,130,135,141,78,107,167,111,80,83,142,74,81,78,73,107,73,108,107,77,130,82,111,113,80,73,70,108,117,79,80,113,117,80,135,142,141,119,76,79,117,119,79,68,111,108,70,68,108,119,75,76,71,130,77,69,74,142,135,69,142,132,135,130,71,132,130,126,72,75,119,126,75,125,132,71,68,113,111,146,69,135,125,71,72,120,126,119,126,125,72,68,62,113,116,117,113,132,146,135,117,120,119,59,116,113,132,134,146,127,132,125,62,59,113,127,170,132,116,120,117,146,67,69,126,127,125,56,120,116,59,57,116,63,162,64,156,65,67,146,156,67,163,60,61,161,61,66,158,63,65,64,162,160,161,66,160,162,161,160,156,158,65,158,162,63,57,56,116,134,154,146,154,156,146,56,54,120,161,163,61,120,51,126,51,127,126,164,58,60,163,164,60,169,164,163,54,51,120,170,134,132,137,154,134,158,47,162,53,55,58,164,53,58,51,122,127,129,170,127,45,47,158,48,163,161,49,48,161,49,161,162,47,49,162,170,137,134,44,158,156,154,44,156,48,50,169,53,52,55,48,169,163,129,137,170,128,137,129,137,42,154,44,45,158,43,44,154,169,53,164,122,129,127,50,53,169,50,46,53,122,128,129,46,52,53,124,128,122,42,43,154,128,138,137,41,122,51,39,42,137,138,39,137,139,138,128,123,124,122,41,118,122,118,123,122,40,118,41,34,31,128,31,131,128,131,139,128,124,34,128,38,118,40,138,37,39,114,118,38,36,114,38,114,121,118,121,123,118,121,30,124,121,124,123,139,140,138,35,37,138,140,35,138,28,30,121,131,140,139,33,114,36,30,34,124,29,35,140,144,29,140,114,22,121,131,144,140,32,112,33,112,114,33,19,22,114,22,25,121,25,28,121,136,144,131,20,136,131,26,20,131,31,26,131,27,112,32,115,19,114,110,112,27,112,115,114,144,24,29,23,110,27,17,19,115,166,110,23,15,136,20,152,24,144,14,115,112,13,14,110,152,18,24,21,109,23,136,152,144,110,14,112,14,17,115,109,166,23,16,109,21,166,13,110,152,11,18,109,12,166,12,13,166,145,11,152,16,10,109,15,9,136,9,152,136,9,145,152,10,12,109,7,145,9,145,8,11,151,153,8,151,8,145,7,5,145,5,151,145,4,151,5,165,6,8,153,165,8,165,3,6,159,3,165,1,3,159,151,159,153,153,159,165,2,159,151,4,2,151,0,1,159,2,0,159];
+	var controlPoints = [165,166,167,168,169,170];
+
+	var image = new Image();
+	image.onload = function() {
+		var canvas = document.createElement('canvas');
+		canvas.id = "dummyCanvas";
+		canvas.width = image.width;
+		canvas.height = image.height;
+		var context = canvas.getContext('2d');
+		context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
+
+	    setupMeshAndARAP(vertices, faces, controlPoints, canvas);
+
+		document.getElementById("meshGenerationWindow").style.visibility = "hidden";
+		document.getElementById("newPuppetWindow").style.visibility = "visible";
+	};
+	image.src = 'testimages/starfish.jpg';
+};
+
+document.getElementById("showMeshButton").onclick = function() {
+	ImageToMesh.generateMesh();
+	ImageToMesh.redraw();
+};
 
 var puppets = [];
 
@@ -75,10 +110,10 @@ function init() {
 	document.body.appendChild( container );
 
 	camera = new THREE.OrthographicCamera( 0, 
-		                                   window.innerWidth, 
-		                                   0, 
-		                                   window.innerHeight, 
-		                                   0.1, 1000 );
+										   window.innerWidth, 
+										   0, 
+										   window.innerHeight, 
+										   0.1, 1000 );
 	camera.updateProjectionMatrix();
 
 	scene = new THREE.Scene();
@@ -98,42 +133,41 @@ function init() {
 
 }
 
-function setupMeshAndARAP() {
+function setupMeshAndARAP(vertices, faces, controlPoints, canvas) {
 
-	/* Setup ARAP on mesh */
+	console.log(canvas)
 
-	var vertices = ImageToMesh.getVertices();
-	var faces = ImageToMesh.getTriangles();
-	var controlPoints = ImageToMesh.getControlPointIndices();
-
-	var i2mCanvas = ImageToMesh.getCanvas();
-	var i2mContext = i2mCanvas.getContext('2d');
-
-	var image = ImageToMesh.getImage();
-
-	ImageToMesh.eraseUnselectedPixels();
-
-	/* Create THREE texture from image used by ImageToMesh */
-
-	var canvasTexture = new THREE.Texture(document.getElementById("imageToMeshCanvas"));
-	canvasTexture.needsUpdate = true;
-
-	/* Create THREE material using that image */
+	/*var bigOlString = "[";
+	for (var i = 0; i < vertices.length; i++) {
+		bigOlString += vertices[i] + ",";
+	}
+	bigOlString += "]\n["
+	for (var i = 0; i < faces.length; i++) {
+		bigOlString += faces[i] + ",";
+	}
+	bigOlString += "]\n["
+	for (var i = 0; i < controlPoints.length; i++) {
+		bigOlString += controlPoints[i] + ",";
+	}
+	bigOlString += "]"
+	console.log(bigOlString)*/
 
 	var wireframeMaterial = new THREE.MeshBasicMaterial({
-        color: 0xFF0000,
-        wireframe: true,
-        wireframeLinewidth: 1
-    });
+		color: 0xFF0000,
+		wireframe: true,
+		wireframeLinewidth: 1
+	});
 
+	var canvasTexture = new THREE.Texture(canvas);
+	canvasTexture.needsUpdate = true;
 	var texturedMaterial = new THREE.MeshBasicMaterial({
 		map: canvasTexture
-    });
+	});
 
 	/* Create the new ARAPThreeMesh */
 
 	var arapThreeMesh = new ARAPThreeMesh(
-		vertices, faces, controlPoints, texturedMaterial, image.width, image.height
+		vertices, faces, controlPoints, wireframeMaterial, canvas.width, canvas.height
 	);
 	scene.add(arapThreeMesh.threeMesh);
 	puppets.push(arapThreeMesh);
