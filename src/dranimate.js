@@ -253,6 +253,64 @@ document.getElementById("THREEContainer").addEventListener( 'mouseup', function(
 
 });
 
+document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+function onDocumentTouchStart( event ) {
+
+	mouseX = event.clientX;
+	mouseY = event.clientY;
+
+	/* Find control point closest to the mouse */
+
+	if(!activeControlPoint.beingDragged) {
+
+		var foundControlPoint = false;
+
+		for(var p = 0; p < puppets.length; p++) {
+
+			var verts = puppets[p].threeMesh.geometry.vertices;
+			var controlPoints = puppets[p].controlPoints;
+
+			for(var c = 0; c < controlPoints.length; c++) {
+
+				var vert = verts[controlPoints[c]];
+				var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
+				var dist = vert.distanceTo(mouseVec);
+
+				if(dist < 40) {
+					activeControlPoint = { 
+						puppetIndex: p, 
+						hoveredOver: true, 
+						beingDragged: false, 
+						controlPointIndex: c 
+					};
+					foundControlPoint = true;
+					break;
+				}
+			}
+		}
+
+		if(foundControlPoint) {
+			document.getElementById("THREEContainer").style.cursor = "pointer";
+		} else {
+			document.getElementById("THREEContainer").style.cursor = "default";
+			activeControlPoint.hoveredOver = false;
+		}
+	}
+
+}
+
+document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+function onDocumentTouchMove( event ) {
+
+	mouseX = event.clientX;
+	mouseY = event.clientY;
+
+	if(activeControlPoint.hoveredOver) {
+		activeControlPoint.beingDragged = true;
+	}
+
+}
+
 document.addEventListener('keydown', function(evt) {
 	if(evt.keyCode == 39) { // right arrow
 		controlPointToControl++;
