@@ -135,8 +135,6 @@ function init() {
 
 function setupMeshAndARAP(vertices, faces, controlPoints, canvas) {
 
-	console.log(canvas)
-
 	/*var bigOlString = "[";
 	for (var i = 0; i < vertices.length; i++) {
 		bigOlString += vertices[i] + ",";
