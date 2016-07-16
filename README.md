@@ -3,7 +3,7 @@
 Experimental browser-based version of <a href="http://www.dranimate.com">Dranimate</a>.
 
 Currently in development.
-Check out the demo [here](http://www.zrispo.co/dranimate-browser/).
+Check out the demo [here](http://cmuartfab.github.io/dranimate-browser/).
 
 ### Installation + How to run locally
 * Clone or download and unzip this repo
