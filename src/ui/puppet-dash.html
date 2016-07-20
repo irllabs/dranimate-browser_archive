@@ -1,0 +1,32 @@
+<md-content class="md-padding">
+  <md-button>Edit Image</md-button>
+  <md-button>Edit Puppet</md-button>
+
+  <md-input-container>
+    <label>x</label>
+    <input type="number" ng-model="pupdash.x"/>
+  </md-input-container>
+  <md-input-container>
+    <label>y</label>
+    <input type="number" ng-model="pupdash.y"/>
+  </md-input-container>
+
+  <md-slider-container>
+    <md-input-container>
+      <label>Rotation</label>
+      <input type="number" ng-model="pupdash.rotation"/>
+    </md-input-container>
+    <md-slider min="0" max="360" ng-model="pupdash.rotation"></md-slider>
+  </md-slider-container>
+
+  <md-slider-container>
+    <md-input-container>
+      <label>Rotation</label>
+      <input type="number" ng-model="pupdash.scale"/>
+    </md-input-container>
+    <md-slider min="0" max="360" ng-model="pupdash.scale"></md-slider>
+  </md-slider-container>
+
+  <md-button>Clear Animation</md-button>
+  <md-button>Delete Puppet</md-button>
+</md-content>
