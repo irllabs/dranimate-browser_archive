@@ -1,16 +1,14 @@
 /** Dranimate Browser UI - Puppet Dashboard
  *
- * Module Name: 'app.puppetDash'
+ * Module Name: 'app.puppetDashboard'
  * Directive Name: <puppet-dashboard>
  */
 
-angular.module('app.puppetDash', ['ngMaterial'])
-  .controller('PuppetDashboardCtrl', ['$scope', function($scope) {
-  })
+angular.module('app.puppetDashboard', ['ngMaterial'])
   .directive('puppetDashboard', function() {
     return {
       restrict: 'AE',
-      templateUrl: 'puppet-dash.html',
+      templateUrl: 'puppet-dashboard.html',
       scope: { },
       controller: ['$scope', function($scope) {
         // TODO: connect to current puppet (dummy values for now)
