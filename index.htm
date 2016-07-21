@@ -1,5 +1,52 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Dranimate Editor</title>
+  <meta name="description" content="In-browser editor for making Dranimations."/>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"/>
+
+  <!-- Angular Material Stylesheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+
+  <!--
+    Things to patch weird decisions made by the Angular Material team.
+    TODO: move to a separate file!
+  -->
+  <style>
+    /* no space for input errors if none exist.
+     * done to make input-heavy interfaces more compact.
+     * should i limit the scope of this, in case some inputs have errors?
+     */
+    md-input-container .md-errors-spacer {
+      min-height: 0;
+    }
+  </style>
+</head>
+
+<body ng-app="dran">
+
+  <div style="width: 320px;">
+    <dran-puppet-dashboard></dran-puppet-dashboard>
+  </div>
+
+  <!-- Angular Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+  <!-- Angular Material -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+  <!-- UI Code -->
+  <script src="src/ui/dran.js"></script>
+  <script src="src/ui/puppet-dashboard/puppet-dashboard.js"></script>
+
+</body>
+
+<!-- Old Code
 <head>
 	<title>Browser Dranimate Demo</title>
 	<meta charset="utf-8">
@@ -34,13 +81,13 @@
 
 		#stats {
 			position: absolute;
-			top: 0; 
+			top: 0;
 			left: 0;
-		} 
+		}
 
 		#meshGenerationWindow {
 			margin-top: 50px;
-			position: absolute; 
+			position: absolute;
 			visibility: hidden;
 		}
 
@@ -56,7 +103,7 @@
 	<div id="loading">Setting up ARAP.js...</div>
 
 	<div id="newPuppetWindow">
-		Create new puppet from file: <input type="file" id="imageLoader" name="imageLoader"><br /> 
+		Create new puppet from file: <input type="file" id="imageLoader" name="imageLoader"><br />
 		<button type="button" id="useDemoPuppetButton">Use Demo Puppet</button>
 		<button type="button" id="useDemoPuppet2Button">Use Demo Puppet 2</button>
 
@@ -88,4 +135,5 @@
 	<script src="src/dranimate.js"></script>
 
 </body>
+-->
 </html>
