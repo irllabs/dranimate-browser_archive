@@ -1,0 +1,31 @@
+<div layout="column" class="container">
+
+  <md-toolbar layout="row" flex="none" class="md-toolbar-tools" md-whiteframe="2">
+    <md-button class="md-icon-button" ng-click="togglePupdashContainer()">
+      <md-icon md-font-set="material-icons">menu</md-icon>
+    </md-button>
+    <h1>Dranimate Editor</h1>
+  </md-toolbar>
+
+  <div layout="row" flex>
+
+    <md-sidenav
+        class="md-sidenav-left"
+        md-component-id="pupdash-container"
+        md-disable-backdrop
+        md-whiteframe="2">
+      <dran-puppet-dashboard></dran-puppet-dashboard>
+    </md-sidenav>
+
+    <div flex class="position-root">
+      <div class="md-padding bottom-left-pos">
+        <dran-zoompanner></dran-zoompanner>
+      </div>
+      <div class="md-padding bottom-right-pos">
+        <md-button class="md-fab"><md-icon md-font-set="material-icons">add</md-icon></md-button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

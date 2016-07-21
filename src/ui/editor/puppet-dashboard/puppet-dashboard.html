@@ -1,4 +1,15 @@
-<md-content>
+<md-content layout="column">
+
+  <div layout="row">
+    <div layout-margin class="md-title md-medium-tall">
+      <md-input-container>
+        <input type="text" ng-model="pupdash.name"/>
+      </md-input-container>
+    </div>
+  </div>
+
+  <md-divider></md-divider>
+
   <div layout="row" layout-margin>
     <md-button flex class="md-raised md-primary">Edit Image</md-button>
     <md-button flex class="md-raised md-primary">Edit Puppet</md-button>
@@ -18,7 +29,7 @@
     </md-input-container>
   </div>
 
-  <md-slider-container layout-margin>
+  <md-slider-container layout="row" layout-margin>
     <h1 class="md-subhead">SX</h1>
     <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleX"></md-slider>
     <md-input-container>
@@ -35,7 +46,7 @@
   </md-slider-container>
 
   <md-slider-container layout="row" layout-margin>
-    <h1 class="md-subhead">R</h1>
+    <md-icon md-font-set="material-icons">autorenew</md-icon>
     <md-slider flex="40" min="-180" max="180" ng-model="pupdash.rotation"></md-slider>
     <md-input-container>
       <input type="number" ng-model="pupdash.rotation"/>
