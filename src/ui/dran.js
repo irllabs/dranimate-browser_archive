@@ -10,4 +10,11 @@
 angular.module('dran', [
     'ngMaterial',
     'dran.editor'
-  ]);
+  ])
+
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('pink')
+      .accentPalette('orange')
+      .warnPalette('red')
+  });
