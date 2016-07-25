@@ -1,7 +1,7 @@
 <div layout="column" class="container">
 
   <md-toolbar layout="row" flex="none" class="md-toolbar-tools" md-whiteframe="2">
-    <md-button class="md-icon-button" ng-click="togglePupdashContainer()">
+    <md-button class="md-icon-button" ng-click="togglePupdashContainer()" hide-gt-sm>
       <md-icon md-font-set="material-icons">menu</md-icon>
     </md-button>
     <h1>Dranimate Editor</h1>
@@ -12,8 +12,15 @@
     <md-sidenav
         class="md-sidenav-left"
         md-component-id="pupdash-container"
+        md-is-locked-open="$mdMedia('gt-sm')"
         md-disable-backdrop
-        md-whiteframe="2">
+        md-whiteframe="{{ getPupdashContainerDepth() }}">
+      <md-toolbar layout="row" class="md-hue-2 md-medium-tall md-toolbar-tools">
+        <md-button class="md-icon-button" ng-click="togglePupdashContainer()" hide-gt-sm>
+          <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
+        </md-button>
+        <h2>Puppet Name</h2>
+      </md-toolbar>
       <dran-puppet-dashboard></dran-puppet-dashboard>
     </md-sidenav>
 

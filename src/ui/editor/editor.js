@@ -17,9 +17,13 @@ angular.module('dran.editor', [
       restrict: 'AE',
       templateUrl: 'src/ui/editor/editor.html',
       scope: { },
-      controller: ['$scope', '$mdSidenav', function($scope, $mdSidenav) {
+      controller: ['$scope', '$mdSidenav', '$mdMedia', function($scope, $mdSidenav, $mdMedia) {
         $scope.togglePupdashContainer = function() {
           $mdSidenav('pupdash-container').toggle();
+        };
+
+        $scope.getPupdashContainerDepth = function() {
+          return $mdMedia('gt-sm') ? 2 : 4;
         };
       }]
     };
