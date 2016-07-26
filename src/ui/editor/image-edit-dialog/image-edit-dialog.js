@@ -1,4 +1,10 @@
 /** Dranimate Browser UI - Editor - Image Edit Dialog
+ *
+ * Angular Module Name: 'dran.editor.imageEditDialog'
+ * Directive Name: <dran-image-edit-dialog>
+ *
+ * Note: When using, wrap this around an <md-dialog>!
+ *       The template only has the dialog toolbar, contents, and actions
  */
 
 angular.module('dran.editor.imageEditDialog', [

@@ -2,6 +2,11 @@
  *
  * Module Name: 'dran.editor.puppetDashboard'
  * Directive Name: <dran-puppet-dashboard>
+ *
+ * Contains UI for controlling puppet appearance
+ * with buttons to open image and puppet editors.
+ *
+ * Note that puppet name changing has been moved to the editor (bring it back?)
  */
 
 angular.module('dran.editor.puppetDashboard', [

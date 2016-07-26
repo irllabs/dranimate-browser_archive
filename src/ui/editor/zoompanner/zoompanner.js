@@ -3,6 +3,8 @@
  * Module Name: 'dran.editor.zoompanner'
  * Directive Name: <dran-zoompanner>
  *
+ * Contains icon buttons for zooming and panning.
+ *
  * Attributes: (TODO implement!)
  *   zoominClick = function to call when zoom in is pressed
  *   zoomoutClick = function to call when zoom out is pressed

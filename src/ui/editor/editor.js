@@ -4,6 +4,11 @@
  * Directive Name: <dran-editor>
  *
  * It's the editor!
+ *
+ * Note: currently (is supposed to) contain input for editing puppet name
+ * in the left sidenav (pupdash-container). Move this to the sidenav?
+ *   The reason why it's here is because it makes closing sidenav easier.
+ *   But maybe we could get around that using directive attributes.
  */
 
 angular.module('dran.editor', [
