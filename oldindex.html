@@ -84,16 +84,20 @@
         document.getElementById("meshGenerationWindow").style.visibility = "hidden";
         document.getElementById("newPuppetWindow").style.visibility = "visible";
         document.getElementById("loading").style.visibility = "hidden";
-        
+
         var imageToMesh = new ImageToMesh();
-        imageToMesh.setup();
 
         var imageLoader = document.getElementById('imageLoader');
         imageLoader.addEventListener('change', function(e){
             document.getElementById("meshGenerationWindow").style.visibility = "visible";
             document.getElementById("newPuppetWindow").style.visibility = "hidden";
-            imageToMesh.reset();
-        });
+
+            var reader = new FileReader();
+            reader.onload = function(event){
+                imageToMesh.setup(event.target.result);
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }, false);
 
         document.getElementById("createPuppetButton").onclick = function() {
             imageToMesh.generateMesh();
