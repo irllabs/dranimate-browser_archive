@@ -37,7 +37,7 @@ angular.module('dran.editor.puppetDashboard', [
 
         $scope.showImageEditDialog = function(ev) {
           $mdDialog.show({
-            template: '<md-dialog><dran-image-edit-dialog></dran-image-edit-dialog></md-dialog>',
+            template: '<md-dialog class="edit-dialog"><dran-image-edit-dialog></dran-image-edit-dialog></md-dialog>',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: true,

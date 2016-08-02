@@ -1,11 +1,13 @@
 <md-toolbar class="md-toolbar-tools">
   <h1>Edit Image</h1>
+  <span flex></span>
+  <md-button class="md-icon-button" ng-click="close()">
+    <md-icon md-font-set="material-icons">close</md-icon>
+  </md-button>
 </md-toolbar>
-<md-dialog-content>
-  <div class="md-dialog-content position-root">
-    <canvas width="320" height="320"></canvas>
+<md-dialog-content class="position-root">
+    <div style="height:340px"></div>
     <dran-zoompanner class="bottom-left-pos"></dran-zoompanner>
-  </div>
 </md-dialog-content>
 <md-dialog-actions>
   <md-button ng-click="close()">Cancel</md-button>
