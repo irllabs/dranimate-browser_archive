@@ -1,0 +1,14 @@
+<md-toolbar class="md-toolbar-tools">
+  <h1>Edit Image</h1>
+</md-toolbar>
+<md-dialog-content>
+  <div class="md-dialog-content position-root">
+    <canvas width="320" height="320"></canvas>
+    <dran-zoompanner class="bottom-left-pos"></dran-zoompanner>
+  </div>
+</md-dialog-content>
+<md-dialog-actions>
+  <md-button ng-click="close()">Cancel</md-button>
+  <md-button ng-click="revert()">Revert</md-button>
+  <md-button ng-click="save()">Save</md-button>
+</md-dialog-actions>

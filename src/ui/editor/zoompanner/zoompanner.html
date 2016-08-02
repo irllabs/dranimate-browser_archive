@@ -1,0 +1,16 @@
+<div layout="column">
+  <div md-whiteframe="2" class="round-corners md-margin">
+    <md-button class="md-icon-button{{ panToggle ? ' md-accent' : '' }}" ng-click="panToggled($event)">
+      <md-icon md-font-set="material-icons">pan_tool</md-icon>
+    </md-button>
+  </div>
+  <div layout="column" md-whiteframe="2" class="round-corners md-margin">
+    <md-button class="md-icon-button" ng-click="zoominClick($event)">
+      <md-icon md-font-set="material-icons">zoom_in</md-icon>
+    </md-button>
+    <md-divider></md-divider>
+    <md-button class="md-icon-button" ng-click="zoomoutClick($event)">
+      <md-icon md-font-set="material-icons">zoom_out</md-icon>
+    </md-button>
+  </div>
+</div>
