@@ -7,40 +7,42 @@
   <!-- layout-padding directive for spacing between divider and x/y inputs -->
   <md-divider layout-padding></md-divider>
 
-  <div layout="row" layout-margin>
-    <md-input-container>
-      <label>x</label>
-      <input type="number" ng-model="pupdash.x"/>
-    </md-input-container>
-    <md-input-container>
-      <label>y</label>
-      <input type="number" ng-model="pupdash.y"/>
-    </md-input-container>
-  </div>
+  <form novalidate>
+    <div layout="row" layout-margin>
+      <md-input-container>
+        <label>x</label>
+        <input type="number" ng-model="pupdash.x"/>
+      </md-input-container>
+      <md-input-container>
+        <label>y</label>
+        <input type="number" ng-model="pupdash.y"/>
+      </md-input-container>
+    </div>
 
-  <md-slider-container layout="row" layout-margin>
-    <h1 class="md-subhead">SX</h1>
-    <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleX"></md-slider>
-    <md-input-container>
-      <input type="number" ng-model="pupdash.scaleX"/>
-    </md-input-container>
-  </md-slider-container>
+    <md-slider-container layout="row" layout-margin>
+      <h1 class="md-subhead">SX</h1>
+      <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleX"></md-slider>
+      <md-input-container>
+        <input type="number" ng-model="pupdash.scaleX"/>
+      </md-input-container>
+    </md-slider-container>
 
-  <md-slider-container layout="row" layout-margin>
-    <h1 class="md-subhead">SY</h1>
-    <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleY"></md-slider>
-    <md-input-container>
-      <input type="number" ng-model="pupdash.scaleY"/>
-    </md-input-container>
-  </md-slider-container>
+    <md-slider-container layout="row" layout-margin>
+      <h1 class="md-subhead">SY</h1>
+      <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleY"></md-slider>
+      <md-input-container>
+        <input type="number" ng-model="pupdash.scaleY"/>
+      </md-input-container>
+    </md-slider-container>
 
-  <md-slider-container layout="row" layout-margin>
-    <md-icon md-font-set="material-icons">autorenew</md-icon>
-    <md-slider flex="40" min="-180" max="180" ng-model="pupdash.rotation"></md-slider>
-    <md-input-container>
-      <input type="number" ng-model="pupdash.rotation"/>
-    </md-input-container>
-  </md-slider-container>
+    <md-slider-container layout="row" layout-margin>
+      <md-icon md-font-set="material-icons">autorenew</md-icon>
+      <md-slider flex="40" min="-180" max="180" ng-model="pupdash.rotation"></md-slider>
+      <md-input-container>
+        <input type="number" ng-model="pupdash.rotation"/>
+      </md-input-container>
+    </md-slider-container>
+  </form>
 
   <md-divider></md-divider>
 
