@@ -14,8 +14,21 @@
 angular.module('dran.editor', [
     'ngMaterial',
     'dran.editor.puppetDashboard',
-    'dran.editor.zoompanner'
+    'dran.editor.zoompanner',
+    'dran.model'
   ])
+
+  .directive('dranThreeContainer', ['model', function(model) {
+    return {
+      restrict: 'AE',
+      template: '<div></div>',
+      scope: { },
+      link: function(scope, element) {
+        /* element[0] gets the raw DOM reference from the jqlite object */
+        model.setup(element[0]);
+      }
+    };
+  }])
 
   .directive('dranEditor', function() {
     return {
