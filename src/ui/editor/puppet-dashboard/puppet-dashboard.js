@@ -10,8 +10,7 @@
  */
 
 angular.module('dran.editor.puppetDashboard', [
-    'ngMaterial',
-    'dran.editor.imageEditDialog'
+    'ngMaterial'
   ])
 
   .directive('dranPuppetDashboard', function() {
@@ -33,16 +32,6 @@ angular.module('dran.editor.puppetDashboard', [
           rotation: 0,
           scaleX: 100,
           scaleY: 100
-        };
-
-        $scope.showImageEditDialog = function(ev) {
-          $mdDialog.show({
-            template: '<md-dialog class="edit-dialog"><dran-image-edit-dialog></dran-image-edit-dialog></md-dialog>',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            fullscreen: $mdMedia('xs')
-          });
         };
 
       }]
