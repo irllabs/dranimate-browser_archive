@@ -14,7 +14,8 @@
 angular.module('dran.editor', [
     'ngMaterial',
     'dran.editor.puppetDashboard',
-    'dran.editor.zoompanner'
+    'dran.editor.zoompanner',
+    'dran.editor.model'
   ])
 
   .directive('dranEditor', function() {
