@@ -75,6 +75,96 @@ var Dranimate = function () {
 
         animate();
 
+        // events
+
+        THREEContainer.addEventListener( 'mousemove', function ( event ) {
+
+            event.preventDefault();
+
+            mouse.x =   ( event.clientX / window.innerWidth )  * 2 - 1;
+            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            // find intersections
+
+            raycaster.setFromCamera( mouse, camera );
+
+            var intersects = raycaster.intersectObjects( scene.children );
+
+            if ( intersects.length > 0 ) {
+                console.log(intersects[0]);
+                var cps = intersects[0].object.arapMesh.controlPoints;
+                var faceVerts = [intersects[0].face.a, intersects[0].face.b, intersects[0].face.c];
+
+                cps.forEach(function (cp) {
+                    //if(cp == )
+                });
+            }
+
+            /*mouseX = event.clientX;
+            mouseY = event.clientY;
+
+            if(!activeControlPoint.beingDragged) {
+
+                var foundControlPoint = false;
+
+                for(var p = 0; p < puppets.length; p++) {
+
+                    var verts = puppets[p].threeMesh.geometry.vertices;
+                    var controlPoints = puppets[p].controlPoints;
+
+                    for(var c = 0; c < controlPoints.length; c++) {
+
+                        var vert = verts[controlPoints[c]];
+                        var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
+                        var dist = vert.distanceTo(mouseVec);
+
+                        if(dist < 40) {
+                            activeControlPoint = {
+                                valid: true,
+                                puppetIndex: p, 
+                                hoveredOver: true, 
+                                beingDragged: false, 
+                                controlPointIndex: c 
+                            };
+                            foundControlPoint = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(foundControlPoint) {
+                    THREEContainer.style.cursor = "pointer";
+                } else {
+                    THREEContainer.style.cursor = "default";
+                    activeControlPoint.hoveredOver = false;
+                }
+            }*/
+
+        }, false );
+
+        THREEContainer.addEventListener( 'mousedown', function( event ) {
+            
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+
+            if(activeControlPoint.hoveredOver) {
+                activeControlPoint.beingDragged = true;
+            }
+
+        } , false );
+
+        THREEContainer.addEventListener( 'mouseup', function( event ) {
+            
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+
+            if(activeControlPoint) {
+                activeControlPoint.beingDragged = false;
+                THREEContainer.style.cursor = "default";
+            }
+
+        });
+
     }
 
     this.setupMeshAndARAP = function (vertices, faces, controlPoints, canvas) {
@@ -150,98 +240,6 @@ var Dranimate = function () {
     this.setPanEnabled = function (enabled) {
         
     }
-
-/*****************************
-    THREE events
-*****************************/
-
-    THREEContainer.addEventListener( 'mousemove', function ( event ) {
-
-        event.preventDefault();
-
-        mouse.x =   ( event.clientX / window.innerWidth )  * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-        // find intersections
-
-        raycaster.setFromCamera( mouse, camera );
-
-        var intersects = raycaster.intersectObjects( scene.children );
-
-        if ( intersects.length > 0 ) {
-            console.log(intersects[0]);
-            var cps = intersects[0].object.arapMesh.controlPoints;
-            var faceVerts = [intersects[0].face.a, intersects[0].face.b, intersects[0].face.c];
-
-            cps.forEach(function (cp) {
-                //if(cp == )
-            });
-        }
-
-    	/*mouseX = event.clientX;
-    	mouseY = event.clientY;
-
-    	if(!activeControlPoint.beingDragged) {
-
-    		var foundControlPoint = false;
-
-    		for(var p = 0; p < puppets.length; p++) {
-
-    			var verts = puppets[p].threeMesh.geometry.vertices;
-    			var controlPoints = puppets[p].controlPoints;
-
-    			for(var c = 0; c < controlPoints.length; c++) {
-
-    				var vert = verts[controlPoints[c]];
-    				var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
-    				var dist = vert.distanceTo(mouseVec);
-
-    				if(dist < 40) {
-    					activeControlPoint = {
-    						valid: true,
-    						puppetIndex: p, 
-    						hoveredOver: true, 
-    						beingDragged: false, 
-    						controlPointIndex: c 
-    					};
-    					foundControlPoint = true;
-    					break;
-    				}
-    			}
-    		}
-
-    		if(foundControlPoint) {
-    			THREEContainer.style.cursor = "pointer";
-    		} else {
-    			THREEContainer.style.cursor = "default";
-    			activeControlPoint.hoveredOver = false;
-    		}
-    	}*/
-
-    }, false );
-
-    THREEContainer.addEventListener( 'mousedown', function( event ) {
-    	
-    	mouseX = event.clientX;
-    	mouseY = event.clientY;
-
-    	if(activeControlPoint.hoveredOver) {
-    		activeControlPoint.beingDragged = true;
-    	}
-
-    } , false );
-
-    THREEContainer.addEventListener( 'mouseup', function( event ) {
-    	
-    	mouseX = event.clientX;
-    	mouseY = event.clientY;
-
-    	if(activeControlPoint) {
-    		activeControlPoint.beingDragged = false;
-    		THREEContainer.style.cursor = "default";
-    	}
-
-    });
 
 /*****************************
     Dom events
