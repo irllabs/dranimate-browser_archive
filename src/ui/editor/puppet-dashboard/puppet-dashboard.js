@@ -9,31 +9,26 @@
  * Note that puppet name changing has been moved to the editor (bring it back?)
  */
 
-angular.module('dran.editor.puppetDashboard', [
-    'ngMaterial'
-  ])
+(function() {
 
-  .directive('dranPuppetDashboard', function() {
-    return {
-      restrict: 'AE',
-      templateUrl: 'src/ui/editor/puppet-dashboard/puppet-dashboard.html',
-      scope: { },
-      controller: [
-        '$scope',
-        '$mdMedia',
-        '$mdDialog',
-      function($scope, $mdMedia, $mdDialog) {
+var pupdashMod = angular.module('dran.editor.puppetDashboard', [
+  'ngMaterial'
+]);
 
-        // TODO: connect to current puppet (dummy values for now)
-        $scope.pupdash = {
-          name: 'Puppet Name',
-          x: 60,
-          y: 75,
-          rotation: 0,
-          scaleX: 100,
-          scaleY: 100
-        };
+function PuppetDashboardCtrl() {
+  var ctrl = this;
 
-      }]
-    };
-  });
+  ctrl.name = 'Puppet Name';
+  ctrl.x = 60;
+  ctrl.y = 75;
+  ctrl.rotation = 0;
+  ctrl.scaleX = 100;
+  ctrl.scaleY = 100;
+};
+
+pupdashMod.component('dranPuppetDashboard', {
+  templateUrl: 'src/ui/editor/puppet-dashboard/puppet-dashboard.html',
+  controller: PuppetDashboardCtrl
+})
+
+})();
