@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Webcam CV</title>
+  
+<style>
+
+#videoElem {
+   width:320px; 
+   height:240px;
+   float:left;
+   padding:10px;
+}
+
+#canvasElem {
+   width:320px; 
+   height:240px;
+   float:left;
+   padding:10px;
+
+}
+
+#closeups{
+   width:50px;
+   float:left;
+   padding:10px;
+}
+
+</style>
+</head>
+  
+<body>
+
+
+<video autoplay="true" id="videoElem"></video>
+<canvas id ="canvasElem"></canvas>
+<div id="closeups">
+   <canvas id ="closeupCanvas0" width=40px height=40px></canvas>
+   <canvas id ="closeupCanvas1" width=40px height=40px></canvas>
+   <canvas id ="closeupCanvas2" width=40px height=40px></canvas>
+   <canvas id ="closeupCanvas3" width=40px height=40px></canvas>
+   <canvas id ="closeupCanvas4" width=40px height=40px></canvas>
+</div>
+<button onclick="captureBackground()">Capture Background</button>
+
+<script type="text/javascript" src="cv.js"></script> 
+<script type="text/javascript" src="handtracking.js"></script> 
+<script type="text/javascript" src="background_deletion.js"></script> 
+
+<script>
+   //this script grabs a video stream from the users webcam
+   //when the user clicks "Capture Background" the background_deletion.js script is called
+
+   var video = document.getElementById("videoElem");
+   var canvas = document.getElementById("canvasElem");
+   var context = canvas.getContext("2d");
+   var back = document.createElement("canvas");
+   var backContext = back.getContext("2d");
+   var closeupCanvas0 = document.getElementById("closeupCanvas0");
+   var closeupCtx0 = closeupCanvas0.getContext("2d");
+   var closeupCanvas1 = document.getElementById("closeupCanvas1");
+   var closeupCtx1 = closeupCanvas1.getContext("2d");
+   var closeupCanvas2 = document.getElementById("closeupCanvas2");
+   var closeupCtx2 = closeupCanvas2.getContext("2d");
+   var closeupCanvas3 = document.getElementById("closeupCanvas3");
+   var closeupCtx3 = closeupCanvas3.getContext("2d");
+   var closeupCanvas4 = document.getElementById("closeupCanvas4");
+   var closeupCtx4 = closeupCanvas4.getContext("2d");
+
+   var tracker = new HT.Tracker();
+   var candidate;
+   var contour = [];
+   var hull = [];
+   var defects = [];
+
+   var shortimg = new CV.Image();
+
+   var ch, cw;
+
+   window.onload = getVid;
+
+   function getVid() {
+
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
+                            || navigator.mozGetUserMedia || navigator.msGetUserMedia 
+                            || navigator.oGetUserMedia;
+       
+      if (navigator.getUserMedia) {       
+         navigator.getUserMedia({video: true}, handleVideo, videoError);
+      }
+   }
+    
+   function handleVideo(stream) {
+      video.src = window.URL.createObjectURL(stream);
+   
+      cw = video.clientWidth;
+      ch = video.clientHeight;
+      canvas.width = cw;
+      canvas.height = ch;
+      back.width = cw;
+      back.height = ch;
+      shortimg.height = ch;
+      shortimg.width = cw;
+
+   }
+    
+   function videoError(e) {
+      alert("Could not initialize camera. :(");
+   }
+
+
+</script>
+</body>
+</html>
