@@ -1,6 +1,6 @@
 <div layout="column">
   <div layout="row" layout-margin>
-    <md-button flex class="md-raised md-primary" ng-click="showImageEditDialog($event)">Crop Image</md-button>
+    <md-button flex class="md-raised md-primary">Crop Image</md-button>
     <md-button flex class="md-raised md-primary">Edit Puppet</md-button>
   </div>
 
@@ -11,35 +11,35 @@
     <div layout="row" layout-margin>
       <md-input-container>
         <label>x</label>
-        <input type="number" ng-model="pupdash.x"/>
+        <input type="number" ng-model="$ctrl.x"/>
       </md-input-container>
       <md-input-container>
         <label>y</label>
-        <input type="number" ng-model="pupdash.y"/>
+        <input type="number" ng-model="$ctrl.y"/>
       </md-input-container>
     </div>
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SX</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleX"></md-slider>
+      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleX"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="pupdash.scaleX"/>
+        <input type="number" ng-model="$ctrl.scaleX"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SY</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="pupdash.scaleY"></md-slider>
+      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleY"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="pupdash.scaleY"/>
+        <input type="number" ng-model="$ctrl.scaleY"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <md-icon md-font-set="material-icons">autorenew</md-icon>
-      <md-slider flex="40" min="-180" max="180" ng-model="pupdash.rotation"></md-slider>
+      <md-slider flex="40" min="-180" max="180" ng-model="$ctrl.rotation"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="pupdash.rotation"/>
+        <input type="number" ng-model="$ctrl.rotation"/>
       </md-input-container>
     </md-slider-container>
   </form>

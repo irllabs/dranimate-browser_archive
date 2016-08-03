@@ -7,14 +7,18 @@
  *       (dran-editor?)
  */
 
-angular.module('dran', [
-    'ngMaterial',
-    'dran.editor'
-  ])
+(function() {
 
-  .config(function($mdThemingProvider) {
-    $mdThemingProvider.theme('default')
-      .primaryPalette('pink')
-      .accentPalette('orange')
-      .warnPalette('red')
-  });
+var dranMod = angular.module('dran', [
+  'ngMaterial',
+  'dran.editor'
+])
+
+dranMod.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('pink')
+    .accentPalette('orange')
+    .warnPalette('red')
+});
+
+})();
