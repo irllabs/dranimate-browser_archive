@@ -22,11 +22,14 @@ angular.module('dran.editor', [
     return {
       restrict: 'AE',
       template: '<div></div>',
-      scope: { }
+      scope: { },
+      link: function(scope, element) {
+        /* element[0] gets the raw DOM reference from the jqlite object */
+        model.setup(element[0]);
+      }
     };
   }])
 
-        /* element[0] gets the raw DOM reference from the jqlite object */
   .directive('dranEditor', function() {
     return {
       restrict: 'AE',
