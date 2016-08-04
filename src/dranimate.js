@@ -275,11 +275,9 @@ var Dranimate = function () {
         /* Create the new ARAPThreeMesh */
 
         var arapThreeMesh = new ARAPThreeMesh(
-            vertices, faces, controlPoints, texturedMaterial, canvas.width, canvas.height
+            vertices, faces, controlPoints, texturedMaterial, canvas.width, canvas.height, scene
         );
-        scene.add(arapThreeMesh.threeMesh);
         puppets.push(arapThreeMesh);
-        scene.add(arapThreeMesh.boundingBox);
 
     }
 
