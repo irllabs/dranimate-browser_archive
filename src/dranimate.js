@@ -90,7 +90,7 @@ var Dranimate = function () {
         image.src = 'testimages/shiba.jpg';
     };
 
-    this.setup = function (THREEContainer) {
+    this.setup = function (canvasContainer) {
 
         /* Initialize THREE canvas and scene */
 
@@ -114,6 +114,7 @@ var Dranimate = function () {
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setClearColor( 0xFFFFFF, 1 );
+        THREEContainer = canvasContainer;
         THREEContainer.appendChild( renderer.domElement );
 
         animate();
