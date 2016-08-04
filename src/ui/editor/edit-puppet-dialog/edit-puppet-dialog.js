@@ -1,4 +1,6 @@
 /** Dranimate Browser UI - Edit Puppet Dialog
+ *
+ * TODO: DOCUMENT
  */
 
 (function() {
@@ -7,17 +9,26 @@ var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
   'ngMaterial'
 ]);
 
-EditPuppetDialogCtrl.$inject = [ ]
-function EditPuppetDialogCtrl() {
-  var ctrl = this;
+EditPuppetDialogCtrl.$inject = [ '$mdDialog' ]
+function EditPuppetDialogCtrl($mdDialog) {
+  var $ctrl = this;
+
+  $ctrl.state = {
+    mode: 'cropImg',
+    cropmode: 'select',
+    threshold: 25
+  }
+
+  $ctrl.close = function(ev) {
+    $mdDialog.hide();
+  }
 
   // TODO: attach to the actual canvas yo!
-  ctrl.zoomIn = function() { console.log("edit pup zoom in"); };
-  ctrl.zoomOut = function() { console.log("edit pup zoom out"); };
-  ctrl.panEnabled = false;
+  $ctrl.zoomIn = function() { console.log("edit pup zoom in"); };
+  $ctrl.zoomOut = function() { console.log("edit pup zoom out"); };
+  $ctrl.panEnabled = false;
 }
 
-// TODO: put $mdDialog in scope somehow
 edPupDogMod.directive('dranOpenEditPuppetDialog', ["$mdDialog", function($mdDialog) {
   return {
     restrict: 'A',
