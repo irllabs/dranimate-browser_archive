@@ -1,0 +1,25 @@
+<edit-panel-inner
+  header-text="Crop image"
+  on-close="{{ $ctrl.close }}">
+
+  <dran-edit-panel-main class="position-root">
+    <!-- canvas goes here -->
+    <div class="md-padding bottom-left-pos">
+      <zoompanner
+        on-zoom-in="{{ $ctrl.zoomIn }}"
+        on-zoom-out="{{ $ctrl.zoomOut }}"
+        pan-enabled="{{ $ctrl.panEnabled }}">
+      </zoompanner>
+    </div>
+  </dran-edit-panel-main>
+
+  <dran-edit-panel-side>
+    <form novalidate>
+      <md-radio-group>
+        <md-radio-button>Add</md-radio-button>
+        <md-radio-button>Remove</md-radio-button>
+      </md-radio-group>
+    </form>
+  </dran-edit-panel-side>
+
+</edit-panel-inner>
