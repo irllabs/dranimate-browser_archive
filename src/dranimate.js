@@ -170,9 +170,9 @@ var Dranimate = function () {
                 }
 
                 if(foundControlPoint) {
-                    document.getElementById("THREEContainer").style.cursor = "pointer";
+                    THREEContainer.style.cursor = "pointer";
                 } else {
-                    document.getElementById("THREEContainer").style.cursor = "default";
+                    THREEContainer.style.cursor = "default";
                     activeControlPoint.hoveredOver = false;
                 }
             }
@@ -195,7 +195,7 @@ var Dranimate = function () {
 
             if(activeControlPoint) {
                 activeControlPoint.beingDragged = false;
-                document.getElementById("THREEContainer").style.cursor = "default";
+                THREEContainer.style.cursor = "default";
             }
 
         });
