@@ -27,6 +27,15 @@ var edMod = angular.module('dran.editor', [
   'dran.model'
 ]);
 
+function EditorCtrl() {
+  var ctrl = this;
+
+  // TODO: these are in lieu of properly hooking up the model to the zoompanner!
+  ctrl.zoomIn = function(ev) { console.log('zoom in!') };
+  ctrl.zoomOut = function(ev) { console.log('zoom out!') };
+  ctrl.panEnabled = false;
+}
+
 edMod.directive('dranThreeContainer', ['model', function(model) {
   return {
     restrict: 'AE',
@@ -48,6 +57,9 @@ edMod.directive('dranTogglePupdash', ['$mdSidenav', function($mdSidenav) {
   };
 }]);
 
-edMod.component('dranEditor', { templateUrl: 'src/ui/editor/editor.html' });
+edMod.component('dranEditor', {
+  templateUrl: 'src/ui/editor/editor.html',
+  controller: EditorCtrl
+});
 
 })();

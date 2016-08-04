@@ -31,7 +31,11 @@
     <div flex class="position-root">
       <dran-three-container></dran-three-container>
       <div class="md-padding bottom-left-pos">
-        <dran-zoompanner></dran-zoompanner>
+        <dran-zoompanner
+          on-zoom-in="$ctrl.zoomIn"
+          on-zoom-out="$ctrl.zoomOut"
+          pan-enabled="$ctrl.panEnabled">
+        </dran-zoompanner>
       </div>
       <div layout="column" class="md-padding bottom-right-pos">
         <md-button class="md-fab"><md-icon md-font-set="material-icons">fiber_manual_record</md-icon></md-button>
