@@ -1,5 +1,3 @@
-# iciaio.github.io
-
 Instructions: 
 
 Using WebCam Settings (from the apple app store) and an external webcam turn off all of the auto settings.
