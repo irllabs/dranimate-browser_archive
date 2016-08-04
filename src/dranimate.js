@@ -21,7 +21,8 @@ var Dranimate = function () {
 
     var camera, scene, renderer;
 
-    var mouseX = 0, mouseY = 0;
+    var mouseRelative = {x:0, y:0};
+    var mouseAbsolute = {x:0, y:0};
 
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
@@ -32,21 +33,14 @@ var Dranimate = function () {
 
     var controlPointToControl = 0;
 
+    var zoom = 1.0;
+    var panPosition = {x:0, y:0};
+    var panEnabled = false;
+    var panFromPosition = {x:0, y:0}
+
 /*****************************
     API
 *****************************/
-
-    this.zoomIn = function () {
-
-    }
-
-    this.zoomOut = function () {
-
-    }
-
-    this.setPanEnabled = function (enable) {
-
-    }
 
     this.loadDemoPuppet1 = function () {
         var vertices = [[78,391],[85,410],[90,374],[105,415],[106,361],[120,344],[123,404],[137,332],[143,398],[154,320],[160,78],[160,387],[162,98],[166,118],[170,138],[170,308],[172,62],[177,157],[180,383],[183,177],[188,297],[192,66],[193,195],[199,85],[199,375],[202,213],[207,288],[212,101],[213,230],[219,369],[225,246],[225,279],[226,116],[237,133],[237,262],[239,366],[253,145],[258,359],[267,160],[278,353],[282,174],[297,188],[298,356],[301,376],[305,396],[306,416],[307,538],[308,436],[309,492],[310,464],[310,517],[313,200],[317,556],[327,538],[331,188],[337,556],[340,169],[351,152],[352,538],[361,133],[361,520],[368,485],[373,116],[374,414],[375,444],[376,394],[376,466],[380,374],[385,98],[394,359],[399,82],[403,254],[409,234],[411,65],[414,359],[415,212],[420,192],[420,265],[425,48],[426,172],[432,150],[433,366],[436,277],[439,128],[442,36],[445,108],[450,88],[453,371],[454,286],[455,68],[459,47],[471,297],[472,378],[491,301],[492,383],[508,312],[512,385],[523,326],[532,389],[539,338],[551,396],[558,345],[571,401],[574,357],[588,372],[591,401],[435.3515151515152,42.4],[433.00041339396444,70.03183133526251],[424.28418230563005,96.08847184986595],[176.89820359281438,83.85748502994012],[189.68328298086607,108.39073514602215],[412.00119047619046,122.29563492063492],[200.46575342465752,132.4637964774951],[396.7291875626881,130.71013039117352],[217.10059835452506,153.4513836948392],[198.41369047619048,149.54166666666666],[372.3714591127739,161.64617851416355],[390.0816326530612,169.34948979591837],[265.0247838616715,186.64726224783863],[406.5187891440501,189.178496868476],[357.89702427564606,202.89036805011747],[227.15515151515152,205.90989898989898],[299.7580893682589,208.64149974319466],[256.0543259557344,207.62776659959758],[253.15321180555554,244.2265625],[391.81705342687536,247.90825688073394],[362.43809523809523,219.66666666666666],[333.4648148148148,249.1],[287.4949944382647,280.3604004449388],[312.8158253751705,273.4665757162347],[418.3302825308396,291.8173497811381],[228.70821256038647,306.24830917874397],[358.05231259968104,301.541307814992],[465.9596848934198,316.7289156626506],[341.9867374005305,319.6657824933687],[405.71496437054634,312.6413301662708],[178.16244725738397,330.2035864978903],[309.26553911205076,331.8139534883721],[260.7354285714286,340.67885714285717],[243.95679012345678,323.27777777777777],[241.44654088050314,323.62893081761007],[429.80625,323.96875],[422.67910447761193,342.93407960199005],[518.4676616915423,340.4636815920398],[200.24681238615665,351.00774134790527],[151.44158878504672,358.0907320872274],[370.18890300720034,355.3108852181279],[472.2542735042735,342.11752136752136],[510.06635071090045,364.53554502369667],[493.326362135388,367.5189873417722],[564.3716734325666,378.94587280108254],[109.75308641975309,373.5679012345679],[170.82420749279538,354.64553314121036],[111.33093894304771,385.331965110313],[325.3185550082102,367.4039408866995],[556.1308411214953,391.4897196261682],[340.86315789473684,381.0342105263158],[543.8421052631579,371.53739612188366],[335.98234349919744,402.3073836276084],[105.45114345114345,389.7837837837838],[376.43548387096774,458.1774193548387],[344.0618021293171,465.5492079979226],[346.87786259541986,443.30916030534354],[338.5273311897106,499.68167202572346],[334.59377593360995,525.4186721991701],[112,390],[184,100],[439,62],[564,379],[330,519],[333,286]];
@@ -166,14 +160,42 @@ var Dranimate = function () {
 
     }
 
+    this.zoomIn = function () {
+        zoom += 0.1;
+        camera.zoom = zoom;
+        camera.updateProjectionMatrix();
+    }
+
+    this.zoomOut = function () {
+        zoom -= 0.1;
+        camera.zoom = zoom;
+        camera.updateProjectionMatrix();
+    }
+
+    this.setPanEnabled = function (enable) {
+        panEnabled = enable;
+    }
+
 /*****************************
     THREE events
 *****************************/
 
-    document.getElementById("THREEContainer").addEventListener( 'mousemove', function ( event ) {
+    var updateMousePosition = function (x,y) {
+        mouseAbsolute = {
+            x: x, 
+            y: y
+        };
 
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        var zoomTransformed = zoom;
+        mouseRelative = {
+            x: x / zoomTransformed + panPosition.x, 
+            y: y / zoomTransformed + panPosition.y
+        };
+    }
+
+    THREEContainer.addEventListener( 'mousemove', function ( event ) {
+
+        updateMousePosition(event.clientX, event.clientY);
 
         /* Find control point closest to the mouse */
 
@@ -189,7 +211,7 @@ var Dranimate = function () {
                 for(var c = 0; c < controlPoints.length; c++) {
 
                     var vert = verts[controlPoints[c]];
-                    var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
+                    var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
                     var dist = vert.distanceTo(mouseVec);
 
                     if(dist < 40) {
@@ -204,17 +226,6 @@ var Dranimate = function () {
                         break;
                     }
                 }
-                /*
-                for(var c = 0; c < verts.length; c++) {
-                    var vert = verts[c];
-                    var mouseVec = new THREE.Vector3(mouseX, mouseY, 0);
-                    var dist = vert.distanceTo(mouseVec);
-                    if(dist < 5) {
-                        
-                        console.log(c)
-                        
-                    }
-                }*/
             }
 
             if(foundControlPoint) {
@@ -227,10 +238,9 @@ var Dranimate = function () {
 
     }, false );
 
-    document.getElementById("THREEContainer").addEventListener( 'mousedown', function( event ) {
+    THREEContainer.addEventListener( 'mousedown', function( event ) {
         
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        updateMousePosition(event.clientX, event.clientY);
 
         if(activeControlPoint.hoveredOver) {
             activeControlPoint.beingDragged = true;
@@ -238,10 +248,9 @@ var Dranimate = function () {
 
     } , false );
 
-    document.getElementById("THREEContainer").addEventListener( 'mouseup', function( event ) {
+    THREEContainer.addEventListener( 'mouseup', function( event ) {
         
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        updateMousePosition(event.clientX, event.clientY);
 
         if(activeControlPoint) {
             activeControlPoint.beingDragged = false;
@@ -298,7 +307,7 @@ var Dranimate = function () {
         if(activeControlPoint.beingDragged) {
             var pi = activeControlPoint.puppetIndex;
             var ci = activeControlPoint.controlPointIndex;
-            puppets[pi].setControlPointPosition(ci, mouseX, mouseY);
+            puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
         }
 
         /* Test mic input */
@@ -327,8 +336,8 @@ var Dranimate = function () {
 
     function render() {
 
-        camera.position.x = 0;
-        camera.position.y = 0;
+        camera.position.x = panPosition.x //+ (1-zoom)*window.innerWidth/2;
+        camera.position.y = panPosition.y;
         camera.position.z = 100;
         camera.lookAt( window.innerWidth/2, window.innerHeight/2, 0 );
 
