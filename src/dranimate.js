@@ -201,14 +201,7 @@ var Dranimate = function () {
 
         var image = new Image();
         image.onload = function() {
-            var canvas = document.createElement('canvas');
-            canvas.id = "dummyCanvas";
-            canvas.width = image.width;
-            canvas.height = image.height;
-            var context = canvas.getContext('2d');
-            context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
-
-            that.createNewPuppet(vertices, faces, controlPoints, canvas);
+            that.createNewPuppet(vertices, faces, controlPoints, image);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
@@ -227,14 +220,7 @@ var Dranimate = function () {
 
         var image = new Image();
         image.onload = function() {
-            var canvas = document.createElement('canvas');
-            canvas.id = "dummyCanvas";
-            canvas.width = image.width;
-            canvas.height = image.height;
-            var context = canvas.getContext('2d');
-            context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
-
-            that.createNewPuppet(vertices, faces, controlPoints, canvas);
+            that.createNewPuppet(vertices, faces, controlPoints, image);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
@@ -242,42 +228,13 @@ var Dranimate = function () {
         image.src = 'testimages/shiba.jpg';
     };
 
-    this.createNewPuppet = function (vertices, faces, controlPoints, canvas) {
+    this.createNewPuppet = function (vertices, faces, controlPoints, image) {
 
-        /*var bigOlString = "[";
-        for (var i = 0; i < vertices.length; i++) {
-            bigOlString += vertices[i] + ",";
-        }
-        bigOlString += "]\n["
-        for (var i = 0; i < faces.length; i++) {
-            bigOlString += faces[i] + ",";
-        }
-        bigOlString += "]\n["
-        for (var i = 0; i < controlPoints.length; i++) {
-            bigOlString += controlPoints[i] + ",";
-        }
-        bigOlString += "]"
-        console.log(bigOlString)*/
+        /* Create the new Puppet */
 
-        var wireframeMaterial = new THREE.MeshBasicMaterial({
-            color: 0xFF0000,
-            wireframe: true,
-            wireframeLinewidth: 1
-        });
-
-        var canvasTexture = new THREE.Texture(canvas);
-        canvasTexture.needsUpdate = true;
-        var texturedMaterial = new THREE.MeshBasicMaterial({
-            map: canvasTexture,
-            transparent: true
-        });
-
-        /* Create the new ARAPThreeMesh */
-
-        var arapThreeMesh = new ARAPThreeMesh(
-            vertices, faces, controlPoints, texturedMaterial, canvas.width, canvas.height, scene
-        );
-        puppets.push(arapThreeMesh);
+        var puppet = new Puppet(image);
+        puppet.generateMesh(vertices, faces, controlPoints, scene);
+        puppets.push(puppet);
 
     }
 
@@ -346,24 +303,6 @@ var Dranimate = function () {
             var pi = activeControlPoint.puppetIndex;
             var ci = activeControlPoint.controlPointIndex;
             puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
-        }
-
-        /* Test mic input */
-
-        if(puppets.length > 0) {
-            if(averageVolume && activeControlPoint.valid && !activeControlPoint.beingDragged) {
-                var cpi = activeControlPoint.controlPointIndex;
-                var puppet = puppets[0];
-                var controlPointIndex = puppet.controlPoints[cpi];
-                var vert = puppet.undeformedVertices[controlPointIndex];
-                var vertX = vert[0];
-                var vertY = vert[1];
-                puppets[0].setControlPointPosition(
-                    cpi,
-                    vertX-(averageVolume-8)*10,
-                    vertY-(averageVolume-8)*10
-                );
-            }
         }
 
         for(var i = 0; i < puppets.length; i++) {
