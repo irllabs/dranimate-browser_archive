@@ -13,7 +13,7 @@
 
 var pupdashMod = angular.module('dran.editor.puppetDashboard', [
   'ngMaterial',
-  'dran.editor.image-crop-panel'
+  'dran.editor.edit-puppet-dialog'
 ]);
 
 function PuppetDashboardCtrl() {
