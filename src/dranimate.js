@@ -267,6 +267,7 @@ var Dranimate = function () {
         );
         scene.add(arapThreeMesh.threeMesh);
         puppets.push(arapThreeMesh);
+        scene.add(arapThreeMesh.boundingBox);
 
     }
 
