@@ -63,7 +63,7 @@ var Dranimate = function () {
         directionalLight.position.set( 0, 0, 1 );
         scene.add( directionalLight );
 
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setClearColor( 0xFFFFFF, 1 );
