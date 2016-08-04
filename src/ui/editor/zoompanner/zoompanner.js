@@ -1,32 +1,39 @@
 /** Dranimate Browser UI - Editor - Zoompanner
  *
  * Module Name: 'dran.editor.zoompanner'
- * Directive Name: <dran-zoompanner>
  *
- * Contains icon buttons for zooming and panning.
+ * Controller:
+ *   zoomIn: function called on pressing zoom in button
+ *   zoomOut: function called on pressing zoom out button
+ *   panEnabled: boolean for when pan mode is enabled
+ *   togglePan: function that toggles panEnabled, called on pressing pan button
  *
- * Attributes: (TODO implement!)
- *   zoominClick = function to call when zoom in is pressed
- *   zoomoutClick = function to call when zoom out is pressed
- *   panToggle = assignable related to pan button
+ * Component: dran-zoompanner
+ *   zoomIn: required, one-way. What you'd expect.
+ *   zoomOut: required, one-way. What you'd expect.
+ *   panEnabled: required, two-way. What you'd expect.
  */
 
-angular.module('dran.editor.zoompanner', ['ngMaterial'])
-  .directive('dranZoompanner', function() {
-    return {
-      restrict: 'AE',
-      templateUrl: 'src/ui/editor/zoompanner/zoompanner.html',
-      scope: { },
-      controller: ['$scope', function($scope) {
-        // TODO: this is here as a placeholder,
-        // eventually you'll hook up models to these things
-        $scope.zoominClick = function(ev) { console.log("zoom in!"); };
-        $scope.zoomoutClick = function(ev) { console.log("zoom out!"); };
-        $scope.panToggle = false;
+(function() {
 
-        $scope.panToggled = function(ev) {
-          $scope.panToggle = !$scope.panToggle;
-        }
-      }]
-    };
-  });
+var zoompanMod = angular.module('dran.editor.zoompanner', ['ngMaterial']);
+
+function ZoompannerCtrl() {
+  var ctrl = this;
+
+  ctrl.togglePan = function(ev) {
+    ctrl.panEnabled = !ctrl.panEnabled;
+  }
+};
+
+zoompanMod.component('dranZoompanner', {
+  templateUrl: 'src/ui/editor/zoompanner/zoompanner.html',
+  controller: ZoompannerCtrl,
+  bindings: {
+    zoomIn: '<onZoomIn',
+    zoomOut: '<onZoomOut',
+    panEnabled: '='
+  }
+});
+
+})();

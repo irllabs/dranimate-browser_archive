@@ -17,72 +17,30 @@
   <!-- Angular Material Stylesheet -->
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css"/>
 
-  <!--
-    Mostly Things to patch weird decisions made by the Angular Material team.
-    TODO: move to a separate file!
-  -->
-  <style>
-    body {
-      overflow: hidden;
-    }
-
-    .container {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .edit-dialog {
-      width: 80%;
-      height: 80%;
-      max-width: 700px;
-      max-height: 500px;
-    }
-
-
-    .position-root {
-      position: relative;
-      left: 0;
-      top: 0;
-    }
-
-    .bottom-left-pos {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-    }
-
-    .bottom-right-pos {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-
-    .round-corners {
-      border-radius: 2px;
-    }
-
-
-    /* no space for input errors if none exist.
-     * done to make input-heavy interfaces more compact.
-     * should i limit the scope of this, in case some inputs have errors?
-     */
-    md-input-container .md-errors-spacer {
-      min-height: 0;
-    }
-
-    /* for some reason icon buttons have margins??????
-     * makes sense but not in the zoompanner
-     */
-    dran-zoompanner .md-button.md-icon-button {
-      margin: 0;
-    }
-  </style>
+  <!-- Style Tweaking -->
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 
 <body ng-app="dran">
 
   <dran-editor></dran-editor>
+
+  <!-- Misc. Libraries -->
+  <script src="lib/FileSaver.min.js"></script>
+  <!-- Image -> Mesh libraries -->
+  <script src="lib/imagetomesh/slic.js"></script>
+  <script src="lib/imagetomesh/delaunay.js"></script>
+  <script src="lib/imagetomesh/canvasutils.js"></script>
+  <script src="lib/imagetomesh/imagetomesh.js"></script>
+  <!-- THREE.js -->
+  <script src="lib/three/three79.js"></script>
+  <!-- ARAP.js -->
+  <script src="lib/arap/deform2d.js"></script>
+  <script src="lib/arap/arap.js"></script>
+  <script src="lib/PitchDetect/js/pitchdetect.js"></script>
+  <!-- Dranimate Code -->
+  <script src="src/puppet.js"></script>
+  <script src="src/dranimate.js"></script>
 
   <!-- Angular Libraries -->
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
@@ -93,13 +51,14 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
 
   <!-- UI Code -->
-
   <script src="src/ui/dran.js"></script>
-
+  <!-- Model Stuff -->
+  <script src="src/ui/model/model.js"></script>
+  <!-- View Stuff -->
   <script src="src/ui/editor/editor.js"></script>
   <script src="src/ui/editor/puppet-dashboard/puppet-dashboard.js"></script>
+  <script src="src/ui/editor/edit-puppet-dialog/edit-puppet-dialog.js"></script>
   <script src="src/ui/editor/zoompanner/zoompanner.js"></script>
-  <script src="src/ui/editor/image-edit-dialog/image-edit-dialog.js"></script>
 
 </body>
 

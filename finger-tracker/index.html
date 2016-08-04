@@ -20,10 +20,14 @@
 
 }
 
-#closeups{
-   width:50px;
+#videoCanvas{
+   width:320px; 
+   height:240px;
    float:left;
    padding:10px;
+   transform: rotateY(180deg);
+   -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+   -moz-transform:rotateY(180deg); /* Firefox */
 }
 
 </style>
@@ -33,15 +37,10 @@
 
 
 <video autoplay="true" id="videoElem"></video>
+<canvas id ="videoCanvas"></canvas>
 <canvas id ="canvasElem"></canvas>
-<div id="closeups">
-   <canvas id ="closeupCanvas0" width=40px height=40px></canvas>
-   <canvas id ="closeupCanvas1" width=40px height=40px></canvas>
-   <canvas id ="closeupCanvas2" width=40px height=40px></canvas>
-   <canvas id ="closeupCanvas3" width=40px height=40px></canvas>
-   <canvas id ="closeupCanvas4" width=40px height=40px></canvas>
-</div>
 <button onclick="captureBackground()">Capture Background</button>
+<button onclick="trackFingertips()">Track Fingertips</button>
 
 <script type="text/javascript" src="cv.js"></script> 
 <script type="text/javascript" src="handtracking.js"></script> 
@@ -56,16 +55,9 @@
    var context = canvas.getContext("2d");
    var back = document.createElement("canvas");
    var backContext = back.getContext("2d");
-   var closeupCanvas0 = document.getElementById("closeupCanvas0");
-   var closeupCtx0 = closeupCanvas0.getContext("2d");
-   var closeupCanvas1 = document.getElementById("closeupCanvas1");
-   var closeupCtx1 = closeupCanvas1.getContext("2d");
-   var closeupCanvas2 = document.getElementById("closeupCanvas2");
-   var closeupCtx2 = closeupCanvas2.getContext("2d");
-   var closeupCanvas3 = document.getElementById("closeupCanvas3");
-   var closeupCtx3 = closeupCanvas3.getContext("2d");
-   var closeupCanvas4 = document.getElementById("closeupCanvas4");
-   var closeupCtx4 = closeupCanvas4.getContext("2d");
+
+   var videoCanvas = document.getElementById("videoCanvas");
+   var videoContext = videoCanvas.getContext("2d");
 
    var tracker = new HT.Tracker();
    var candidate;
@@ -97,6 +89,8 @@
       ch = video.clientHeight;
       canvas.width = cw;
       canvas.height = ch;
+      videoCanvas.width = cw;
+      videoCanvas.height = ch;
       back.width = cw;
       back.height = ch;
       shortimg.height = ch;

@@ -1,7 +1,7 @@
 <div layout="column" class="container">
 
   <md-toolbar layout="row" flex="none" class="md-toolbar-tools" md-whiteframe="2">
-    <md-button class="md-icon-button" ng-click="togglePupdashContainer()" hide-gt-sm>
+    <md-button class="md-icon-button" dran-toggle-pupdash hide-gt-sm>
       <md-icon md-font-set="material-icons">menu</md-icon>
     </md-button>
     <h1>Dranimate Editor</h1>
@@ -18,9 +18,9 @@
         md-component-id="pupdash-container"
         md-is-locked-open="$mdMedia('gt-sm')"
         md-disable-backdrop
-        md-whiteframe="{{ getPupdashContainerDepth() }}">
+        md-whiteframe="{{ $mdMedia('gt-sm') ? 2 : 4 }}">
       <md-toolbar layout="row" class="md-hue-2 md-medium-tall md-toolbar-tools">
-        <md-button class="md-icon-button" ng-click="togglePupdashContainer()" hide-gt-sm>
+        <md-button dran-toggle-pupdash class="md-icon-button" hide-gt-sm>
           <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
         </md-button>
         <h2>Puppet Name</h2>
@@ -29,8 +29,13 @@
     </md-sidenav>
 
     <div flex class="position-root">
+      <dran-three-container></dran-three-container>
       <div class="md-padding bottom-left-pos">
-        <dran-zoompanner></dran-zoompanner>
+        <dran-zoompanner
+          on-zoom-in="$ctrl.zoomIn"
+          on-zoom-out="$ctrl.zoomOut"
+          pan-enabled="$ctrl.panEnabled">
+        </dran-zoompanner>
       </div>
       <div layout="column" class="md-padding bottom-right-pos">
         <md-button class="md-fab"><md-icon md-font-set="material-icons">fiber_manual_record</md-icon></md-button>

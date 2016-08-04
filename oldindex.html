@@ -54,31 +54,34 @@
     <div id="loading">Setting up ARAP.js...</div>
 
     <div id="newPuppetWindow">
-        Create new puppet from file: <input type="file" id="imageLoader" name="imageLoader"><br />
+        Create new puppet from image: <input type="file" id="imageLoader" name="imageLoader"><br />
+        Load puppet from JSON: <input type="file" id="puppetLoader" name="puppetLoader"><br />
+        <button type="button" id="exportSelectedPuppet">Export Selected Puppet as JSON</button>
     </div>
 
     <div id="meshGenerationWindow">
+        <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
         <button type="button" id="showMeshButton">Show Mesh</button>
         <button type="button" id="createPuppetButton">Create Puppet</button> <br />
-
-        <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
     </div>
 
     <div id="THREEContainer"></div>
+
+    <script src="lib/FileSaver.min.js"></script>
 
     <script src="lib/imagetomesh/slic.js"></script>
     <script src="lib/imagetomesh/delaunay.js"></script>
     <script src="lib/imagetomesh/canvasutils.js"></script>
     <script src="lib/imagetomesh/imagetomesh.js"></script>
 
-    <script src="lib/three/three.min.js"></script>
+    <script src="lib/three/three79.js"></script>
     <script src="lib/three/stats.min.js"></script>
 
     <script src="lib/arap/deform2d.js"></script>
     <script src="lib/arap/arap.js"></script>
-    <script src="lib/arap/arap-three.js"></script>
     <script src="lib/PitchDetect/js/pitchdetect.js"></script>
 
+    <script src="src/puppet.js"></script>
     <script src="src/dranimate.js"></script>
     <script>
         document.getElementById("meshGenerationWindow").style.visibility = "hidden";
@@ -87,17 +90,28 @@
 
         var imageToMesh = new ImageToMesh();
 
-        var imageLoader = document.getElementById('imageLoader');
-        imageLoader.addEventListener('change', function(e){
+        document.getElementById('imageLoader').addEventListener('change', function(e){
             document.getElementById("meshGenerationWindow").style.visibility = "visible";
             document.getElementById("newPuppetWindow").style.visibility = "hidden";
 
             var reader = new FileReader();
             reader.onload = function(event){
-                imageToMesh.reset();
                 imageToMesh.setup(event.target.result);
             }
             reader.readAsDataURL(e.target.files[0]);
+        }, false);
+
+        document.getElementById('puppetLoader').addEventListener('change', function(e){
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var puppetData = JSON.parse(e.target.result);
+                var image = new Image();
+                image.onload = function () {
+                    dranimate.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image);
+                }
+                image.src = puppetData.imageData;
+            };
+            reader.readAsText(document.getElementById('puppetLoader').files[0]);
         }, false);
 
         document.getElementById("createPuppetButton").onclick = function() {
@@ -110,7 +124,7 @@
 
             imageToMesh.eraseUnselectedPixels();
 
-            dranimate.setupMeshAndARAP(vertices, faces, controlPoints, document.getElementById("imageToMeshCanvas"));
+            dranimate.createNewPuppet(vertices, faces, controlPoints, image);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
@@ -118,7 +132,16 @@
 
         document.getElementById("showMeshButton").onclick = function() {
             imageToMesh.generateMesh();
-            imageToMesh.redraw();
+        };
+
+        document.getElementById("exportSelectedPuppet").onclick = function() {
+            var puppet = dranimate.getSelectedPuppet();
+            if(puppet) {
+                var blob = new Blob([puppet.getJSONData()], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "puppet.json");
+            } else {
+                alert("No puppet selected...")
+            }
         };
 
         var dranimate = new Dranimate();

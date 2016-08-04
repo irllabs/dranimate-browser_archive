@@ -1,0 +1,59 @@
+body {
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.edit-puppet-dialog {
+  width: 90%;
+  height: 90%;
+  max-width: none;
+  max-height: none;
+}
+
+
+.position-root {
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.bottom-left-pos {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.bottom-right-pos {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+
+.round-corners {
+  border-radius: 2px;
+}
+
+
+/* Quick fixes to weird Angular formatting stuff */
+
+/* no space for input errors if none exist.
+ * done to make input-heavy interfaces more compact.
+ * should i limit the scope of this, in case some inputs have errors?
+ */
+md-input-container .md-errors-spacer {
+  min-height: 0;
+}
+
+/* for some reason icon buttons have margins??????
+ * makes sense but not in the zoompanner
+ */
+dran-zoompanner .md-button.md-icon-button {
+  margin: 0;
+}
