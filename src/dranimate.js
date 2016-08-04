@@ -39,6 +39,8 @@ var Dranimate = function () {
     var panEnabled = false;
     var panFromPosition = {x:0, y:0}
 
+    var selectedPuppet = null;
+
 /*****************************
     API
 *****************************/
@@ -146,7 +148,17 @@ var Dranimate = function () {
 
             } else {
                 if(activeControlPoint.hoveredOver) {
+                    if(selectedPuppet) {
+                        selectedPuppet.boundingBox.visible = false;
+                    }
+                    selectedPuppet = puppets[activeControlPoint.puppetIndex];
+                    selectedPuppet.boundingBox.visible = true;
                     activeControlPoint.beingDragged = true;
+                } else {
+                    if(selectedPuppet) {
+                        selectedPuppet.boundingBox.visible = false;
+                        selectedPuppet = null;
+                    }
                 }
             }
 
@@ -196,7 +208,7 @@ var Dranimate = function () {
             var context = canvas.getContext('2d');
             context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
 
-            that.setupMeshAndARAP(vertices, faces, controlPoints, canvas);
+            that.createNewPuppet(vertices, faces, controlPoints, canvas);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
@@ -222,7 +234,7 @@ var Dranimate = function () {
             var context = canvas.getContext('2d');
             context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
 
-            that.setupMeshAndARAP(vertices, faces, controlPoints, canvas);
+            that.createNewPuppet(vertices, faces, controlPoints, canvas);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
@@ -230,7 +242,7 @@ var Dranimate = function () {
         image.src = 'testimages/shiba.jpg';
     };
 
-    this.setupMeshAndARAP = function (vertices, faces, controlPoints, canvas) {
+    this.createNewPuppet = function (vertices, faces, controlPoints, canvas) {
 
         /*var bigOlString = "[";
         for (var i = 0; i < vertices.length; i++) {
@@ -285,6 +297,10 @@ var Dranimate = function () {
 
     this.setPanEnabled = function (enable) {
         panEnabled = enable;
+    }
+
+    this.getSelectedPuppet = function () {
+        return selectedPuppet;
     }
 
 /*****************************
