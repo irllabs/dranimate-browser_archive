@@ -12,7 +12,8 @@
 (function() {
 
 var pupdashMod = angular.module('dran.editor.puppetDashboard', [
-  'ngMaterial'
+  'ngMaterial',
+  'dran.editor.edit-puppet-dialog'
 ]);
 
 function PuppetDashboardCtrl() {
