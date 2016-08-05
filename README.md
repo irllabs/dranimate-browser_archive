@@ -16,3 +16,6 @@ Check out the demo [here](http://cmuartfab.github.io/dranimate-browser/oldindex.
  
 ### Puppeteering
 * Click and drag to move control points
+
+### Browser Web-Cam Handtracking
+* only works with Firefox browser currently
