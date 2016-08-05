@@ -2,6 +2,12 @@
 
 var Puppet = function (image) {
 	this.image = image;
+
+	this.name = "The Puppet With No Name";
+	this.x = 0;
+	this.y = 0;
+	this.rotation = 0;
+	this.scale = 0;
 };
 
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
@@ -181,4 +187,20 @@ Puppet.prototype.getJSONData = function () {
 	    imageData: this.getImageAsDataURL()
 	};
 	return JSON.stringify(puppetData);
+}
+
+Puppet.prototype.removeFromScene = function (scene) {
+
+	scene.remove(this.threeMesh);
+	scene.remove(this.boundingBox);
+	for(var i = 0; i < this.controlPointSpheres.length; i++) {
+		scene.remove(this.controlPointSpheres[i]);
+	}
+
+}
+
+Puppet.prototype.cleanup = function () {
+
+	console.error("Warning: Puppet.cleanup() not yet implemented! You are wasting memory! >:(")
+
 }
