@@ -90,6 +90,7 @@
         document.getElementById("loading").style.visibility = "hidden";
 
         var imageToMesh = new ImageToMesh();
+        imageToMesh.setup(document.getElementById("imageToMeshCanvas"));
 
         document.getElementById('imageLoader').addEventListener('change', function(e){
             document.getElementById("meshGenerationWindow").style.visibility = "visible";
@@ -97,7 +98,7 @@
 
             var reader = new FileReader();
             reader.onload = function(event){
-                imageToMesh.setup(event.target.result);
+                imageToMesh.editImage(event.target.result);
             }
             reader.readAsDataURL(e.target.files[0]);
         }, false);

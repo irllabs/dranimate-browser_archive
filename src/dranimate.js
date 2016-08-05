@@ -210,12 +210,18 @@ var Dranimate = function () {
 
     this.zoomIn = function () {
         zoom += 0.1;
+        panPosition.x -= (0.1)*window.innerWidth/2;
+        panPosition.y -= (0.1)*window.innerHeight/2;
+
         refreshCamera();
         camera.updateProjectionMatrix();
     }
 
     this.zoomOut = function () {
         zoom -= 0.1;
+        panPosition.x += (0.1)*window.innerWidth/2;
+        panPosition.y += (0.1)*window.innerHeight/2;
+
         refreshCamera();
         camera.updateProjectionMatrix();
     }
@@ -288,6 +294,10 @@ var Dranimate = function () {
     }
 
     function refreshCamera() {
+
+        if(zoom < 0.1) zoom = 0.1;
+        if(zoom > 3) zoom = 3;
+
         camera.left = 0;
         camera.right = window.innerWidth / zoom;
         camera.top = 0;

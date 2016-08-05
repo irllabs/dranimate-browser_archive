@@ -16,7 +16,7 @@ var dranMod = angular.module('dran', [
 
 dranMod.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
-    .primaryPalette('pink')
+    .primaryPalette('green')
     .accentPalette('orange')
     .warnPalette('red')
 });
