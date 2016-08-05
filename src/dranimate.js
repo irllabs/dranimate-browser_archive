@@ -249,14 +249,7 @@ var Dranimate = function () {
 *****************************/
 
     document.addEventListener('keydown', function(evt) {
-
-        console.log("keydown: " + evt.keyCode);
-
-        // Delete
-        if(evt.keyCode == 8) {
-            evt.preventDefault();
-            that.deleteSelectedPuppet();
-        }
+        
     });
 
     window.addEventListener( 'resize', function () {
