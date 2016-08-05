@@ -47,6 +47,15 @@ var Dranimate = function () {
     API
 *****************************/
 
+    this.loadDemoPuppet = function () {
+        var puppetData = JSON.parse(demoPuppetJSON);
+        var image = new Image();
+        image.onload = function () {
+            dranimate.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image);
+        }
+        image.src = puppetData.imageData;
+    }
+
     this.setup = function (canvasContainer) {
 
         /* Initialize THREE canvas and scene */

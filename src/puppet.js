@@ -129,7 +129,7 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 	for(var i = 0; i < this.controlPoints.length; i++) {
 		var sphere = new THREE.Mesh( 
 			new THREE.SphereGeometry( 5, 32, 32 ), 
-			new THREE.MeshBasicMaterial( {color: 0xffff00} ) 
+			new THREE.MeshBasicMaterial( {color: 0xFFAB40} ) 
 		);
 		sphere.position.z = 10;
 		this.controlPointSpheres.push(sphere);
