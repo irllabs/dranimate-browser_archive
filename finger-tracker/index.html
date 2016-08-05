@@ -40,7 +40,6 @@
 <canvas id ="videoCanvas"></canvas>
 <canvas id ="canvasElem"></canvas>
 <button onclick="captureBackground()">Capture Background</button>
-<button onclick="trackFingertips()">Track Fingertips</button>
 
 <script type="text/javascript" src="cv.js"></script> 
 <script type="text/javascript" src="handtracking.js"></script> 
@@ -68,6 +67,8 @@
    var shortimg = new CV.Image();
 
    var ch, cw;
+
+   var offsets = new Array(5); //<----------- this is the important thing. this array contains the finger offsets
 
    window.onload = getVid;
 
