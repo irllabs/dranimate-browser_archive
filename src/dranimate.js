@@ -56,7 +56,7 @@ var Dranimate = function () {
                                                0,
                                                window.innerHeight,
                                                0.1, 1000 );
-        camera.updateProjectionMatrix();
+        refreshCamera();
 
         scene = new THREE.Scene();
 
@@ -87,8 +87,8 @@ var Dranimate = function () {
             };
 
             mouseRelative = {
-                x: (x - boundingRect.left) / zoom - panPosition.x,
-                y: (y - boundingRect.top)  / zoom - panPosition.y
+                x: (x - boundingRect.left-window.innerWidth/2) / zoom - panPosition.x,
+                y: (y - boundingRect.top-window.innerHeight/2)  / zoom - panPosition.y
             };
         }
 
@@ -217,8 +217,8 @@ var Dranimate = function () {
 
     this.zoomIn = function () {
         zoom += 0.1;
-        panPosition.x -= (0.1)*window.innerWidth/2;
-        panPosition.y -= (0.1)*window.innerHeight/2;
+        //panPosition.x -= (0.1)*window.innerWidth/2;
+        //panPosition.y -= (0.1)*window.innerHeight/2;
 
         refreshCamera();
         camera.updateProjectionMatrix();
@@ -226,8 +226,8 @@ var Dranimate = function () {
 
     this.zoomOut = function () {
         zoom -= 0.1;
-        panPosition.x += (0.1)*window.innerWidth/2;
-        panPosition.y += (0.1)*window.innerHeight/2;
+        //panPosition.x += (0.1)*window.innerWidth/2;
+        //panPosition.y += (0.1)*window.innerHeight/2;
 
         refreshCamera();
         camera.updateProjectionMatrix();
@@ -305,10 +305,10 @@ var Dranimate = function () {
         if(zoom < 0.1) zoom = 0.1;
         if(zoom > 3) zoom = 3;
 
-        camera.left = 0;
-        camera.right = window.innerWidth / zoom;
-        camera.top = 0;
-        camera.bottom = window.innerHeight / zoom;
+        camera.left = -window.innerWidth/2 / zoom;
+        camera.right =  window.innerWidth/2 / zoom;
+        camera.top = -window.innerHeight/2 / zoom;
+        camera.bottom = window.innerHeight/2 / zoom;
         camera.updateProjectionMatrix();
         //camera.lookAt( 0, 0, 0 );
     }
