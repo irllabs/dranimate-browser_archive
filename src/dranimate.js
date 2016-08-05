@@ -34,7 +34,7 @@ var Dranimate = function () {
 
     var controlPointToControl = 0;
 
-    this.panEnabled = false;
+    var panEnabled = false;
     var zoom = 1.0;
     var panPosition = {x:0, y:0};
     var panFromPosition = {x:0, y:0}
@@ -95,7 +95,7 @@ var Dranimate = function () {
 
             /* Find control point closest to the mouse */
 
-            if(this.panEnabled) {
+            if(panEnabled) {
                 panPosition.x = mouseAbsolute.x;
                 panPosition.y = mouseAbsolute.y;
             } else {
@@ -144,7 +144,7 @@ var Dranimate = function () {
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = true;
 
-            if(this.panEnabled) {
+            if(panEnabled) {
 
             } else {
                 if(activeControlPoint.hoveredOver) {
@@ -169,7 +169,7 @@ var Dranimate = function () {
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = false;
 
-            if(this.panEnabled) {
+            if(panEnabled) {
 
             } else {
                 if(activeControlPoint) {
@@ -220,12 +220,21 @@ var Dranimate = function () {
         this.panEnabled = enable;
     }
 
+    this.getPanEnabled = function (enable) {
+        return panEnabled;
+    }
+
     this.getSelectedPuppet = function () {
         return selectedPuppet;
     }
 
     this.deleteSelectedPuppet = function () {
-        puppets.splice(index, 1);
+        if(selectedPuppet) {
+            var index = puppets.indexOf(selectedPuppet);
+            selectedPuppet.removeFromScene(scene);
+            selectedPuppet.cleanup();
+            puppets.splice(index, 1);
+        }
     }
 
 /*****************************
