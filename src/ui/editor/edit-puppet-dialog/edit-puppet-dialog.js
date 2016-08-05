@@ -19,32 +19,42 @@ function EditPuppetDialogCtrl($mdDialog) {
     threshold: 25
   }
 
-  $ctrl.close = function(ev) {
-    $mdDialog.hide();
-  }
-
   // TODO: attach to the actual canvas yo!
   $ctrl.zoomIn = function() { console.log("edit pup zoom in"); };
   $ctrl.zoomOut = function() { console.log("edit pup zoom out"); };
   $ctrl.panEnabled = false;
 }
 
-edPupDogMod.directive('dranOpenEditPuppetDialog', ["$mdDialog", function($mdDialog) {
+edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
   return {
     restrict: 'A',
     link: function(scope, element) {
       element.bind('click', function(ev) {
-        $mdDialog.show({
-          controller: EditPuppetDialogCtrl,
-          controllerAs: '$ctrl',
-          templateUrl: 'src/ui/editor/edit-puppet-dialog/edit-puppet-dialog.html',
-          parent: angular.element(document.body),
-          closeTo: element,
-          fullscreen: false // TODO: make fullscreen on smaller windows
-        });
+        $mdDialog.hide();
       });
     }
   };
+}]);
+
+edPupDogMod.directive('dranOpenEditPuppetDialog', [
+    '$mdMedia',
+    '$mdDialog',
+  function($mdMedia, $mdDialog) {
+    return {
+      restrict: 'A',
+      link: function(scope, element) {
+        element.bind('click', function(ev) {
+          $mdDialog.show({
+            controller: EditPuppetDialogCtrl,
+            controllerAs: '$ctrl',
+            templateUrl: 'src/ui/editor/edit-puppet-dialog/edit-puppet-dialog.html',
+            parent: angular.element(document.body),
+            closeTo: element,
+            fullscreen: $mdMedia('xs')
+          });
+        });
+      }
+    };
 }]);
 
 })();
