@@ -82,29 +82,14 @@ var Dranimate = function () {
             var boundingRect = renderer.domElement.getBoundingClientRect();
 
             mouseAbsolute = {
-<<<<<<< HEAD
-                x: x,
-                y: y
-=======
                 x: x - boundingRect.left,
                 y: y - boundingRect.top
->>>>>>> 383702b9103bc2d746f9fd39c849c2059adf399a
             };
 
             var zoomTransformed = zoom;
             mouseRelative = {
-<<<<<<< HEAD
                 x: (x - boundingRect.left) / zoomTransformed - panPosition.x,
                 y: (y - boundingRect.top)  / zoomTransformed - panPosition.y
-=======
-<<<<<<< HEAD
-                x: x / zoomTransformed - panPosition.x,
-                y: y / zoomTransformed - panPosition.y
-=======
-                x: x / zoomTransformed - panPosition.x - boundingRect.left,
-                y: y / zoomTransformed - panPosition.y - boundingRect.top
->>>>>>> 383702b9103bc2d746f9fd39c849c2059adf399a
->>>>>>> 1443d5a69d5226ab4ab60630af9876455758d988
             };
         }
 
