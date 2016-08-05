@@ -39,6 +39,8 @@ var Dranimate = function () {
     var panPosition = {x:0, y:0};
     var panFromPosition = {x:0, y:0}
 
+    var renderWireframes = false;
+
     var selectedPuppet = null;
 
 /*****************************
@@ -237,22 +239,22 @@ var Dranimate = function () {
         }
     }
 
+    this.toggleRenderWireframes = function () {
+        renderWireframes = !renderWireframes;
+    }
+
 /*****************************
     Dom events
 *****************************/
 
     document.addEventListener('keydown', function(evt) {
-        if(evt.keyCode == 39) { // right arrow
-            controlPointToControl++;
-            if(controlPointToControl >= puppets[puppets.length-1].controlPoints.length) {
-                controlPointToControl = 0;
-            }
-        }
-        if(evt.keyCode == 37) { // left arrow
-            controlPointToControl--;
-            if(controlPointToControl < 0) {
-                controlPointToControl = puppets[puppets.length-1].controlPoints.length-1;
-            }
+
+        console.log("keydown: " + evt.keyCode);
+
+        // Delete
+        if(evt.keyCode == 8) {
+            evt.preventDefault();
+            that.deleteSelectedPuppet();
         }
     });
 
@@ -300,6 +302,10 @@ var Dranimate = function () {
     }
 
     function render() {
+
+        for(var i = 0; i < puppets.length; i++) {
+            puppets[i].setRenderWireframe(renderWireframes);
+        }
 
         camera.position.x = -panPosition.x;
         camera.position.y = -panPosition.y;
