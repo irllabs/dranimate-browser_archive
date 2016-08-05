@@ -322,6 +322,10 @@ var Dranimate = function () {
             selectedPuppet.setSelectionGUIVisible(true);
         }
 
+        if(activeControlPoint.hoveredOver) {
+            puppets[activeControlPoint.puppetIndex].controlPointSpheres[activeControlPoint.controlPointIndex].visible = true;
+        }
+
         camera.position.x = -panPosition.x;
         camera.position.y = -panPosition.y;
         camera.position.z = 100;
