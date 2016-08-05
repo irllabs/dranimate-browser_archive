@@ -79,15 +79,17 @@ var Dranimate = function () {
         // THREE events
 
         var updateMousePosition = function (x,y) {
+            var boundingRect = renderer.domElement.getBoundingClientRect();
+
             mouseAbsolute = {
-                x: x,
-                y: y
+                x: x - boundingRect.left,
+                y: y - boundingRect.top
             };
 
             var zoomTransformed = zoom;
             mouseRelative = {
-                x: x / zoomTransformed - panPosition.x,
-                y: y / zoomTransformed - panPosition.y
+                x: x / zoomTransformed - panPosition.x - boundingRect.left,
+                y: y / zoomTransformed - panPosition.y - boundingRect.top
             };
         }
 
