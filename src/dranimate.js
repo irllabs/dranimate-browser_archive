@@ -88,8 +88,8 @@ var Dranimate = function () {
 
             var zoomTransformed = zoom;
             mouseRelative = {
-                x: x / zoomTransformed - panPosition.x - boundingRect.left,
-                y: y / zoomTransformed - panPosition.y - boundingRect.top
+                x: (x - boundingRect.left) / zoomTransformed - panPosition.x,
+                y: (y - boundingRect.top)  / zoomTransformed - panPosition.y
             };
         }
 
