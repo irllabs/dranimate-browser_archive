@@ -88,7 +88,7 @@ var Dranimate = function () {
 
             mouseRelative = {
                 x: (x - boundingRect.left-window.innerWidth/2) / zoom - panPosition.x,
-                y: (y - boundingRect.top-window.innerHeight/2)  / zoom - panPosition.y
+                y: (y - boundingRect.top-window.innerHeight/2) / zoom - panPosition.y
             };
         }
 
@@ -158,17 +158,16 @@ var Dranimate = function () {
                 panFromPosition.x = mouseAbsolute.x/zoom;
                 panFromPosition.y = mouseAbsolute.y/zoom;
             } else {
+
                 if(activeControlPoint.hoveredOver) {
-                    if(selectedPuppet) {
-                        selectedPuppet.boundingBox.visible = false;
-                    }
                     selectedPuppet = puppets[activeControlPoint.puppetIndex];
-                    selectedPuppet.boundingBox.visible = true;
                     activeControlPoint.beingDragged = true;
                 } else {
-                    if(selectedPuppet) {
-                        selectedPuppet.boundingBox.visible = false;
-                        selectedPuppet = null;
+                    selectedPuppet = null;
+                    for(var i = 0; i < puppets.length; i++) {
+                        if(puppets[i].pointInsideMesh(mouseRelative.x, mouseRelative.y)) {
+                            selectedPuppet = puppets[i];
+                        }
                     }
                 }
             }
@@ -317,6 +316,10 @@ var Dranimate = function () {
 
         for(var i = 0; i < puppets.length; i++) {
             puppets[i].setRenderWireframe(renderWireframes);
+            puppets[i].setSelectionGUIVisible(false);
+        }
+        if(selectedPuppet) {
+            selectedPuppet.setSelectionGUIVisible(true);
         }
 
         camera.position.x = -panPosition.x;

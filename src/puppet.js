@@ -226,3 +226,44 @@ Puppet.prototype.cleanup = function () {
 	console.error("Warning: Puppet.cleanup() not yet implemented! You are wasting memory! >:(")
 
 }
+
+Puppet.prototype.setSelectionGUIVisible = function (visible) {
+	this.boundingBox.visible = visible;
+	for(var i = 0; i < this.controlPointSpheres.length; i++) {
+		this.controlPointSpheres[i].visible = visible;
+	}
+}
+
+Puppet.prototype.pointInsideMesh = function (x, y) {
+
+	//http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+
+	var sign = function (x1, y1, x2, y2, x3, y3) {
+		return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
+	}
+
+	var pointInsideTriangle = function (px, py, x1, y1, x2, y2, x3, y3) {
+		var b1, b2, b3;
+    
+	    b1 = sign(px,py, x1,y1, x2,y2) < 0.0;
+	    b2 = sign(px,py, x2,y2, x3,y3) < 0.0;
+	    b3 = sign(px,py, x3,y3, x1,y1) < 0.0;
+	    
+	    return ((b1 == b2) && (b2 == b3));
+	}
+
+	var allFaces = this.threeMesh.geometry.faces;
+	var allVerts = this.threeMesh.geometry.vertices;
+	for(var i = 0; i < allFaces.length; i++) {
+		var v1 = allVerts[allFaces[i].a];
+		var v2 = allVerts[allFaces[i].b];
+		var v3 = allVerts[allFaces[i].c];
+
+		if(pointInsideTriangle(x, y, v1.x, v1.y, v2.x, v2.y, v3.x, v3.y)) {
+			return true;
+		}
+	}
+
+	return false;
+
+}
