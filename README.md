@@ -18,4 +18,4 @@ Check out the demo [here](http://cmuartfab.github.io/dranimate-browser/oldindex.
 * Click and drag to move control points
 
 ### Browser Web-Cam Handtracking
-* only works with Firefox browser currently
+* to use with Chrome you need to host the webpage on a webserver (Chrome doesnt allow video streams otherwise). Follow the instructions above to create a python simple server.
