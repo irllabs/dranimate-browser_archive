@@ -8,10 +8,21 @@ var Puppet = function (image) {
 	this.scale = 1.0;
 };
 
-Puppet.prototype.getName() { return name; };
-Puppet.prototype.getPosition() { return {x: this.x, y: this.y}; };
-Puppet.prototype.getRotation() { return this.rotation; };
-Puppet.prototype.getScale() { return this.scale; };
+Puppet.prototype.getName = function() { 
+	return name; 
+};
+
+Puppet.prototype.getPosition = function() { 
+	return {x: this.x, y: this.y}; 
+};
+
+Puppet.prototype.getRotation = function() { 
+	return this.rotation; 
+};
+
+Puppet.prototype.getScale = function() { 
+	return this.scale; 
+};
 
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 
