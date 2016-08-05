@@ -18,4 +18,4 @@ Check out the demo [here](http://cmuartfab.github.io/dranimate-browser/oldindex.
 * Click and drag to move control points
 
 ### Browser Web-Cam Handtracking
-* to use with Chrome you need to host the webpage on a webserver (Chrome doesnt allow video streams otherwise). To do this go into the directory with the index file and type "python -m SimpleHTTPServer" you will then see the line "Serving HTTP on 0.0.0.0 port ????" where ???? is the port number. Then in the Chrome browser go to "localhost:????/index.html".
+* to use with Chrome you need to host the webpage on a webserver (Chrome doesnt allow video streams otherwise). Follow the instructions above to create a python simple server.
