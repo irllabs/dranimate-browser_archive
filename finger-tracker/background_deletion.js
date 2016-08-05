@@ -83,9 +83,11 @@ var handoutline = [{ x:201, y:48}, { x:196, y:51}, { x:196, y:56}, { x:195, y:57
 
 var tips = [{x:142, y:81}, {x:256, y:119}, {x:172, y:55}, {x:201, y:50}, {x:229, y:62}];
 
-function trackFingertips(){
-  track = true;
+
+function getOffsets(){
+  return offsets;
 }
+
 //capture background gets average background
 function captureBackground() {
   //reset values
@@ -282,6 +284,7 @@ function update(){
     for (var i = 0; i < tips.length; i++){
       videoContext.strokeRect(tips[i].x-10, tips[i].y-10, 20, 20);
     }
+    context.strokeRect(palmCenterX-4,palmCenterY-4,8,8);
   }
 }
 
@@ -302,9 +305,9 @@ function fingertip(){
   for (var i = 4; i >= 0; i--){
     min = 400;
     indexOfSmallest = 0;
-    closest = {dist:Math.hypot(hullArray[0].x - posFingertips[i].x, hullArray[0].y - posFingertips[i].y), x:hullArray[0].x, y:hullArray[0].y};
+    closest = {dist:Math.hypot(hullArray[0].x - tips[i].x, hullArray[0].y - tips[i].y), x:hullArray[0].x, y:hullArray[0].y};
     for (var j = 1; j <= i; j++){
-      min = Math.min(Math.hypot(hullArray[j].x - posFingertips[i].x, hullArray[j].y - posFingertips[i].y),closest.dist);
+      min = Math.min(Math.hypot(hullArray[j].x - tips[i].x, hullArray[j].y - tips[i].y),closest.dist);
       if (min !== closest.dist){
         closest = {dist:min, x:hullArray[j].x, y:hullArray[j].y};
         indexOfSmallest = j;
@@ -314,12 +317,13 @@ function fingertip(){
     context.strokeStyle = colors[i];
     context.lineWidth = 4;
     context.strokeRect(posFingertips[i].x-4, posFingertips[i].y-4, 8, 8);
-    // console.log("========");
-    for (var m = 0; m < i+1; m++){
-      // console.log("hull: " + hullArray[m].x + " " + hullArray[m].y + " posF: " + posFingertips[m].x + " " + posFingertips[m].y);
-    }
     hullArray = hullArray.slice(0,indexOfSmallest).concat(hullArray.slice(indexOfSmallest+1,i+1));
-    // console.log("i: " + i + "indexOfSmallest: " + indexOfSmallest);
+  }
+  console.log("------------------------");
+  offsets = [];
+  for (var m = 0; m < 5; m++){
+    offsets.push({x:tips[m].x - posFingertips[m].x, y:tips[m].y - posFingertips[m].y});
+    // console.log(" posFingertips: " + offsets[m].x + " " + (offsets[m].y));
   }
 }
 
