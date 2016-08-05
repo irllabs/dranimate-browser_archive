@@ -24,6 +24,14 @@ Puppet.prototype.getScale = function() {
 	return this.scale; 
 };
 
+Puppet.prototype.setRenderWireframe = function (renderWireframe) {
+	if(renderWireframe) {
+		this.threeMesh.material = this.wireframeMaterial;
+	} else {
+		this.threeMesh.material = this.texturedMaterial;
+	}
+}
+
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 
 	/* Generate wireframe material */

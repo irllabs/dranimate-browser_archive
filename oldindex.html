@@ -57,6 +57,7 @@
         Create new puppet from image: <input type="file" id="imageLoader" name="imageLoader"><br />
         Load puppet from JSON: <input type="file" id="puppetLoader" name="puppetLoader"><br />
         <button type="button" id="exportSelectedPuppet">Export Selected Puppet as JSON</button>
+        <button type="button" id="toggleRenderWireframes">Toggle Render Wireframes</button>
     </div>
 
     <div id="meshGenerationWindow">
@@ -132,6 +133,10 @@
 
         document.getElementById("showMeshButton").onclick = function() {
             imageToMesh.generateMesh();
+        };
+
+        document.getElementById("toggleRenderWireframes").onclick = function() {
+            dranimate.toggleRenderWireframes();
         };
 
         document.getElementById("exportSelectedPuppet").onclick = function() {
