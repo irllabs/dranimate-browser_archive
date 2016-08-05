@@ -3,7 +3,7 @@
   <md-toolbar layout="row" class="md-toolbar-tools">
     <h2>Edit puppet</h2>
     <span flex></span>
-    <md-button class="md-icon-button">
+    <md-button class="md-icon-button" dran-close-edit-puppet-dialog>
       <md-icon md-font-set="material-icons">close</md-icon>
     </md-button>
   </md-toolbar>
@@ -15,7 +15,8 @@
         <dran-zoompanner
           on-zoom-in="$ctrl.zoomIn"
           on-zoom-out="$ctrl.zoomOut"
-          pan-enabled="$ctrl.panEnabled">
+          on-toggle-pan="$ctrl.panEnabled"
+          pan-enabled-getter="$ctrl.getPanEnabled">
         </dran-zoompanner>
       </div>
     </div>
@@ -25,34 +26,38 @@
         class="md-sidenav-right"
         md-is-locked-open="true"
         md-whiteframe="4">
+
       <form class="md-margin">
         <div class="md-margin">
-          <md-radio-group>
+          <md-radio-group ng-model="$ctrl.state.mode">
             <md-radio-button value="editCtrlPt">Edit Control Points</md-radio-button>
             <md-radio-button value="cropImg">Crop Image</md-radio-button>
           </md-radio-group>
         </div>
       </form>
-        <md-divider></md-divider>
+
+      <md-divider></md-divider>
+
       <form class="md-margin">
         <div class="md-margin">
-          <md-radio-group layout="row">
-            <md-radio-button flex value="select">Select</md-radio-button>
-            <md-radio-button flex value="remove">Remove</md-radio-button>
+          <md-radio-group layout="row" ng-model="$ctrl.state.cropmode">
+            <md-radio-button flex value="select" ng-disabled="!($ctrl.state.mode == 'cropImg')">Select</md-radio-button>
+            <md-radio-button flex value="remove" ng-disabled="!($ctrl.state.mode == 'cropImg')">Remove</md-radio-button>
           </md-radio-group>
         </div>
         <md-slider-container layout-margin>
           <h3 class="md-subhead">TH</h3>
-          <md-slider flex="40" min="0" max="100"></md-slider>
+          <md-slider flex="40" min="0" max="100" ng-model="$ctrl.state.threshold" ng-disabled="!($ctrl.state.mode == 'cropImg')"></md-slider>
           <md-input-container>
-            <input type="number" value="100"/>
+            <input type="number" value="100" ng-model="$ctrl.state.threshold" ng-disabled="!($ctrl.state.mode == 'cropImg')"/>
           </md-input-container>
         </md-slider-container>
         <div layout="row">
-          <md-button flex class="md-raised">Select All</md-button>
-          <md-button flex class="md-raised">Remove All</md-button>
+          <md-button flex class="md-raised" ng-disabled="!($ctrl.state.mode == 'cropImg')">Select All</md-button>
+          <md-button flex class="md-raised" ng-disabled="!($ctrl.state.mode == 'cropImg')">Remove All</md-button>
         </div>
       </form>
+
     </md-sidenav>
 
   </div>

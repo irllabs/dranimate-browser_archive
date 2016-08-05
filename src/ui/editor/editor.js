@@ -27,24 +27,20 @@ var edMod = angular.module('dran.editor', [
   'dran.model'
 ]);
 
-function EditorCtrl() {
-  var ctrl = this;
+EditorCtrl.$inject = [ 'model' ];
+function EditorCtrl(model) {
+  var $ctrl = this;
 
-  // TODO: these are in lieu of properly hooking up the model to the zoompanner!
-  ctrl.zoomIn = function(ev) { console.log('zoom in!') };
-  ctrl.zoomOut = function(ev) { console.log('zoom out!') };
-  ctrl.panEnabled = false;
+  $ctrl.zoomIn = model.zoomIn;
+  $ctrl.zoomOut = model.zoomOut;
+  $ctrl.togglePan = function() { model.setPanEnabled(!model.getPanEnabled()); };
+  $ctrl.getPanEnabled = model.getPanEnabled;
 }
 
-edMod.directive('dranThreeContainer', ['model', function(model) {
-  return {
-    restrict: 'AE',
-    link: function(scope, element) {
-      /* element[0] gets the raw DOM reference from the jqlite object */
-      model.setup(element[0]);
-    }
-  };
-}]);
+edMod.component('dranEditor', {
+  templateUrl: 'src/ui/editor/editor.html',
+  controller: EditorCtrl
+});
 
 edMod.directive('dranTogglePupdash', ['$mdSidenav', function($mdSidenav) {
   return {
@@ -57,9 +53,51 @@ edMod.directive('dranTogglePupdash', ['$mdSidenav', function($mdSidenav) {
   };
 }]);
 
-edMod.component('dranEditor', {
-  templateUrl: 'src/ui/editor/editor.html',
-  controller: EditorCtrl
+edMod.directive('dranThreeContainer', ['model', function(model) {
+  return {
+    restrict: 'AE',
+    link: function(scope, element) {
+      /* element[0] gets the raw DOM reference from the jqlite object */
+      model.setup(element[0]);
+    }
+  };
+}]);
+
+/* For Uploading Files */
+
+edMod.directive('dranFileUploadContainer', function() {
+  return {
+    restrict: 'AE',
+    link: function(scope, element) {
+      var input = element.find('input');
+      var button = element.find('button');
+      if (input.length && button.length) {
+        button.bind('click', function(ev) {
+          input[0].click();
+        });
+      };
+    }
+  };
 });
+
+edMod.directive('dranNewPuppetFromJson', ['model', function(model) {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.bind('change', function() {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          var puppetData = JSON.parse(ev.target.result);
+          var image = new Image();
+          image.onload = function() {
+            model.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image);
+          }
+          image.src = puppetData.imageData;
+        };
+        reader.readAsText(element[0].files[0]);
+      });
+    }
+  };
+}]);
 
 })();

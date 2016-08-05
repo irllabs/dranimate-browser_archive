@@ -34,10 +34,12 @@ var Dranimate = function () {
 
     var controlPointToControl = 0;
 
+    var panEnabled = false;
     var zoom = 1.0;
     var panPosition = {x:0, y:0};
-    var panEnabled = false;
     var panFromPosition = {x:0, y:0}
+
+    var renderWireframes = false;
 
     var selectedPuppet = null;
 
@@ -49,10 +51,10 @@ var Dranimate = function () {
 
         /* Initialize THREE canvas and scene */
 
-        camera = new THREE.OrthographicCamera( 0, 
-                                               window.innerWidth, 
-                                               0, 
-                                               window.innerHeight, 
+        camera = new THREE.OrthographicCamera( 0,
+                                               window.innerWidth,
+                                               0,
+                                               window.innerHeight,
                                                0.1, 1000 );
         camera.updateProjectionMatrix();
 
@@ -78,13 +80,13 @@ var Dranimate = function () {
 
         var updateMousePosition = function (x,y) {
             mouseAbsolute = {
-                x: x, 
+                x: x,
                 y: y
             };
 
             var zoomTransformed = zoom;
             mouseRelative = {
-                x: x / zoomTransformed - panPosition.x, 
+                x: x / zoomTransformed - panPosition.x,
                 y: y / zoomTransformed - panPosition.y
             };
         }
@@ -117,10 +119,10 @@ var Dranimate = function () {
                             if(dist < 40) {
                                 activeControlPoint = {
                                     valid: true,
-                                    puppetIndex: p, 
-                                    hoveredOver: true, 
-                                    beingDragged: false, 
-                                    controlPointIndex: c 
+                                    puppetIndex: p,
+                                    hoveredOver: true,
+                                    beingDragged: false,
+                                    controlPointIndex: c
                                 };
                                 foundControlPoint = true;
                                 break;
@@ -140,7 +142,7 @@ var Dranimate = function () {
         }, false );
 
         THREEContainer.addEventListener( 'mousedown', function( event ) {
-            
+
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = true;
 
@@ -165,7 +167,7 @@ var Dranimate = function () {
         } , false );
 
         THREEContainer.addEventListener( 'mouseup', function( event ) {
-            
+
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = false;
 
@@ -180,7 +182,7 @@ var Dranimate = function () {
 
         });
 
-        function mousewheel( e ) {      
+        function mousewheel( e ) {
             var d = ((typeof e.wheelDelta != "undefined")?(-e.wheelDelta):e.detail);
             d *= 0.01;
 
@@ -220,8 +222,25 @@ var Dranimate = function () {
         panEnabled = enable;
     }
 
+    this.getPanEnabled = function (enable) {
+        return panEnabled;
+    }
+
     this.getSelectedPuppet = function () {
         return selectedPuppet;
+    }
+
+    this.deleteSelectedPuppet = function () {
+        if(selectedPuppet) {
+            var index = puppets.indexOf(selectedPuppet);
+            selectedPuppet.removeFromScene(scene);
+            selectedPuppet.cleanup();
+            puppets.splice(index, 1);
+        }
+    }
+
+    this.toggleRenderWireframes = function () {
+        renderWireframes = !renderWireframes;
     }
 
 /*****************************
@@ -229,18 +248,7 @@ var Dranimate = function () {
 *****************************/
 
     document.addEventListener('keydown', function(evt) {
-        if(evt.keyCode == 39) { // right arrow
-            controlPointToControl++;
-            if(controlPointToControl >= puppets[puppets.length-1].controlPoints.length) {
-                controlPointToControl = 0;
-            }
-        }
-        if(evt.keyCode == 37) { // left arrow
-            controlPointToControl--;
-            if(controlPointToControl < 0) {
-                controlPointToControl = puppets[puppets.length-1].controlPoints.length-1;
-            }
-        }
+        
     });
 
     window.addEventListener( 'resize', function () {
@@ -287,6 +295,10 @@ var Dranimate = function () {
     }
 
     function render() {
+
+        for(var i = 0; i < puppets.length; i++) {
+            puppets[i].setRenderWireframe(renderWireframes);
+        }
 
         camera.position.x = -panPosition.x;
         camera.position.y = -panPosition.y;

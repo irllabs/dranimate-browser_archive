@@ -1,8 +1,36 @@
-/* A wrapper for ARAP.js so we can use ARAP on THREE.js mesh objects. */
-
 var Puppet = function (image) {
 	this.image = image;
+
+	this.name = "The Puppet With No Name";
+	this.x = 0.0;
+	this.y = 0.0;
+	this.rotation = 0.0;
+	this.scale = 1.0;
 };
+
+Puppet.prototype.getName = function() { 
+	return name; 
+};
+
+Puppet.prototype.getPosition = function() { 
+	return {x: this.x, y: this.y}; 
+};
+
+Puppet.prototype.getRotation = function() { 
+	return this.rotation; 
+};
+
+Puppet.prototype.getScale = function() { 
+	return this.scale; 
+};
+
+Puppet.prototype.setRenderWireframe = function (renderWireframe) {
+	if(renderWireframe) {
+		this.threeMesh.material = this.wireframeMaterial;
+	} else {
+		this.threeMesh.material = this.texturedMaterial;
+	}
+}
 
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 
@@ -181,4 +209,20 @@ Puppet.prototype.getJSONData = function () {
 	    imageData: this.getImageAsDataURL()
 	};
 	return JSON.stringify(puppetData);
+}
+
+Puppet.prototype.removeFromScene = function (scene) {
+
+	scene.remove(this.threeMesh);
+	scene.remove(this.boundingBox);
+	for(var i = 0; i < this.controlPointSpheres.length; i++) {
+		scene.remove(this.controlPointSpheres[i]);
+	}
+
+}
+
+Puppet.prototype.cleanup = function () {
+
+	console.error("Warning: Puppet.cleanup() not yet implemented! You are wasting memory! >:(")
+
 }
