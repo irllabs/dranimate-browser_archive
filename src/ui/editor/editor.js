@@ -29,11 +29,12 @@ var edMod = angular.module('dran.editor', [
 
 EditorCtrl.$inject = [ 'model' ];
 function EditorCtrl(model) {
-  var ctrl = this;
+  var $ctrl = this;
 
-  ctrl.zoomIn = function(ev) { model.zoomIn(); };
-  ctrl.zoomOut = function(ev) { model.zoomOut(); };
-  ctrl.panEnabled = model.panEnabled;
+  $ctrl.zoomIn = model.zoomIn;
+  $ctrl.zoomOut = model.zoomOut;
+  $ctrl.togglePan = function() { model.setPanEnabled(!model.getPanEnabled()); };
+  $ctrl.getPanEnabled = model.getPanEnabled;
 }
 
 edMod.directive('dranThreeContainer', ['model', function(model) {

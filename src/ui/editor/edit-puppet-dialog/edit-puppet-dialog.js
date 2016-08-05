@@ -20,9 +20,11 @@ function EditPuppetDialogCtrl($mdDialog) {
   }
 
   // TODO: attach to the actual canvas yo!
+  var panEnabled = false;
   $ctrl.zoomIn = function() { console.log("edit pup zoom in"); };
   $ctrl.zoomOut = function() { console.log("edit pup zoom out"); };
-  $ctrl.panEnabled = false;
+  $ctrl.togglePan = function() { panEnabled = !panEnabled; };
+  $ctrl.getPanEnabled = function() { return panEnabled; };
 }
 
 edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
