@@ -217,7 +217,7 @@ var Dranimate = function () {
     }
 
     this.setPanEnabled = function (enable) {
-        this.panEnabled = enable;
+        panEnabled = enable;
     }
 
     this.getPanEnabled = function (enable) {
