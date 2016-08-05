@@ -18,21 +18,13 @@
 
 var zoompanMod = angular.module('dran.editor.zoompanner', ['ngMaterial']);
 
-function ZoompannerCtrl() {
-  var ctrl = this;
-
-  ctrl.togglePan = function(ev) {
-    ctrl.panEnabled = !ctrl.panEnabled;
-  }
-};
-
 zoompanMod.component('dranZoompanner', {
   templateUrl: 'src/ui/editor/zoompanner/zoompanner.html',
-  controller: ZoompannerCtrl,
   bindings: {
     zoomIn: '<onZoomIn',
     zoomOut: '<onZoomOut',
-    panEnabled: '='
+    togglePan: '<onPanToggle',
+    getPanEnabled: '<panEnabledGetter'
   }
 });
 

@@ -27,13 +27,14 @@ var edMod = angular.module('dran.editor', [
   'dran.model'
 ]);
 
-function EditorCtrl() {
-  var ctrl = this;
+EditorCtrl.$inject = [ 'model' ];
+function EditorCtrl(model) {
+  var $ctrl = this;
 
-  // TODO: these are in lieu of properly hooking up the model to the zoompanner!
-  ctrl.zoomIn = function(ev) { console.log('zoom in!') };
-  ctrl.zoomOut = function(ev) { console.log('zoom out!') };
-  ctrl.panEnabled = false;
+  $ctrl.zoomIn = model.zoomIn;
+  $ctrl.zoomOut = model.zoomOut;
+  $ctrl.togglePan = function() { model.setPanEnabled(!model.getPanEnabled()); };
+  $ctrl.getPanEnabled = model.getPanEnabled;
 }
 
 edMod.directive('dranThreeContainer', ['model', function(model) {

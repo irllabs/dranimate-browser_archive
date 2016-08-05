@@ -51,10 +51,10 @@ var Dranimate = function () {
 
         /* Initialize THREE canvas and scene */
 
-        camera = new THREE.OrthographicCamera( 0, 
-                                               window.innerWidth, 
-                                               0, 
-                                               window.innerHeight, 
+        camera = new THREE.OrthographicCamera( 0,
+                                               window.innerWidth,
+                                               0,
+                                               window.innerHeight,
                                                0.1, 1000 );
         camera.updateProjectionMatrix();
 
@@ -80,13 +80,13 @@ var Dranimate = function () {
 
         var updateMousePosition = function (x,y) {
             mouseAbsolute = {
-                x: x, 
+                x: x,
                 y: y
             };
 
             var zoomTransformed = zoom;
             mouseRelative = {
-                x: x / zoomTransformed - panPosition.x, 
+                x: x / zoomTransformed - panPosition.x,
                 y: y / zoomTransformed - panPosition.y
             };
         }
@@ -119,10 +119,10 @@ var Dranimate = function () {
                             if(dist < 40) {
                                 activeControlPoint = {
                                     valid: true,
-                                    puppetIndex: p, 
-                                    hoveredOver: true, 
-                                    beingDragged: false, 
-                                    controlPointIndex: c 
+                                    puppetIndex: p,
+                                    hoveredOver: true,
+                                    beingDragged: false,
+                                    controlPointIndex: c
                                 };
                                 foundControlPoint = true;
                                 break;
@@ -142,7 +142,7 @@ var Dranimate = function () {
         }, false );
 
         THREEContainer.addEventListener( 'mousedown', function( event ) {
-            
+
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = true;
 
@@ -167,7 +167,7 @@ var Dranimate = function () {
         } , false );
 
         THREEContainer.addEventListener( 'mouseup', function( event ) {
-            
+
             updateMousePosition(event.clientX, event.clientY);
             mouseState.down = false;
 
@@ -182,7 +182,7 @@ var Dranimate = function () {
 
         });
 
-        function mousewheel( e ) {      
+        function mousewheel( e ) {
             var d = ((typeof e.wheelDelta != "undefined")?(-e.wheelDelta):e.detail);
             d *= 0.01;
 
@@ -220,6 +220,7 @@ var Dranimate = function () {
 
     this.setPanEnabled = function (enable) {
         panEnabled = enable;
+        console.log(panEnabled);
     }
 
     this.getPanEnabled = function (enable) {

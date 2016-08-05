@@ -34,7 +34,8 @@
         <dran-zoompanner
           on-zoom-in="$ctrl.zoomIn"
           on-zoom-out="$ctrl.zoomOut"
-          pan-enabled="$ctrl.panEnabled">
+          on-pan-toggle="$ctrl.togglePan"
+          pan-enabled-getter="$ctrl.getPanEnabled">
         </dran-zoompanner>
       </div>
       <div layout="column" class="md-padding bottom-right-pos">

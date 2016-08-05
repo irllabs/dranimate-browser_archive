@@ -15,7 +15,8 @@
         <dran-zoompanner
           on-zoom-in="$ctrl.zoomIn"
           on-zoom-out="$ctrl.zoomOut"
-          pan-enabled="$ctrl.panEnabled">
+          on-toggle-pan="$ctrl.panEnabled"
+          pan-enabled-getter="$ctrl.getPanEnabled">
         </dran-zoompanner>
       </div>
     </div>

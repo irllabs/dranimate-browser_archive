@@ -1,7 +1,7 @@
 <div layout="column">
   <div md-whiteframe="2" class="round-corners md-margin">
     <md-button
-        class="md-icon-button{{ $ctrl.panEnabled ? ' md-accent' : '' }}"
+        class="md-icon-button{{ $ctrl.getPanEnabled() ? ' md-accent' : '' }}"
         ng-click="$ctrl.togglePan($event)">
       <md-icon md-font-set="material-icons">pan_tool</md-icon>
     </md-button>
