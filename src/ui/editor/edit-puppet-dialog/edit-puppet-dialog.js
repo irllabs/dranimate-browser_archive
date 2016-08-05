@@ -25,7 +25,7 @@ function EditPuppetDialogCtrl($mdDialog) {
   $ctrl.panEnabled = false;
 }
 
-edPupDogMod.directive('dranCloseEditPuppetDialog', ["$mdDialog", function($mdDialog) {
+edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
   return {
     restrict: 'A',
     link: function(scope, element) {
@@ -36,22 +36,25 @@ edPupDogMod.directive('dranCloseEditPuppetDialog', ["$mdDialog", function($mdDia
   };
 }]);
 
-edPupDogMod.directive('dranOpenEditPuppetDialog', ["$mdDialog", function($mdDialog) {
-  return {
-    restrict: 'A',
-    link: function(scope, element) {
-      element.bind('click', function(ev) {
-        $mdDialog.show({
-          controller: EditPuppetDialogCtrl,
-          controllerAs: '$ctrl',
-          templateUrl: 'src/ui/editor/edit-puppet-dialog/edit-puppet-dialog.html',
-          parent: angular.element(document.body),
-          closeTo: element,
-          fullscreen: false // TODO: make fullscreen on smaller windows
+edPupDogMod.directive('dranOpenEditPuppetDialog', [
+    '$mdMedia',
+    '$mdDialog',
+  function($mdMedia, $mdDialog) {
+    return {
+      restrict: 'A',
+      link: function(scope, element) {
+        element.bind('click', function(ev) {
+          $mdDialog.show({
+            controller: EditPuppetDialogCtrl,
+            controllerAs: '$ctrl',
+            templateUrl: 'src/ui/editor/edit-puppet-dialog/edit-puppet-dialog.html',
+            parent: angular.element(document.body),
+            closeTo: element,
+            fullscreen: $mdMedia('xs')
+          });
         });
-      });
-    }
-  };
+      }
+    };
 }]);
 
 })();
