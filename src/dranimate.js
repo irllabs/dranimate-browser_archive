@@ -86,10 +86,9 @@ var Dranimate = function () {
                 y: y - boundingRect.top
             };
 
-            var zoomTransformed = zoom;
             mouseRelative = {
-                x: (x - boundingRect.left) / zoomTransformed - panPosition.x,
-                y: (y - boundingRect.top)  / zoomTransformed - panPosition.y
+                x: (x - boundingRect.left) / zoom - panPosition.x,
+                y: (y - boundingRect.top)  / zoom - panPosition.y
             };
         }
 
@@ -100,8 +99,15 @@ var Dranimate = function () {
             /* Find control point closest to the mouse */
 
             if(panEnabled) {
-                panPosition.x = mouseAbsolute.x;
-                panPosition.y = mouseAbsolute.y;
+
+                THREEContainer.style.cursor = "move";
+
+                if(mouseState.down) {
+                    panPosition.x += mouseAbsolute.x/zoom - panFromPosition.x;
+                    panPosition.y += mouseAbsolute.y/zoom - panFromPosition.y;
+                    panFromPosition.x = mouseAbsolute.x/zoom;
+                    panFromPosition.y = mouseAbsolute.y/zoom;
+                }
             } else {
                 if(!activeControlPoint.beingDragged) {
 
@@ -118,7 +124,7 @@ var Dranimate = function () {
                             var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
                             var dist = vert.distanceTo(mouseVec);
 
-                            if(dist < 40) {
+                            if(dist < 10*zoom) {
                                 activeControlPoint = {
                                     valid: true,
                                     puppetIndex: p,
@@ -149,7 +155,8 @@ var Dranimate = function () {
             mouseState.down = true;
 
             if(panEnabled) {
-
+                panFromPosition.x = mouseAbsolute.x/zoom;
+                panFromPosition.y = mouseAbsolute.y/zoom;
             } else {
                 if(activeControlPoint.hoveredOver) {
                     if(selectedPuppet) {
