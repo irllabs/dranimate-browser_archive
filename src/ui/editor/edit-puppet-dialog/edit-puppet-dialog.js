@@ -6,11 +6,12 @@
 (function() {
 
 var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
-  'ngMaterial'
+  'ngMaterial',
+  'dran.image-to-mesh'
 ]);
 
-EditPuppetDialogCtrl.$inject = [ '$mdDialog' ]
-function EditPuppetDialogCtrl($mdDialog) {
+EditPuppetDialogCtrl.$inject = [ '$mdDialog', 'imageToMesh' ]
+function EditPuppetDialogCtrl($mdDialog, imageToMesh) {
   var $ctrl = this;
 
   $ctrl.state = {
@@ -19,12 +20,15 @@ function EditPuppetDialogCtrl($mdDialog) {
     threshold: 25
   }
 
-  // TODO: attach to the actual canvas yo!
-  var panEnabled = false;
-  $ctrl.zoomIn = function() { console.log("edit pup zoom in"); };
-  $ctrl.zoomOut = function() { console.log("edit pup zoom out"); };
-  $ctrl.togglePan = function() { panEnabled = !panEnabled; };
-  $ctrl.getPanEnabled = function() { return panEnabled; };
+  /* zoompanner controls */
+  $ctrl.zoomIn = imageToMesh.zoomIn;
+  $ctrl.zoomOut = imageToMesh.zoomOut;
+  $ctrl.togglePan = function() {
+    // pending getMode
+  };
+  $ctrl.getPanEnabled = function() {
+    // pending getMode
+  };
 }
 
 edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
@@ -34,6 +38,15 @@ edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDia
       element.bind('click', function(ev) {
         $mdDialog.hide();
       });
+    }
+  };
+}]);
+
+edPupDogMod.directive('dranImageToMeshContainer', ['imageToMesh', function(imageToMesh) {
+  return {
+    restrict: 'AE',
+    link: function(scope, element) {
+      imageToMesh.setup(element[0]);
     }
   };
 }]);
