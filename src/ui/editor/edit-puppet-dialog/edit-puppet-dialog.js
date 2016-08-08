@@ -40,9 +40,10 @@ edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDia
   };
 }]);
 
+/* attach this directive to canvases only */
 edPupDogMod.directive('dranImageToMeshContainer', ['imageToMesh', function(imageToMesh) {
   return {
-    restrict: 'AE',
+    restrict: 'A',
     link: function(scope, element) {
       imageToMesh.setup(element[0]);
     }
