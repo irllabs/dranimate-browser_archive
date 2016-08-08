@@ -253,6 +253,12 @@ var Dranimate = function () {
         return selectedPuppet;
     }
 
+    this.exportSelectedPuppet = function () {
+        var puppet = dranimate.getSelectedPuppet();
+        var blob = new Blob([puppet.getJSONData()], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "puppet.json");
+    }
+
     this.deleteSelectedPuppet = function () {
         if(selectedPuppet) {
             var index = puppets.indexOf(selectedPuppet);

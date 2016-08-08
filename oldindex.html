@@ -125,8 +125,6 @@
             var controlPoints = imageToMesh.getControlPointIndices();
             var image = imageToMesh.getImage();
 
-            imageToMesh.eraseUnselectedPixels();
-
             dranimate.createNewPuppet(vertices, faces, controlPoints, image);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
@@ -142,13 +140,7 @@
         };
 
         document.getElementById("exportSelectedPuppet").onclick = function() {
-            var puppet = dranimate.getSelectedPuppet();
-            if(puppet) {
-                var blob = new Blob([puppet.getJSONData()], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, "puppet.json");
-            } else {
-                alert("No puppet selected...")
-            }
+            dranimate.exportSelectedPuppet();
         };
 
         var dranimate = new Dranimate();
