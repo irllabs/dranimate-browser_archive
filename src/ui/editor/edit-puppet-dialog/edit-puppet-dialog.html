@@ -30,7 +30,7 @@
 
       <form class="md-margin">
         <div class="md-margin">
-          <md-radio-group ng-model="$ctrl.state.mode">
+          <md-radio-group ng-model="$ctrl.editMode">
             <md-radio-button value="editCtrlPt">Edit Control Points</md-radio-button>
             <md-radio-button value="cropImg">Crop Image</md-radio-button>
           </md-radio-group>
@@ -41,21 +41,21 @@
 
       <form class="md-margin">
         <div class="md-margin">
-          <md-radio-group layout="row" ng-model="$ctrl.state.cropmode">
-            <md-radio-button flex value="select" ng-disabled="!($ctrl.state.mode == 'cropImg')">Select</md-radio-button>
-            <md-radio-button flex value="remove" ng-disabled="!($ctrl.state.mode == 'cropImg')">Remove</md-radio-button>
+          <md-radio-group layout="row" ng-model="$ctrl.selectMode">
+            <md-radio-button flex value="select" ng-disabled="!($ctrl.editMode == 'cropImg')">Select</md-radio-button>
+            <md-radio-button flex value="remove" ng-disabled="!($ctrl.editMode == 'cropImg')">Remove</md-radio-button>
           </md-radio-group>
         </div>
         <md-slider-container layout-margin>
           <h3 class="md-subhead">TH</h3>
-          <md-slider flex="40" min="0" max="100" ng-model="$ctrl.state.threshold" ng-disabled="!($ctrl.state.mode == 'cropImg')"></md-slider>
+          <md-slider flex="40" min="0" max="100" ng-model="$ctrl.threshold" ng-disabled="true"></md-slider>
           <md-input-container>
-            <input type="number" value="100" ng-model="$ctrl.state.threshold" ng-disabled="!($ctrl.state.mode == 'cropImg')"/>
+            <input type="number" value="100" ng-model="$ctrl.threshold" ng-disabled="true"/>
           </md-input-container>
         </md-slider-container>
         <div layout="row">
-          <md-button flex class="md-raised" ng-disabled="!($ctrl.state.mode == 'cropImg')">Select All</md-button>
-          <md-button flex class="md-raised" ng-disabled="!($ctrl.state.mode == 'cropImg')">Remove All</md-button>
+          <md-button flex class="md-raised" ng-disabled="!($ctrl.editMode == 'cropImg')">Select All</md-button>
+          <md-button flex class="md-raised" ng-disabled="!($ctrl.editMode == 'cropImg')">Remove All</md-button>
         </div>
       </form>
 

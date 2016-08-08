@@ -11,15 +11,40 @@ var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
   'dran.image-to-mesh'
 ]);
 
-EditPuppetDialogCtrl.$inject = [ '$mdDialog', 'imageToMesh' ]
-function EditPuppetDialogCtrl($mdDialog, imageToMesh) {
+EditPuppetDialogCtrl.$inject = [ '$scope', '$mdDialog', 'imageToMesh' ];
+function EditPuppetDialogCtrl($scope, $mdDialog, imageToMesh) {
   var $ctrl = this;
 
-  $ctrl.state = {
-    mode: 'cropImg',
-    cropmode: 'select',
-    threshold: 25
-  }
+  // dummy model for threshold. TODO: hook it up yo!
+  $ctrl.threshold = 25;
+
+  /* initializing the controller */
+  $ctrl.editMode = imageToMesh.getAddControlPoints() ? 'editCtrlPt' : 'cropImg';
+  $ctrl.selectMode = imageToMesh.getAddPixels() ? 'select' : 'remove';
+
+  /* updating imageToMesh through the controller */
+  $scope.$watch(function() { return $ctrl.editMode; },
+    function(newVal, oldVal) {
+      switch(newVal) {
+        case 'editCtrlPt':
+          imageToMesh.setAddControlPoints(true);
+          break;
+        case 'cropImg':
+          imageToMesh.setAddControlPoints(false);
+          break;
+      };
+  });
+  $scope.$watch(function() { return $ctrl.selectMode; },
+    function(newVal, oldVal) {
+      switch(newVal) {
+        case 'select':
+          imageToMesh.setAddPixels(true);
+          break;
+        case 'remove':
+          imageToMesh.setAddPixels(false);
+          break;
+      }
+  });
 
   /* zoompanner controls */
   $ctrl.zoomIn = imageToMesh.zoomIn;
