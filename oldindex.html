@@ -64,6 +64,11 @@
         <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
         <button type="button" id="showMeshButton">Show Mesh</button>
         <button type="button" id="createPuppetButton">Create Puppet</button> <br />
+        <button type="button" onclick="imageToMesh.setMode('selectpixels');">Add Mode</button> 
+        <button type="button" onclick="imageToMesh.setMode('removepixels');">Remove Mode</button> 
+        <button type="button" onclick="imageToMesh.setMode('pan');">Pan Mode</button> <br />
+        <button type="button" onclick="imageToMesh.zoomIn()">Zoom In</button> 
+        <button type="button" onclick="imageToMesh.zoomOut()">Zoom Out</button> 
     </div>
 
     <div id="THREEContainer"></div>
