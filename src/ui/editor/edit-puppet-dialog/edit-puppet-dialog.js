@@ -24,11 +24,9 @@ function EditPuppetDialogCtrl($mdDialog, imageToMesh) {
   $ctrl.zoomIn = imageToMesh.zoomIn;
   $ctrl.zoomOut = imageToMesh.zoomOut;
   $ctrl.togglePan = function() {
-    // pending getMode
+    imageToMesh.setPanEnabled(!imageToMesh.getPanEnabled());
   };
-  $ctrl.getPanEnabled = function() {
-    // pending getMode
-  };
+  $ctrl.getPanEnabled = imageToMesh.getPanEnabled;
 }
 
 edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
