@@ -54,10 +54,12 @@
     <div id="loading">Setting up ARAP.js...</div>
 
     <div id="newPuppetWindow">
-        Create new puppet from image: <input type="file" id="imageLoader" name="imageLoader"><br />
+        Edit image: <input type="file" id="imageLoader" name="imageLoader"><br />
+        Create new puppet from image: <input type="file" id="imageLoaderToPuppet" name="imageLoaderToPuppet"><br />
         Load puppet from JSON: <input type="file" id="puppetLoader" name="puppetLoader"><br />
-        <button type="button" id="exportSelectedPuppet">Export Selected Puppet as JSON</button>
-        <button type="button" id="toggleRenderWireframes">Toggle Render Wireframes</button>
+        <button type="button" id="exportSelectedPuppet">Export Selected Puppet as JSON</button><br />
+        <button type="button" id="toggleRenderWireframes">Toggle Render Wireframes</button><br />
+        <button type="button" id="editSelectedPuppet">Edit Selected Puppet</button>
     </div>
 
     <div id="meshGenerationWindow">
@@ -100,6 +102,18 @@
         var imageToMesh = new ImageToMesh();
         imageToMesh.setup(document.getElementById("imageToMeshCanvas"));
 
+        document.getElementById('imageLoaderToPuppet').addEventListener('change', function(e){
+            var reader = new FileReader();
+            reader.onload = function(event){
+                var image = new Image();
+                image.onload = function () {
+                    dranimate.addPuppet(new Puppet(image));
+                }
+                image.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }, false);
+
         document.getElementById('imageLoader').addEventListener('change', function(e){
             document.getElementById("meshGenerationWindow").style.visibility = "visible";
             document.getElementById("newPuppetWindow").style.visibility = "hidden";
@@ -107,11 +121,6 @@
             var reader = new FileReader();
             reader.onload = function(event){
                 imageToMesh.editImage(event.target.result);
-                /*var image = new Image();
-                image.onload = function () {
-                    dranimate.addPuppet(new Puppet(image));
-                }
-                image.src = event.target.result;*/
             }
             reader.readAsDataURL(e.target.files[0]);
         }, false);
@@ -153,6 +162,13 @@
 
         document.getElementById("exportSelectedPuppet").onclick = function() {
             dranimate.exportSelectedPuppet();
+        };
+
+        document.getElementById("editSelectedPuppet").onclick = function() {
+            document.getElementById("meshGenerationWindow").style.visibility = "visible";
+            document.getElementById("newPuppetWindow").style.visibility = "hidden";
+
+            imageToMesh.editImage(dranimate.getSelectedPuppet().image.src);
         };
 
         var dranimate = new Dranimate();
