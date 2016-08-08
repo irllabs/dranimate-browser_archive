@@ -64,9 +64,11 @@
         <canvas id="imageToMeshCanvas" width="578" height="400"></canvas><br />
         <button type="button" id="showMeshButton">Show Mesh</button>
         <button type="button" id="createPuppetButton">Create Puppet</button> <br />
-        <button type="button" onclick="imageToMesh.setMode('selectpixels');">Add Mode</button> 
-        <button type="button" onclick="imageToMesh.setMode('removepixels');">Remove Mode</button> 
-        <button type="button" onclick="imageToMesh.setMode('pan');">Pan Mode</button> <br />
+        <button type="button" onclick="imageToMesh.setAddPixels(true);">Add Mode</button> 
+        <button type="button" onclick="imageToMesh.setAddPixels(false);">Remove Mode</button> <br />
+        <button type="button" onclick="imageToMesh.setAddControlPoints(true);">Enable add control points mode</button> 
+        <button type="button" onclick="imageToMesh.setAddControlPoints(false);">Disable add control points mode</button> <br />
+        <button type="button" onclick="imageToMesh.setPanEnabled(true);">Pan Mode</button> <br />
         <button type="button" onclick="imageToMesh.zoomIn()">Zoom In</button> 
         <button type="button" onclick="imageToMesh.zoomOut()">Zoom Out</button> 
     </div>
@@ -99,17 +101,17 @@
         imageToMesh.setup(document.getElementById("imageToMeshCanvas"));
 
         document.getElementById('imageLoader').addEventListener('change', function(e){
-            //document.getElementById("meshGenerationWindow").style.visibility = "visible";
-            //document.getElementById("newPuppetWindow").style.visibility = "hidden";
+            document.getElementById("meshGenerationWindow").style.visibility = "visible";
+            document.getElementById("newPuppetWindow").style.visibility = "hidden";
 
             var reader = new FileReader();
             reader.onload = function(event){
-                //imageToMesh.editImage(event.target.result);
-                var image = new Image();
+                imageToMesh.editImage(event.target.result);
+                /*var image = new Image();
                 image.onload = function () {
                     dranimate.addPuppet(new Puppet(image));
                 }
-                image.src = event.target.result;
+                image.src = event.target.result;*/
             }
             reader.readAsDataURL(e.target.files[0]);
         }, false);
