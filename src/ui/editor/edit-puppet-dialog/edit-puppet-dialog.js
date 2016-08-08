@@ -7,6 +7,7 @@
 
 var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
   'ngMaterial',
+  'dran.model',
   'dran.image-to-mesh'
 ]);
 
@@ -41,13 +42,17 @@ edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDia
 }]);
 
 /* attach this directive to canvases only */
-edPupDogMod.directive('dranImageToMeshContainer', ['imageToMesh', function(imageToMesh) {
-  return {
-    restrict: 'A',
-    link: function(scope, element) {
-      imageToMesh.setup(element[0]);
-    }
-  };
+edPupDogMod.directive('dranImageToMeshContainer', [
+    'model',
+    'imageToMesh',
+  function(model, imageToMesh) {
+    return {
+      restrict: 'A',
+      link: function(scope, element) {
+        imageToMesh.setup(element[0]);
+        imageToMesh.editImage(model.getSelectedPuppet().image.src);
+      }
+    };
 }]);
 
 edPupDogMod.directive('dranOpenEditPuppetDialog', [
