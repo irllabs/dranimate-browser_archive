@@ -1,4 +1,4 @@
-var Puppet = function (image) {
+var Puppet = function (image, scene) {
 	this.image = image;
 
 	this.name = "The Puppet With No Name";
@@ -6,6 +6,50 @@ var Puppet = function (image) {
 	this.y = 0.0;
 	this.rotation = 0.0;
 	this.scale = 1.0;
+
+	// Setup quad image
+
+	var canvas = document.createElement('canvas');
+    canvas.width  = this.image.width;
+    canvas.height = this.image.height;
+    var context = canvas.getContext('2d');
+    canvas.getContext('2d');
+    context.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, canvas.width, canvas.height);
+
+    var imageTexture = new THREE.Texture(canvas);
+    imageTexture.needsUpdate = true;
+    this.texturedMaterial = new THREE.MeshBasicMaterial({
+        map: imageTexture,
+        transparent: true
+    });
+
+    var vertsFlatArray = [0,0, image.width,0, 0,image.height, image.width,image.height];
+    var facesFlatArray = [0,2,1, 1,2,3];
+
+    var geometry = new THREE.Geometry();
+
+	for(var i = 0; i < vertsFlatArray.length; i+=2) {
+		var x = vertsFlatArray[i];
+		var y = vertsFlatArray[i+1];
+		geometry.vertices.push( new THREE.Vector3( x, y, 0 ) );
+	}
+	for(var i = 0; i < facesFlatArray.length; i+=3) {
+		var f1 = facesFlatArray[i];
+		var f2 = facesFlatArray[i+1];
+		var f3 = facesFlatArray[i+2];
+		geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
+
+		geometry.faceVertexUvs[0].push( [
+            new THREE.Vector2(geometry.vertices[f1].x/this.image.width, 1-geometry.vertices[f1].y/this.image.height),
+            new THREE.Vector2(geometry.vertices[f2].x/this.image.width, 1-geometry.vertices[f2].y/this.image.height),
+            new THREE.Vector2(geometry.vertices[f3].x/this.image.width, 1-geometry.vertices[f3].y/this.image.height)
+        ]);
+	}
+
+	this.threeMesh = new THREE.Mesh(geometry, this.texturedMaterial);
+
+	this.boundingBox = new THREE.BoundingBoxHelper(this.threeMesh, new THREE.Color(0xFF9900));
+	this.boundingBox.visible = false;
 };
 
 Puppet.prototype.getName = function() { 
@@ -33,6 +77,8 @@ Puppet.prototype.setRenderWireframe = function (renderWireframe) {
 }
 
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
+
+	this.hasMeshData = true;
 
 	/* Generate wireframe material */
 
@@ -228,9 +274,11 @@ Puppet.prototype.cleanup = function () {
 }
 
 Puppet.prototype.setSelectionGUIVisible = function (visible) {
-	this.boundingBox.visible = visible;
-	for(var i = 0; i < this.controlPointSpheres.length; i++) {
-		this.controlPointSpheres[i].visible = visible;
+	if(this.hasMeshData) {
+		this.boundingBox.visible = visible;
+		for(var i = 0; i < this.controlPointSpheres.length; i++) {
+			this.controlPointSpheres[i].visible = visible;
+		}
 	}
 }
 
