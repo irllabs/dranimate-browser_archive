@@ -124,25 +124,28 @@ var Dranimate = function () {
 
                     for(var p = 0; p < puppets.length; p++) {
 
-                        var verts = puppets[p].threeMesh.geometry.vertices;
-                        var controlPoints = puppets[p].controlPoints;
+                        if(puppets[p].hasMeshData) {
 
-                        for(var c = 0; c < controlPoints.length; c++) {
+                            var verts = puppets[p].threeMesh.geometry.vertices;
+                            var controlPoints = puppets[p].controlPoints;
 
-                            var vert = verts[controlPoints[c]];
-                            var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
-                            var dist = vert.distanceTo(mouseVec);
+                            for(var c = 0; c < controlPoints.length; c++) {
 
-                            if(dist < 10*zoom) {
-                                activeControlPoint = {
-                                    valid: true,
-                                    puppetIndex: p,
-                                    hoveredOver: true,
-                                    beingDragged: false,
-                                    controlPointIndex: c
-                                };
-                                foundControlPoint = true;
-                                break;
+                                var vert = verts[controlPoints[c]];
+                                var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
+                                var dist = vert.distanceTo(mouseVec);
+
+                                if(dist < 10*zoom) {
+                                    activeControlPoint = {
+                                        valid: true,
+                                        puppetIndex: p,
+                                        hoveredOver: true,
+                                        beingDragged: false,
+                                        controlPointIndex: c
+                                    };
+                                    foundControlPoint = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -221,6 +224,11 @@ var Dranimate = function () {
         puppet.generateMesh(vertices, faces, controlPoints, scene);
         puppets.push(puppet);
 
+    }
+
+    this.addPuppet = function (p) {
+        puppets.push(p);
+        scene.add(p.threeMesh)
     }
 
     this.zoomIn = function () {
