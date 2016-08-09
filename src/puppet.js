@@ -9,6 +9,7 @@ var Puppet = function (image) {
 
 	this.prevx = this.x;
 	this.prevy = this.y;
+	this.prevScale = this.scale;
 
 	// Setup quad image
 
@@ -194,7 +195,7 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 
 	this.undeformedVertices = this.verts;
 
-	/* Set needsupdate flag to update to initialze immediately */
+	/* Set needsUpdate flag to update to initialze immediately */
 
 	this.needsUpdate = true;
 }
@@ -208,7 +209,7 @@ Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y) {
 }
 
 Puppet.prototype.update = function() {
-	
+
 	var dx = this.x - this.prevx;
 	var dy = this.y - this.prevy;
 
@@ -222,6 +223,12 @@ Puppet.prototype.update = function() {
 
 	this.prevx = this.x;
 	this.prevy = this.y;
+
+	if(this.prevScale != this.scale) {
+		this.threeMesh.scale.set(this.scale, this.scale, this.scale);
+		this.prevScale = this.scale;
+		this.needsUpdate = true;
+	}
 
 	if(this.needsUpdate) {
 	

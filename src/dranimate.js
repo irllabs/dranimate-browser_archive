@@ -228,8 +228,8 @@ var Dranimate = function () {
             refreshCamera();
         }
 
-        document.body.addEventListener( 'mousewheel', mousewheel, false );
-        document.body.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
+        THREEContainer.addEventListener( 'mousewheel', mousewheel, false );
+        THREEContainer.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
 
     }
 
