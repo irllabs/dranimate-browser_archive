@@ -54,7 +54,6 @@
     <div id="loading">Setting up ARAP.js...</div>
 
     <div id="newPuppetWindow">
-        Edit image: <input type="file" id="imageLoader" name="imageLoader"><br />
         Create new puppet from image: <input type="file" id="imageLoaderToPuppet" name="imageLoaderToPuppet"><br />
         Load puppet from JSON: <input type="file" id="puppetLoader" name="puppetLoader"><br />
         <button type="button" id="exportSelectedPuppet">Export Selected Puppet as JSON</button><br />
@@ -114,17 +113,6 @@
             reader.readAsDataURL(e.target.files[0]);
         }, false);
 
-        document.getElementById('imageLoader').addEventListener('change', function(e){
-            document.getElementById("meshGenerationWindow").style.visibility = "visible";
-            document.getElementById("newPuppetWindow").style.visibility = "hidden";
-
-            var reader = new FileReader();
-            reader.onload = function(event){
-                imageToMesh.editImage(event.target.result);
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }, false);
-
         document.getElementById('puppetLoader').addEventListener('change', function(e){
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -133,7 +121,10 @@
                 image.onload = function () {
                     var imageNoBG = new Image();
                     imageNoBG.onload = function () {
-                        dranimate.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image, imageNoBG);
+                        var p = new Puppet(image);
+                        p.setImageToMeshData(imageNoBG, puppetData.controlPointPositions, puppetData.backgroundRemovalData);
+                        p.generateMesh(puppetData.verts, puppetData.faces, puppetData.controlPoints);
+                        dranimate.addPuppet(p);
                     }
                     imageNoBG.src = puppetData.imageNoBGData;
                 }
@@ -148,10 +139,15 @@
             var vertices = imageToMesh.getVertices();
             var faces = imageToMesh.getTriangles();
             var controlPoints = imageToMesh.getControlPointIndices();
+            var controlPointPositions = imageToMesh.getControlPoints();
             var image = imageToMesh.getImage();
             var imageNoBG = imageToMesh.getImageNoBackground();
+            var backgroundRemovalData = imageToMesh.getBackgroundRemovalData();
 
-            dranimate.createNewPuppet(vertices, faces, controlPoints, image, imageNoBG);
+            var p = new Puppet(image);
+            p.setImageToMeshData(imageNoBG, controlPointPositions, backgroundRemovalData);
+            p.generateMesh(vertices, faces, controlPoints);
+            dranimate.addPuppet(p);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";

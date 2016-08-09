@@ -1,6 +1,5 @@
-var Puppet = function (image, imageNoBG) {
+var Puppet = function (image) {
 	this.image = image;
-	this.imageNoBG = imageNoBG;
 
 	this.name = "The Puppet With No Name";
 	this.x = 0.0;
@@ -77,7 +76,13 @@ Puppet.prototype.setRenderWireframe = function (renderWireframe) {
 	}
 }
 
-Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
+Puppet.prototype.setImageToMeshData = function (imageNoBG, controlPointPositions, backgroundRemovalData) {
+	this.imageNoBG = imageNoBG;
+	this.controlPointPositions = controlPointPositions;
+	this.backgroundRemovalData = backgroundRemovalData;
+}
+
+Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 
 	this.hasMeshData = true;
 
@@ -180,11 +185,7 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 		);
 		sphere.position.z = 10;
 		this.controlPointSpheres.push(sphere);
-		scene.add(sphere);
 	}
-
-	scene.add(this.threeMesh);
-	scene.add(this.boundingBox);
 
 	/* Save a version of the vertices in their original position */
 
@@ -254,20 +255,12 @@ Puppet.prototype.getJSONData = function () {
 	    verts: this.verts,
 	    faces: this.faces,
 	    controlPoints: this.controlPoints,
+	    controlPointPositions: this.controlPointPositions,
+	    backgroundRemovalData: this.backgroundRemovalData,
 	    imageData: this.getImageAsDataURL(this.image),
 	    imageNoBGData: this.getImageAsDataURL(this.imageNoBG)
 	};
 	return JSON.stringify(puppetData);
-}
-
-Puppet.prototype.removeFromScene = function (scene) {
-
-	scene.remove(this.threeMesh);
-	scene.remove(this.boundingBox);
-	for(var i = 0; i < this.controlPointSpheres.length; i++) {
-		scene.remove(this.controlPointSpheres[i]);
-	}
-
 }
 
 Puppet.prototype.cleanup = function () {

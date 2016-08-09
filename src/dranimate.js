@@ -43,6 +43,8 @@ var Dranimate = function () {
 
     var selectedPuppet = null;
 
+    var onCurrentPuppetChangeCallback = function () {};
+
 /*****************************
     API
 *****************************/
@@ -164,12 +166,14 @@ var Dranimate = function () {
 
                 if(activeControlPoint.hoveredOver) {
                     selectedPuppet = puppets[activeControlPoint.puppetIndex];
+                    onCurrentPuppetChangeCallback();
                     activeControlPoint.beingDragged = true;
                 } else {
                     selectedPuppet = null;
                     for(var i = 0; i < puppets.length; i++) {
                         if(puppets[i].pointInsideMesh(mouseRelative.x, mouseRelative.y)) {
                             selectedPuppet = puppets[i];
+                            onCurrentPuppetChangeCallback();
                         }
                     }
                 }
@@ -207,6 +211,10 @@ var Dranimate = function () {
 
     }
 
+    this.onCurrentPuppetChange = function (callback) {
+        onCurrentPuppetChangeCallback = callback;
+    }
+
     this.createNewPuppet = function (vertices, faces, controlPoints, image, imageNoBG) {
 
         /* Create the new Puppet */
@@ -219,6 +227,15 @@ var Dranimate = function () {
 
     this.addPuppet = function (p) {
         puppets.push(p);
+
+        if(p.controlPointSpheres) {
+            for(var i = 0; i < p.controlPointSpheres.length; i++) {
+                scene.add(p.controlPointSpheres[i]);
+            }
+        }
+        if(p.boundingBox) {
+            scene.add(p.boundingBox);
+        }
         scene.add(p.threeMesh)
     }
 
@@ -261,7 +278,11 @@ var Dranimate = function () {
     this.deleteSelectedPuppet = function () {
         if(selectedPuppet) {
             var index = puppets.indexOf(selectedPuppet);
-            selectedPuppet.removeFromScene(scene);
+            scene.remove(selectedPuppet.threeMesh);
+            scene.remove(selectedPuppet.boundingBox);
+            for(var i = 0; i < selectedPuppet.controlPointSpheres.length; i++) {
+                scene.remove(selectedPuppet.controlPointSpheres[i]);
+            }
             selectedPuppet.cleanup();
             puppets.splice(index, 1);
         }
