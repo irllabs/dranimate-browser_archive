@@ -153,6 +153,17 @@ var Dranimate = function () {
                         THREEContainer.style.cursor = "default";
                         activeControlPoint.hoveredOver = false;
                     }
+                } else {
+                    var pi = activeControlPoint.puppetIndex;
+                    var ci = activeControlPoint.controlPointIndex;
+                    puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
+                }
+
+                if(selectedPuppet && selectedPuppet.isBeingDragged) {
+                    selectedPuppet.x += mouseRelative.x - selectedPuppet.dragFromPositionX;
+                    selectedPuppet.y += mouseRelative.y - selectedPuppet.dragFromPositionY;
+                    selectedPuppet.dragFromPositionX = mouseRelative.x;
+                    selectedPuppet.dragFromPositionY = mouseRelative.y;
                 }
             }
 
@@ -170,14 +181,17 @@ var Dranimate = function () {
 
                 if(activeControlPoint.hoveredOver) {
                     selectedPuppet = puppets[activeControlPoint.puppetIndex];
-                    onCurrentPuppetChangeCallback();
+                    onChangeCallback();
                     activeControlPoint.beingDragged = true;
                 } else {
                     selectedPuppet = null;
                     for(var i = 0; i < puppets.length; i++) {
                         if(puppets[i].pointInsideMesh(mouseRelative.x, mouseRelative.y)) {
                             selectedPuppet = puppets[i];
-                            onCurrentPuppetChangeCallback();
+                            selectedPuppet.isBeingDragged = true;
+                            selectedPuppet.dragFromPositionX = mouseRelative.x;
+                            selectedPuppet.dragFromPositionY = mouseRelative.y;
+                            onChangeCallback();
                         }
                     }
                 }
@@ -197,6 +211,10 @@ var Dranimate = function () {
                     activeControlPoint.beingDragged = false;
                     THREEContainer.style.cursor = "default";
                 }
+
+                if(selectedPuppet) {
+                    selectedPuppet.isBeingDragged = false;
+                }
             }
 
         });
@@ -213,6 +231,10 @@ var Dranimate = function () {
         document.body.addEventListener( 'mousewheel', mousewheel, false );
         document.body.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
 
+    }
+
+    this.onCurrentPuppetChange = function (callback) {
+        onCurrentPuppetChangeCallback = callback;
     }
 
     this.createNewPuppet = function (vertices, faces, controlPoints, image, imageNoBG) {
@@ -321,12 +343,6 @@ var Dranimate = function () {
     }
 
     function update() {
-
-        if(activeControlPoint.beingDragged) {
-            var pi = activeControlPoint.puppetIndex;
-            var ci = activeControlPoint.controlPointIndex;
-            puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
-        }
 
         for(var i = 0; i < puppets.length; i++) {
             puppets[i].update();

@@ -4,6 +4,10 @@ var Puppet = function (image) {
 	this.name = "The Puppet With No Name";
 	this.x = 0.0;
 	this.y = 0.0;
+	this.prevx = this.x;
+	this.prevy = this.y;
+	this.anchorpointX = 0.0;
+	this.anchorpointY = 0.0;
 	this.rotation = 0.0;
 	this.scale = 1.0;
 
@@ -196,15 +200,58 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 	this.needsUpdate = true;
 }
 
-Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y) {
+Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y, dontMoveOtherPoints) {
 
 	this.needsUpdate = true;
-
+	
 	ARAP.setControlPointPosition(this.arapMeshID, this.controlPoints[controlPointIndex], x, y);
+
+	if(!dontMoveOtherPoints) {
+		for(var i = 0; i < this.controlPoints.length; i++) {
+			if(i != controlPointIndex) {
+				console.log(i)
+				var otherVert = this.threeMesh.geometry.vertices[this.controlPoints[i]];
+	            var movedVert = new THREE.Vector3(x, y, 0);
+	            var dist = movedVert.distanceTo(otherVert);
+	            var diff = movedVert.sub(otherVert);
+	            var dir = diff.multiplyScalar(1/dist);
+
+	            var maxDist = 100;
+	            var force = 0;
+	            var power = -5;
+	           	if(dist > maxDist) {
+	           		force = 0;
+	           	} else {
+	           		force = (1-(dist/maxDist))*power;
+	           	}
+
+	            otherVert.add(dir.multiplyScalar(force))
+
+	            this.setControlPointPosition(i, otherVert.x, otherVert.y, true);
+			}
+		}
+	}
 
 }
 
 Puppet.prototype.update = function() {
+
+	this.anchorpointX = this.boundingBox.position.x;
+	this.anchorpointY = this.boundingBox.position.y;
+
+	var dx = this.x - this.prevx;
+	var dy = this.y - this.prevy;
+
+	if(dx != 0 || dy != 0) {
+		for(var i = 0; i < this.controlPoints.length; i++) {
+			var cpx = this.threeMesh.geometry.vertices[this.controlPoints[i]].x;
+			var cpy = this.threeMesh.geometry.vertices[this.controlPoints[i]].y;
+			this.setControlPointPosition(i, cpx + dx, cpy + dy);
+		}
+	}
+
+	this.prevx = this.x;
+	this.prevy = this.y;
 
 	if(this.needsUpdate) {
 	
