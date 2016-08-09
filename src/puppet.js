@@ -4,12 +4,11 @@ var Puppet = function (image) {
 	this.name = "The Puppet With No Name";
 	this.x = 0.0;
 	this.y = 0.0;
-	this.prevx = this.x;
-	this.prevy = this.y;
-	this.anchorpointX = 0.0;
-	this.anchorpointY = 0.0;
 	this.rotation = 0.0;
 	this.scale = 1.0;
+
+	this.prevx = this.x;
+	this.prevy = this.y;
 
 	// Setup quad image
 
@@ -209,10 +208,7 @@ Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y) {
 }
 
 Puppet.prototype.update = function() {
-
-	this.anchorpointX = this.boundingBox.position.x;
-	this.anchorpointY = this.boundingBox.position.y;
-
+	
 	var dx = this.x - this.prevx;
 	var dy = this.y - this.prevy;
 
