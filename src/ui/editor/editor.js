@@ -84,14 +84,21 @@ edMod.directive('dranNewPuppetFromJson', ['model', function(model) {
   return {
     restrict: 'A',
     link: function(scope, element) {
-      element.bind('change', function() {
+      element.bind('change', function(e) {
         var reader = new FileReader();
-        reader.onload = function(ev) {
-          var puppetData = JSON.parse(ev.target.result);
+        reader.onload = function (e) {
+          var puppetData = JSON.parse(e.target.result);
           var image = new Image();
-          image.onload = function() {
-            model.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image);
-          }
+          image.onload = function () {
+            var imageNoBG = new Image();
+            imageNoBG.onload = function () {
+              var p = new Puppet(image);
+              p.setImageToMeshData(imageNoBG, puppetData.controlPointPositions, puppetData.backgroundRemovalData);
+              p.generateMesh(puppetData.verts, puppetData.faces, puppetData.controlPoints);
+              dranimate.addPuppet(p);
+            };
+            imageNoBG.src = puppetData.imageNoBGData;
+          };
           image.src = puppetData.imageData;
         };
         reader.readAsText(element[0].files[0]);
