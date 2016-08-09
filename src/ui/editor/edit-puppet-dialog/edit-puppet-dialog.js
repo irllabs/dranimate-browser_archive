@@ -11,40 +11,25 @@ var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
   'dran.image-to-mesh'
 ]);
 
-EditPuppetDialogCtrl.$inject = [ '$scope', '$mdDialog', 'imageToMesh' ];
-function EditPuppetDialogCtrl($scope, $mdDialog, imageToMesh) {
+/* to translate properties from imageToMesh to the controller */
+function transEditModeToCtrl(v) { return v ? 'editCtrlPt' : 'cropImg'; };
+function transEditModeFromCtrl(v) {
+  switch (v) {
+    case 'editCtrlPt': return true;
+    case 'cropImg': return false;
+  };
+};
+function transSelectModeToCtrl(v) { return v ? 'select' : 'remove'; };
+function transSelectModeFromCtrl(v) {
+  switch (v) {
+    case 'select': return true;
+    case 'remove': return false;
+  };
+};
+
+EditPuppetDialogCtrl.$inject = [ '$scope', 'imageToMesh' ];
+function EditPuppetDialogCtrl($scope, imageToMesh) {
   var $ctrl = this;
-
-  // dummy model for threshold. TODO: hook it up yo!
-  $ctrl.threshold = 25;
-
-  /* initializing the controller */
-  $ctrl.editMode = imageToMesh.getAddControlPoints() ? 'editCtrlPt' : 'cropImg';
-  $ctrl.selectMode = imageToMesh.getAddPixels() ? 'select' : 'remove';
-
-  /* updating imageToMesh through the controller */
-  $scope.$watch(function() { return $ctrl.editMode; },
-    function(newVal, oldVal) {
-      switch(newVal) {
-        case 'editCtrlPt':
-          imageToMesh.setAddControlPoints(true);
-          break;
-        case 'cropImg':
-          imageToMesh.setAddControlPoints(false);
-          break;
-      };
-  });
-  $scope.$watch(function() { return $ctrl.selectMode; },
-    function(newVal, oldVal) {
-      switch(newVal) {
-        case 'select':
-          imageToMesh.setAddPixels(true);
-          break;
-        case 'remove':
-          imageToMesh.setAddPixels(false);
-          break;
-      }
-  });
 
   /* zoompanner controls */
   $ctrl.zoomIn = imageToMesh.zoomIn;
@@ -53,6 +38,25 @@ function EditPuppetDialogCtrl($scope, $mdDialog, imageToMesh) {
     imageToMesh.setPanEnabled(!imageToMesh.getPanEnabled());
   };
   $ctrl.getPanEnabled = imageToMesh.getPanEnabled;
+
+  // dummy model for threshold. TODO: hook it up yo!
+  $ctrl.threshold = 25;
+
+  /* note: getEditMode is here to disable image edit controls with */
+  $ctrl.getEditMode = function() {
+    return transEditModeToCtrl(imageToMesh.getAddControlPoints());
+  };
+  $ctrl.editMode = function(newVal) {
+    return arguments.length
+      ? imageToMesh.setAddControlPoints(transEditModeFromCtrl(newVal))
+      : $ctrl.getEditMode();
+  };
+
+  $ctrl.selectMode = function(newVal) {
+    return arguments.length
+      ? imageToMesh.setAddPixels(transEditModeFromCtrl(newVal))
+      : transEditModeToCtrl(imageToMesh.getAddPixels());
+  }
 }
 
 edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
