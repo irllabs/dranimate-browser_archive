@@ -217,7 +217,7 @@ Puppet.prototype.update = function() {
 		for(var i = 0; i < this.controlPoints.length; i++) {
 			var cpx = this.threeMesh.geometry.vertices[this.controlPoints[i]].x;
 			var cpy = this.threeMesh.geometry.vertices[this.controlPoints[i]].y;
-			this.setControlPointPosition(i, cpx + dx, cpy + dy);
+			this.setControlPointPosition(i, cpx + (dx/this.scale), cpy + (dy/this.scale));
 		}
 	}
 
