@@ -7,11 +7,10 @@ window.imageToMesh = new ImageToMesh(); // for debug. comment out for prod!
 
 var imgToMeshMod = angular.module('dran.image-to-mesh', [ ]);
 
-imgToMeshMod.factory('imageToMesh', ['$rootScope', function($rootScope) {
+imgToMeshMod.factory('imageToMesh', function() {
   var imageToMesh = window.imageToMesh; // for debug. comment out for prod!
   // var imageToMesh = new imageToMesh(); // uncomment for production!
-  imageToMesh.onChange(function() { $rootScope.$digest(); });
   return imageToMesh;
-}]);
+});
 
 })();

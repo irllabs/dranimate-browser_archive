@@ -8,11 +8,10 @@ window.dranimate = new Dranimate(); // for debug. comment out for production!
 
 var modelMod = angular.module('dran.model', [ ]);
 
-modelMod.factory('model', ['$rootScope', function($rootScope) {
+modelMod.factory('model', function() {
   var dranimate = window.dranimate; // for debug. comment out for production!
   // var dranimate = new Dranimate(); // uncomment for production!
-  dranimate.onChange(function() { $rootScope.$digest(); });
   return dranimate;
-}]);
+});
 
 })();
