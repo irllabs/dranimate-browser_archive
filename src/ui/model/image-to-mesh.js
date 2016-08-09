@@ -1,14 +1,17 @@
 /** Dranimate Browser UI - Image to Mesh Object
  */
 
-// for debugging:
-window.imageToMesh = new ImageToMesh();
-// end for debugging.
+window.imageToMesh = new ImageToMesh(); // for debug. comment out for prod!
 
-angular.module('dran.image-to-mesh', [ ])
-  .factory('imageToMesh', function() {
-    // for debugging:
-    return window.imageToMesh;
-    // end for debugging.
-    // return new ImageToMesh(); // uncomment for production
-  });
+(function() {
+
+var imgToMeshMod = angular.module('dran.image-to-mesh', [ ]);
+
+imgToMeshMod.factory('imageToMesh', ['$rootScope', function($rootScope) {
+  var imageToMesh = window.imageToMesh; // for debug. comment out for prod!
+  // var imageToMesh = new imageToMesh(); // uncomment for production!
+  imageToMesh.onChange(function() { $rootScope.$digest(); });
+  return imageToMesh;
+}]);
+
+})();

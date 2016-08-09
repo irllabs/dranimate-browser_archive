@@ -6,11 +6,13 @@ window.dranimate = new Dranimate(); // for debug. comment out for production!
 
 (function() {
 
-var modelMod = angular.module('dran.model', [ ])
+var modelMod = angular.module('dran.model', [ ]);
 
-modelMod.factory('model', function() {
-  return window.dranimate; // for debug. comment out for production!
-  //return new Dranimate(); // uncomment for production
-});
+modelMod.factory('model', ['$rootScope', function($rootScope) {
+  var dranimate = window.dranimate; // for debug. comment out for production!
+  // var dranimate = new Dranimate(); // uncomment for production!
+  dranimate.onChange(function() { $rootScope.$digest(); });
+  return dranimate;
+}]);
 
 })();
