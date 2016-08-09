@@ -1,5 +1,6 @@
-var Puppet = function (image, scene) {
+var Puppet = function (image, imageNoBG) {
 	this.image = image;
+	this.imageNoBG = imageNoBG;
 
 	this.name = "The Puppet With No Name";
 	this.x = 0.0;
@@ -91,11 +92,11 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
     /* Generate image material */
 
 	var canvas = document.createElement('canvas');
-    canvas.width  = this.image.width;
-    canvas.height = this.image.height;
+    canvas.width  = this.imageNoBG.width;
+    canvas.height = this.imageNoBG.height;
     var context = canvas.getContext('2d');
     canvas.getContext('2d');
-    context.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, canvas.width, canvas.height);
+    context.drawImage(this.imageNoBG, 0, 0, this.imageNoBG.width, this.imageNoBG.height, 0, 0, canvas.width, canvas.height);
 
     var imageTexture = new THREE.Texture(canvas);
     imageTexture.needsUpdate = true;
@@ -137,9 +138,9 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints, scene) {
 		geometry.faces.push( new THREE.Face3( f1, f2, f3 ) );
 
 		geometry.faceVertexUvs[0].push( [
-            new THREE.Vector2(geometry.vertices[f1].x/this.image.width, 1-geometry.vertices[f1].y/this.image.height),
-            new THREE.Vector2(geometry.vertices[f2].x/this.image.width, 1-geometry.vertices[f2].y/this.image.height),
-            new THREE.Vector2(geometry.vertices[f3].x/this.image.width, 1-geometry.vertices[f3].y/this.image.height)
+            new THREE.Vector2(geometry.vertices[f1].x/this.imageNoBG.width, 1-geometry.vertices[f1].y/this.imageNoBG.height),
+            new THREE.Vector2(geometry.vertices[f2].x/this.imageNoBG.width, 1-geometry.vertices[f2].y/this.imageNoBG.height),
+            new THREE.Vector2(geometry.vertices[f3].x/this.imageNoBG.width, 1-geometry.vertices[f3].y/this.imageNoBG.height)
         ]);
 	}
 
@@ -223,6 +224,7 @@ Puppet.prototype.update = function() {
 		//this.threeMesh.geometry.computeBoundingBox();
 		//console.log(this.boundingBox)
 		this.boundingBox.update();
+		this.boundingBox.scale.z = 1; // To make sure volume != 0 (this will cause that warning to show up)
 
 		for(var i = 0; i < this.controlPoints.length; i++) {
 			var cpi = this.controlPoints[i];

@@ -92,7 +92,6 @@
     <script src="lib/arap/arap.js"></script>
     <script src="lib/PitchDetect/js/pitchdetect.js"></script>
 
-    <script src="test-puppets/demopuppet.js"></script>
     <script src="src/puppet.js"></script>
     <script src="src/dranimate.js"></script>
     <script>
@@ -146,8 +145,9 @@
             var faces = imageToMesh.getTriangles();
             var controlPoints = imageToMesh.getControlPointIndices();
             var image = imageToMesh.getImage();
+            var imageNoBG = imageToMesh.getImageNoBackground();
 
-            dranimate.createNewPuppet(vertices, faces, controlPoints, image);
+            dranimate.createNewPuppet(vertices, faces, controlPoints, image, imageNoBG);
 
             document.getElementById("meshGenerationWindow").style.visibility = "hidden";
             document.getElementById("newPuppetWindow").style.visibility = "visible";
