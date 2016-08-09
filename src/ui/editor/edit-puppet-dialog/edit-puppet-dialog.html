@@ -28,7 +28,7 @@
         md-is-locked-open="true"
         md-whiteframe="4">
 
-      <form class="md-margin">
+      <form class="md-margin" ng-model-options="{ getterSetter: true }">
         <div class="md-margin">
           <md-radio-group ng-model="$ctrl.editMode">
             <md-radio-button value="editCtrlPt">Edit Control Points</md-radio-button>
@@ -41,7 +41,7 @@
 
       <form class="md-margin">
         <div class="md-margin">
-          <md-radio-group layout="row" ng-model="$ctrl.selectMode">
+          <md-radio-group layout="row" ng-model="$ctrl.selectMode" ng-model-options="{ getterSetter: true }">
             <md-radio-button flex value="select" ng-disabled="!($ctrl.editMode == 'cropImg')">Select</md-radio-button>
             <md-radio-button flex value="remove" ng-disabled="!($ctrl.editMode == 'cropImg')">Remove</md-radio-button>
           </md-radio-group>
