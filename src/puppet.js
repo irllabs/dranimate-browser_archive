@@ -239,13 +239,13 @@ Puppet.prototype.update = function() {
 
 };
 
-Puppet.prototype.getImageAsDataURL = function () {
+Puppet.prototype.getImageAsDataURL = function (img) {
 	var canvas = document.createElement('canvas');
-    canvas.width  = this.image.width;
-    canvas.height = this.image.height;
+    canvas.width  = img.width;
+    canvas.height = img.height;
     var context = canvas.getContext('2d');
     canvas.getContext('2d');
-    context.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, canvas.width, canvas.height);
+    context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
     return canvas.toDataURL();
 }
 
@@ -254,7 +254,8 @@ Puppet.prototype.getJSONData = function () {
 	    verts: this.verts,
 	    faces: this.faces,
 	    controlPoints: this.controlPoints,
-	    imageData: this.getImageAsDataURL()
+	    imageData: this.getImageAsDataURL(this.image),
+	    imageNoBGData: this.getImageAsDataURL(this.imageNoBG)
 	};
 	return JSON.stringify(puppetData);
 }

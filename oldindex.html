@@ -131,7 +131,11 @@
                 var puppetData = JSON.parse(e.target.result);
                 var image = new Image();
                 image.onload = function () {
-                    dranimate.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image);
+                    var imageNoBG = new Image();
+                    imageNoBG.onload = function () {
+                        dranimate.createNewPuppet(puppetData.verts, puppetData.faces, puppetData.controlPoints, image, imageNoBG);
+                    }
+                    imageNoBG.src = puppetData.imageNoBGData;
                 }
                 image.src = puppetData.imageData;
             };
