@@ -200,37 +200,11 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 	this.needsUpdate = true;
 }
 
-Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y, dontMoveOtherPoints) {
+Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y) {
 
 	this.needsUpdate = true;
-	
+
 	ARAP.setControlPointPosition(this.arapMeshID, this.controlPoints[controlPointIndex], x, y);
-
-	if(!dontMoveOtherPoints) {
-		for(var i = 0; i < this.controlPoints.length; i++) {
-			if(i != controlPointIndex) {
-				console.log(i)
-				var otherVert = this.threeMesh.geometry.vertices[this.controlPoints[i]];
-	            var movedVert = new THREE.Vector3(x, y, 0);
-	            var dist = movedVert.distanceTo(otherVert);
-	            var diff = movedVert.sub(otherVert);
-	            var dir = diff.multiplyScalar(1/dist);
-
-	            var maxDist = 100;
-	            var force = 0;
-	            var power = -5;
-	           	if(dist > maxDist) {
-	           		force = 0;
-	           	} else {
-	           		force = (1-(dist/maxDist))*power;
-	           	}
-
-	            otherVert.add(dir.multiplyScalar(force))
-
-	            this.setControlPointPosition(i, otherVert.x, otherVert.y, true);
-			}
-		}
-	}
 
 }
 
