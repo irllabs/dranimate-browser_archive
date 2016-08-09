@@ -43,11 +43,15 @@ var Dranimate = function () {
 
     var selectedPuppet = null;
 
-    var onCurrentPuppetChangeCallback = function () {};
+    var onChangeCallback = function () {};
 
 /*****************************
     API
 *****************************/
+
+    this.onChange = function (callback) {
+        onChangeCallback = callback;
+    }
 
     this.setup = function (canvasContainer) {
 
@@ -209,10 +213,6 @@ var Dranimate = function () {
         document.body.addEventListener( 'mousewheel', mousewheel, false );
         document.body.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
 
-    }
-
-    this.onCurrentPuppetChange = function (callback) {
-        onCurrentPuppetChangeCallback = callback;
     }
 
     this.createNewPuppet = function (vertices, faces, controlPoints, image, imageNoBG) {
