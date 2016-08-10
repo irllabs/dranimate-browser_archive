@@ -42,21 +42,21 @@ function EditPuppetDialogCtrl($scope, imageToMesh) {
   // dummy model for threshold. TODO: hook it up yo!
   $ctrl.threshold = 25;
 
-  /* note: getEditMode is here to disable image edit controls with */
-  $ctrl.getEditMode = function() {
-    return transEditModeToCtrl(imageToMesh.getAddControlPoints());
-  };
   $ctrl.editMode = function(newVal) {
     return arguments.length
       ? imageToMesh.setAddControlPoints(transEditModeFromCtrl(newVal))
-      : $ctrl.getEditMode();
+      : transEditModeToCtrl(imageToMesh.getAddControlPoints());
   };
 
   $ctrl.selectMode = function(newVal) {
     return arguments.length
-      ? imageToMesh.setAddPixels(transEditModeFromCtrl(newVal))
-      : transEditModeToCtrl(imageToMesh.getAddPixels());
-  }
+      ? imageToMesh.setAddPixels(transSelectModeFromCtrl(newVal))
+      : transSelectModeToCtrl(imageToMesh.getAddPixels());
+  };
+
+  $ctrl.notCropImgMode = function() {
+    return imageToMesh.getAddControlPoints();
+  };
 }
 
 edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
