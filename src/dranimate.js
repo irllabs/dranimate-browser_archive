@@ -130,8 +130,8 @@ var Dranimate = function () {
 
                                 var vert = verts[controlPoints[c]];
                                 var mouseVec = new THREE.Vector3(
-                                    mouseRelative.x / puppets[p].scale, 
-                                    mouseRelative.y / puppets[p].scale, 
+                                    mouseRelative.x / puppets[p].scaleX, 
+                                    mouseRelative.y / puppets[p].scaleY, 
                                     0);
                                 var dist = vert.distanceTo(mouseVec);
 
@@ -161,8 +161,8 @@ var Dranimate = function () {
                     var ci = activeControlPoint.controlPointIndex;
                     puppets[pi].setControlPointPosition(
                         ci, 
-                        mouseRelative.x / puppets[pi].scale, 
-                        mouseRelative.y / puppets[pi].scale);
+                        mouseRelative.x / puppets[pi].scaleX, 
+                        mouseRelative.y / puppets[pi].scaleY);
                 }
 
                 if(selectedPuppet && selectedPuppet.isBeingDragged) {
@@ -187,7 +187,6 @@ var Dranimate = function () {
 
                 if(activeControlPoint.hoveredOver) {
                     selectedPuppet = puppets[activeControlPoint.puppetIndex];
-                    onChangeCallback();
                     activeControlPoint.beingDragged = true;
                 } else {
                     selectedPuppet = null;
@@ -197,10 +196,11 @@ var Dranimate = function () {
                             selectedPuppet.isBeingDragged = true;
                             selectedPuppet.dragFromPositionX = mouseRelative.x;
                             selectedPuppet.dragFromPositionY = mouseRelative.y;
-                            onChangeCallback();
                         }
                     }
                 }
+
+                onChangeCallback();
             }
 
         } , false );

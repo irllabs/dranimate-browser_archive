@@ -169,7 +169,11 @@
             document.getElementById("meshGenerationWindow").style.visibility = "visible";
             document.getElementById("newPuppetWindow").style.visibility = "hidden";
 
-            imageToMesh.editImage(dranimate.getSelectedPuppet().image.src);
+            imageToMesh.editImage(
+                dranimate.getSelectedPuppet().image.src,
+                dranimate.getSelectedPuppet().controlPointPositions,
+                dranimate.getSelectedPuppet().backgroundRemovalData
+                );
         };
 
         var dranimate = new Dranimate();
