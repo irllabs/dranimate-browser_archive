@@ -35,7 +35,6 @@ function mkGenericGetterSetter(model) {
           selectedPuppet[attr] = newVal === null
             ? nullDefaults[attr]
             : newVal;
-          console.log(selectedPuppet[attr]);
         } else {
           return selectedPuppet[attr];
         };
