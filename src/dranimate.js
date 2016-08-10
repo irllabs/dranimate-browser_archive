@@ -129,7 +129,10 @@ var Dranimate = function () {
                             for(var c = 0; c < controlPoints.length; c++) {
 
                                 var vert = verts[controlPoints[c]];
-                                var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
+                                var mouseVec = new THREE.Vector3(
+                                    mouseRelative.x / puppets[p].scale, 
+                                    mouseRelative.y / puppets[p].scale, 
+                                    0);
                                 var dist = vert.distanceTo(mouseVec);
 
                                 if(dist < 10*zoom) {
@@ -156,7 +159,10 @@ var Dranimate = function () {
                 } else {
                     var pi = activeControlPoint.puppetIndex;
                     var ci = activeControlPoint.controlPointIndex;
-                    puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
+                    puppets[pi].setControlPointPosition(
+                        ci, 
+                        mouseRelative.x / puppets[pi].scale, 
+                        mouseRelative.y / puppets[pi].scale);
                 }
 
                 if(selectedPuppet && selectedPuppet.isBeingDragged) {

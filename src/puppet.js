@@ -254,8 +254,8 @@ Puppet.prototype.update = function() {
 		for(var i = 0; i < this.controlPoints.length; i++) {
 			var cpi = this.controlPoints[i];
 			var v = this.threeMesh.geometry.vertices[cpi];
-			this.controlPointSpheres[i].position.x = v.x;
-			this.controlPointSpheres[i].position.y = v.y;
+			this.controlPointSpheres[i].position.x = v.x * this.scale;
+			this.controlPointSpheres[i].position.y = v.y * this.scale;
 		}
 
 		this.needsUpdate = false;
