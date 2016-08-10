@@ -35,6 +35,10 @@ function EditorCtrl(model) {
   $ctrl.zoomOut = model.zoomOut;
   $ctrl.togglePan = function() { model.setPanEnabled(!model.getPanEnabled()); };
   $ctrl.getPanEnabled = model.getPanEnabled;
+
+  $ctrl.puppetIsSelected = function() {
+    return model.getSelectedPuppet() !== null;
+  }
 }
 
 edMod.component('dranEditor', {
