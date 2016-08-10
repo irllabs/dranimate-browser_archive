@@ -302,7 +302,10 @@ Puppet.prototype.setSelectionGUIVisible = function (visible) {
 	}
 }
 
-Puppet.prototype.pointInsideMesh = function (x, y) {
+Puppet.prototype.pointInsideMesh = function (xUntransformed, yUntransformed) {
+
+	var x = xUntransformed / this.scale;
+	var y = yUntransformed / this.scale;	
 
 	//http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
 
