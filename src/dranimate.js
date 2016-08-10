@@ -129,7 +129,10 @@ var Dranimate = function () {
                             for(var c = 0; c < controlPoints.length; c++) {
 
                                 var vert = verts[controlPoints[c]];
-                                var mouseVec = new THREE.Vector3(mouseRelative.x, mouseRelative.y, 0);
+                                var mouseVec = new THREE.Vector3(
+                                    mouseRelative.x / puppets[p].scaleX, 
+                                    mouseRelative.y / puppets[p].scaleY, 
+                                    0);
                                 var dist = vert.distanceTo(mouseVec);
 
                                 if(dist < 10*zoom) {
@@ -156,7 +159,10 @@ var Dranimate = function () {
                 } else {
                     var pi = activeControlPoint.puppetIndex;
                     var ci = activeControlPoint.controlPointIndex;
-                    puppets[pi].setControlPointPosition(ci, mouseRelative.x, mouseRelative.y);
+                    puppets[pi].setControlPointPosition(
+                        ci, 
+                        mouseRelative.x / puppets[pi].scaleX, 
+                        mouseRelative.y / puppets[pi].scaleY);
                 }
 
                 if(selectedPuppet && selectedPuppet.isBeingDragged) {
@@ -181,7 +187,6 @@ var Dranimate = function () {
 
                 if(activeControlPoint.hoveredOver) {
                     selectedPuppet = puppets[activeControlPoint.puppetIndex];
-                    onChangeCallback();
                     activeControlPoint.beingDragged = true;
                 } else {
                     selectedPuppet = null;
@@ -191,10 +196,11 @@ var Dranimate = function () {
                             selectedPuppet.isBeingDragged = true;
                             selectedPuppet.dragFromPositionX = mouseRelative.x;
                             selectedPuppet.dragFromPositionY = mouseRelative.y;
-                            onChangeCallback();
                         }
                     }
                 }
+
+                onChangeCallback();
             }
 
         } , false );
@@ -228,8 +234,8 @@ var Dranimate = function () {
             refreshCamera();
         }
 
-        document.body.addEventListener( 'mousewheel', mousewheel, false );
-        document.body.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
+        THREEContainer.addEventListener( 'mousewheel', mousewheel, false );
+        THREEContainer.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
 
     }
 

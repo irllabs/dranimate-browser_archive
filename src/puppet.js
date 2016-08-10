@@ -4,12 +4,14 @@ var Puppet = function (image) {
 	this.name = "The Puppet With No Name";
 	this.x = 0.0;
 	this.y = 0.0;
+	this.rotation = 0.0;
+	this.scaleX = 1.0;
+	this.scaleY = 1.0;
+
 	this.prevx = this.x;
 	this.prevy = this.y;
-	this.anchorpointX = 0.0;
-	this.anchorpointY = 0.0;
-	this.rotation = 0.0;
-	this.scale = 1.0;
+	this.prevScaleX = this.scaleX;
+	this.prevScaleY = this.scaleY;
 
 	// Setup quad image
 
@@ -68,8 +70,12 @@ Puppet.prototype.getRotation = function() {
 	return this.rotation; 
 };
 
-Puppet.prototype.getScale = function() { 
-	return this.scale; 
+Puppet.prototype.getScaleX = function() { 
+	return this.scaleX; 
+};
+
+Puppet.prototype.getScaleY = function() { 
+	return this.scaleY; 
 };
 
 Puppet.prototype.setRenderWireframe = function (renderWireframe) {
@@ -195,7 +201,7 @@ Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 
 	this.undeformedVertices = this.verts;
 
-	/* Set needsupdate flag to update to initialze immediately */
+	/* Set needsUpdate flag to update to initialze immediately */
 
 	this.needsUpdate = true;
 }
@@ -210,22 +216,28 @@ Puppet.prototype.setControlPointPosition = function(controlPointIndex, x, y) {
 
 Puppet.prototype.update = function() {
 
-	this.anchorpointX = this.boundingBox.position.x;
-	this.anchorpointY = this.boundingBox.position.y;
-
 	var dx = this.x - this.prevx;
 	var dy = this.y - this.prevy;
 
 	if(dx != 0 || dy != 0) {
-		for(var i = 0; i < this.controlPoints.length; i++) {
-			var cpx = this.threeMesh.geometry.vertices[this.controlPoints[i]].x;
-			var cpy = this.threeMesh.geometry.vertices[this.controlPoints[i]].y;
-			this.setControlPointPosition(i, cpx + dx, cpy + dy);
+		if(this.controlPoints) {
+			for(var i = 0; i < this.controlPoints.length; i++) {
+				var cpx = this.threeMesh.geometry.vertices[this.controlPoints[i]].x;
+				var cpy = this.threeMesh.geometry.vertices[this.controlPoints[i]].y;
+				this.setControlPointPosition(i, cpx + (dx/this.scaleX), cpy + (dy/this.scaleY));
+			}
 		}
 	}
 
 	this.prevx = this.x;
 	this.prevy = this.y;
+
+	if(this.prevScaleX != this.scaleX || this.prevScaleY != this.scaleY) {
+		this.threeMesh.scale.set(this.scaleX, this.scaleY, 1);
+		this.prevScaleX = this.scaleX;
+		this.prevScaleY = this.scaleY;
+		this.needsUpdate = true;
+	}
 
 	if(this.needsUpdate) {
 	
@@ -251,8 +263,8 @@ Puppet.prototype.update = function() {
 		for(var i = 0; i < this.controlPoints.length; i++) {
 			var cpi = this.controlPoints[i];
 			var v = this.threeMesh.geometry.vertices[cpi];
-			this.controlPointSpheres[i].position.x = v.x;
-			this.controlPointSpheres[i].position.y = v.y;
+			this.controlPointSpheres[i].position.x = v.x * this.scaleX;
+			this.controlPointSpheres[i].position.y = v.y * this.scaleY;
 		}
 
 		this.needsUpdate = false;
@@ -299,7 +311,10 @@ Puppet.prototype.setSelectionGUIVisible = function (visible) {
 	}
 }
 
-Puppet.prototype.pointInsideMesh = function (x, y) {
+Puppet.prototype.pointInsideMesh = function (xUntransformed, yUntransformed) {
+
+	var x = xUntransformed / this.scaleX;
+	var y = yUntransformed / this.scaleY;	
 
 	//http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
 
