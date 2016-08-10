@@ -57,6 +57,8 @@ function PuppetDashboardCtrl(model) {
   $ctrl.noPuppetSelected = function() {
     return model.getSelectedPuppet() === null;
   };
+
+  $ctrl.deleteSelectedPuppet = model.deleteSelectedPuppet;
 };
 
 pupdashMod.component('dranPuppetDashboard', {

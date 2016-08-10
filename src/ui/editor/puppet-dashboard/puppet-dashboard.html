@@ -49,6 +49,6 @@
 
   <div layout="column" layout-margin>
     <md-button ng-disabled="true" class="md-raised md-warn">Clear Animation</md-button>
-    <md-button ng-disabled="$ctrl.noPuppetSelected()" class="md-raised md-warn">Delete Puppet</md-button>
+    <md-button ng-disabled="$ctrl.noPuppetSelected()" ng-click="$ctrl.deleteSelectedPuppet()" class="md-raised md-warn">Delete Puppet</md-button>
   </div>
 </div>
