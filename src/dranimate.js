@@ -316,6 +316,8 @@ var Dranimate = function () {
             selectedPuppet.cleanup();
             puppets.splice(index, 1);
 
+            selectedPuppet = null;
+
             onChangeCallback();
         }
     }
