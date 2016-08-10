@@ -163,6 +163,7 @@ var Dranimate = function () {
                         ci, 
                         mouseRelative.x / puppets[pi].scaleX, 
                         mouseRelative.y / puppets[pi].scaleY);
+                    onChangeCallback();
                 }
 
                 if(selectedPuppet && selectedPuppet.isBeingDragged) {
@@ -170,6 +171,7 @@ var Dranimate = function () {
                     selectedPuppet.y += mouseRelative.y - selectedPuppet.dragFromPositionY;
                     selectedPuppet.dragFromPositionX = mouseRelative.x;
                     selectedPuppet.dragFromPositionY = mouseRelative.y;
+                    onChangeCallback();
                 }
             }
 
@@ -313,6 +315,8 @@ var Dranimate = function () {
             }
             selectedPuppet.cleanup();
             puppets.splice(index, 1);
+
+            onChangeCallback();
         }
     }
 
