@@ -1,44 +1,46 @@
 <div layout="column">
   <div layout="row" layout-margin>
-    <md-button flex class="md-raised md-primary" dran-open-edit-puppet-dialog>Edit Puppet</md-button>
+    <md-button flex class="md-raised md-primary" dran-open-edit-puppet-dialog ng-disabled="$ctrl.noPuppetSelected()">Edit Puppet</md-button>
   </div>
 
   <!-- layout-padding directive for spacing between divider and x/y inputs -->
   <md-divider layout-padding></md-divider>
 
-  <form novalidate>
+  <form novalidate ng-model-options="{ getterSetter: true }">
     <div layout="row" layout-margin>
       <md-input-container>
         <label>x</label>
-        <input type="number" ng-model="$ctrl.x"/>
+        <input type="number"
+          ng-model="$ctrl.x"
+          ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
       <md-input-container>
         <label>y</label>
-        <input type="number" ng-model="$ctrl.y"/>
+        <input type="number" ng-model="$ctrl.y" ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </div>
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SX</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleX"></md-slider>
+      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleX" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.scaleX"/>
+        <input type="number" ng-model="$ctrl.scaleX" ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SY</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleY"></md-slider>
+      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleY" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.scaleY"/>
+        <input type="number" ng-model="$ctrl.scaleY" ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <md-icon md-font-set="material-icons">autorenew</md-icon>
-      <md-slider flex="40" min="-180" max="180" ng-model="$ctrl.rotation"></md-slider>
+      <md-slider flex="40" min="-180" max="180" ng-model="$ctrl.rotation" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.rotation"/>
+        <input type="number" ng-model="$ctrl.rotation" ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
   </form>
@@ -47,6 +49,6 @@
 
   <div layout="column" layout-margin>
     <md-button ng-disabled="true" class="md-raised md-warn">Clear Animation</md-button>
-    <md-button class="md-raised md-warn">Delete Puppet</md-button>
+    <md-button ng-disabled="$ctrl.noPuppetSelected()" class="md-raised md-warn">Delete Puppet</md-button>
   </div>
 </div>

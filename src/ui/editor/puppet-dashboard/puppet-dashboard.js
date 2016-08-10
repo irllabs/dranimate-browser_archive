@@ -13,18 +13,50 @@
 
 var pupdashMod = angular.module('dran.editor.puppetDashboard', [
   'ngMaterial',
-  'dran.editor.edit-puppet-dialog'
+  'dran.editor.edit-puppet-dialog',
+  'dran.model'
 ]);
 
-function PuppetDashboardCtrl() {
-  var ctrl = this;
+var nullDefaults = {
+  x: 0,
+  y: 0,
+  scaleX: 100,
+  scaleY: 100,
+  rotation: 0
+}
 
-  ctrl.name = 'Puppet Name';
-  ctrl.x = 60;
-  ctrl.y = 75;
-  ctrl.rotation = 0;
-  ctrl.scaleX = 100;
-  ctrl.scaleY = 100;
+function mkGenericGetterSetter(model) {
+  return function(attr) {
+    return function(newVal) {
+      var selectedPuppet = model.getSelectedPuppet();
+      if (selectedPuppet === null) return nullDefaults[attr];
+      else {
+        if (arguments.length) {
+          selectedPuppet[attr] = newVal === null
+            ? nullDefaults[attr]
+            : newVal;
+        } else {
+          return selectedPuppet[attr];
+        };
+      };
+    };
+  };
+};
+
+PuppetDashboardCtrl.$inject = [ 'model' ];
+function PuppetDashboardCtrl(model) {
+  var $ctrl = this;
+  var mkGetterSetter = mkGenericGetterSetter(model);
+
+  $ctrl.x = mkGetterSetter('x');
+  $ctrl.y = mkGetterSetter('y');
+  $ctrl.rotation = mkGetterSetter('rotation');
+  $ctrl.scaleX = mkGetterSetter('scaleX');
+  $ctrl.scaleY = mkGetterSetter('scaleY');
+
+  $ctrl.noPuppetSelected = function() {
+    return model.getSelectedPuppet() === null;
+  };
 };
 
 pupdashMod.component('dranPuppetDashboard', {
