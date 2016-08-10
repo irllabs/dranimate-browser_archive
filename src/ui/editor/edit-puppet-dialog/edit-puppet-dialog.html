@@ -3,7 +3,7 @@
   <md-toolbar layout="row" class="md-toolbar-tools">
     <h2>Edit puppet</h2>
     <span flex></span>
-    <md-button class="md-icon-button" dran-close-edit-puppet-dialog>
+    <md-button class="md-icon-button" dran-cancel-edit-puppet-dialog>
       <md-icon md-font-set="material-icons">close</md-icon>
     </md-button>
   </md-toolbar>
@@ -64,7 +64,8 @@
 
       <md-dialog-actions layout="row">
         <span flex></span>
-        <md-button class="md-primary">Save</md-button>
+        <md-button dran-cancel-edit-puppet-dialog>Cancel</md-button>
+        <md-button class="md-primary" dran-finish-edit-puppet-dialog>Save</md-button>
       </md-dialog-actions>
     </md-sidenav>
 

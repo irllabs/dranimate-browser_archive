@@ -7,8 +7,8 @@
 
 var edPupDogMod = angular.module('dran.editor.edit-puppet-dialog', [
   'ngMaterial',
-  'dran.model',
-  'dran.image-to-mesh'
+  'dran.image-to-mesh',
+  'dran.model'
 ]);
 
 /* to translate properties from imageToMesh to the controller */
@@ -59,7 +59,18 @@ function EditPuppetDialogCtrl($scope, imageToMesh) {
   };
 }
 
-edPupDogMod.directive('dranCloseEditPuppetDialog', ['$mdDialog', function($mdDialog) {
+edPupDogMod.directive('dranCancelEditPuppetDialog', ['$mdDialog', function($mdDialog) {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.bind('click', function(ev) {
+        $mdDialog.cancel();
+      });
+    }
+  };
+}]);
+
+edPupDogMod.directive('dranFinishEditPuppetDialog', ['$mdDialog', function($mdDialog) {
   return {
     restrict: 'A',
     link: function(scope, element) {
@@ -87,7 +98,9 @@ edPupDogMod.directive('dranImageToMeshContainer', [
 edPupDogMod.directive('dranOpenEditPuppetDialog', [
     '$mdMedia',
     '$mdDialog',
-  function($mdMedia, $mdDialog) {
+    'imageToMesh',
+    'model',
+  function($mdMedia, $mdDialog, imageToMesh, model) {
     return {
       restrict: 'A',
       link: function(scope, element) {
@@ -99,6 +112,21 @@ edPupDogMod.directive('dranOpenEditPuppetDialog', [
             parent: angular.element(document.body),
             closeTo: element,
             fullscreen: $mdMedia('xs')
+          }).then(function() {
+            imageToMesh.generateMesh();
+
+            var vertices = imageToMesh.getVertices();
+            var faces = imageToMesh.getTriangles();
+            var controlPoints = imageToMesh.getControlPointIndices();
+            var controlPointPositions = imageToMesh.getControlPoints();
+            var image = imageToMesh.getImage();
+            var imageNoBG = imageToMesh.getImageNoBackground();
+            var backgroundRemovalData = imageToMesh.getBackgroundRemovalData();
+
+            var p = new Puppet(image);
+            p.setImageToMeshData(imageNoBG, controlPointPositions, backgroundRemovalData);
+            p.generateMesh(vertices, faces, controlPoints);
+            model.addPuppet(p);
           });
         });
       }
