@@ -15,8 +15,6 @@
  *   rotation: getterSetter for currently selected puppet's rotation attribute
  *   noPuppetSelected: fn returning if a puppet is currently selected or not
  *   deleteSelectedPuppet: fn to delete the currently selected puppet
- *
- * Note that puppet name changing has been moved to the editor (bring it back?)
  */
 
 (function() {
