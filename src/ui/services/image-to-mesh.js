@@ -1,4 +1,7 @@
 /** Dranimate Browser UI - Image to Mesh Object
+ *
+ * Wraps imageToMesh object in AngularJS service.
+ * Allows Angular modules to be explicit about when they need to use it.
  */
 
 window.imageToMesh = new ImageToMesh(); // for debug. comment out for prod!

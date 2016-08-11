@@ -1,5 +1,7 @@
 /** Dranimate Browser UI - Model
- * Angular service wrapping the Dranimate object.
+ *
+ * Wraps Dranimate model object in AngularJS service.
+ * Allows Angular modules to be explicit about when they need to use it.
  */
 
 window.dranimate = new Dranimate(); // for debug. comment out for production!

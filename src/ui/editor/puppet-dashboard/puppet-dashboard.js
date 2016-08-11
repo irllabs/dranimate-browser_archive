@@ -1,10 +1,20 @@
 /** Dranimate Browser UI - Puppet Dashboard
  *
  * Module Name: 'dran.editor.puppetDashboard'
- * Directive Name: <dran-puppet-dashboard>
  *
  * Contains UI for controlling puppet appearance
  * with buttons to open image and puppet editors.
+ *
+ * Component: puppet-dashboard
+ *   It's the puppet dashboard!
+ * Controller:
+ *   x: getterSetter for currently selected puppet's x attribute
+ *   y: getterSetter for currently selected puppet's y attribute
+ *   scaleX: getterSetter for currently selected puppet's scaleX attribute
+ *   scaleY: getterSetter for currently selected puppet's scaleY attribute
+ *   rotation: getterSetter for currently selected puppet's rotation attribute
+ *   noPuppetSelected: fn returning if a puppet is currently selected or not
+ *   deleteSelectedPuppet: fn to delete the currently selected puppet
  *
  * Note that puppet name changing has been moved to the editor (bring it back?)
  */

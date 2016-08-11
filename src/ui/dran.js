@@ -2,9 +2,8 @@
  *
  * Module Name: 'dran'
  *
- * Will be expanded upon as the modules come together.
- * TODO: move the dran stuff in the index into here! Or it's own directive
- *       (dran-editor?)
+ * Provides configuration options for the entire application's UI.
+ * Currently only customizes the color scheme. Will more be added later?
  */
 
 (function() {
@@ -17,7 +16,7 @@ var dranMod = angular.module('dran', [
 dranMod.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('green')
-    .accentPalette('orange')
+    .accentPalette('amber')
     .warnPalette('red')
 });
 
