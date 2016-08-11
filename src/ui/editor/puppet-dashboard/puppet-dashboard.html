@@ -22,25 +22,49 @@
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SX</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleX" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
+      <md-slider flex="40"
+        aria-label="scaleX"
+        min="0" max="200"
+        ng-model="$ctrl.scaleX"
+        ng-disabled="$ctrl.noPuppetSelected()">
+      </md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.scaleX" ng-disabled="$ctrl.noPuppetSelected()"/>
+        <input type="number"
+          aria-label="scaleX"
+          ng-model="$ctrl.scaleX"
+          ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <h1 class="md-subhead">SY</h1>
-      <md-slider flex="40" min="0" max="200" ng-model="$ctrl.scaleY" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
+      <md-slider flex="40"
+        aria-label="scaleY"
+        min="0" max="200"
+        ng-model="$ctrl.scaleY"
+        ng-disabled="$ctrl.noPuppetSelected()">
+      </md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.scaleY" ng-disabled="$ctrl.noPuppetSelected()"/>
+        <input type="number"
+          aria-label="scaleY"
+          ng-model="$ctrl.scaleY"
+          ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container layout="row" layout-margin>
       <md-icon md-font-set="material-icons">autorenew</md-icon>
-      <md-slider flex="40" min="-180" max="180" ng-model="$ctrl.rotation" ng-disabled="$ctrl.noPuppetSelected()"></md-slider>
+      <md-slider flex="40"
+        aria-label="rotation"
+        min="-180" max="180"
+        ng-model="$ctrl.rotation"
+        ng-disabled="$ctrl.noPuppetSelected()">
+      </md-slider>
       <md-input-container>
-        <input type="number" ng-model="$ctrl.rotation" ng-disabled="$ctrl.noPuppetSelected()"/>
+        <input type="number"
+          aria-label="rotation"
+          ng-model="$ctrl.rotation"
+          ng-disabled="$ctrl.noPuppetSelected()"/>
       </md-input-container>
     </md-slider-container>
   </form>
