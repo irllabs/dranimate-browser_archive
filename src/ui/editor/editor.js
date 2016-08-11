@@ -33,12 +33,13 @@ var edMod = angular.module('dran.editor', [
 ]);
 
 
-/* this function has been placed here for convenience */
+/* this function has been placed here for convenience
+ * It goes with dran-new-puppet-from-json */
 /* for quickfixes: change arguments and contents of function w/in this one
  * to match changes made to the more canvas-y side of the codebase.
  * (function arguments are curried because i'm FP trash)
  */
-function loadPuppetFromJSON(model) {
+function loadPuppetFromJSON(model, element) {
   return function(e) {
     var reader = new FileReader();
     reader.onload = function (e) {
@@ -98,7 +99,7 @@ edMod.directive('dranNewPuppetFromJson', ['model', function(model) {
   return {
     restrict: 'A',
     link: function(scope, element) {
-      element.bind('change', loadPuppetFromJSON(model));
+      element.bind('change', loadPuppetFromJSON(model, element));
     }
   };
 }]);
