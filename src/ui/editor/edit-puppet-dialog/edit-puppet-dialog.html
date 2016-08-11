@@ -51,9 +51,17 @@
           </div>
           <md-slider-container layout-margin>
             <h3 class="md-subhead">TH</h3>
-            <md-slider flex="40" min="0" max="100" ng-model="$ctrl.threshold" ng-disabled="true"></md-slider>
+            <md-slider flex="40"
+              aria-label="threshold"
+              min="0" max="100"
+              ng-model="$ctrl.threshold"
+              ng-disabled="true">
+            </md-slider>
             <md-input-container>
-              <input type="number" value="100" ng-model="$ctrl.threshold" ng-disabled="true"/>
+              <input type="number"
+                aria-label="threshold"
+                ng-model="$ctrl.threshold"
+                ng-disabled="true"/>
             </md-input-container>
           </md-slider-container>
           <div layout="row">
