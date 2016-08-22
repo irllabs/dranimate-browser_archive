@@ -1,12 +1,12 @@
 <div layout="column">
-  <div md-whiteframe="2" class="round-corners md-margin">
+  <div md-whiteframe="2" class="round-corners md-margin opaque-bg">
     <md-button
-        class="md-icon-button{{ $ctrl.panEnabled ? ' md-accent' : '' }}"
+        class="md-icon-button{{ $ctrl.getPanEnabled() ? ' md-accent' : '' }}"
         ng-click="$ctrl.togglePan($event)">
       <md-icon md-font-set="material-icons">pan_tool</md-icon>
     </md-button>
   </div>
-  <div layout="column" md-whiteframe="2" class="round-corners md-margin">
+  <div layout="column" md-whiteframe="2" class="round-corners md-margin opaque-bg">
     <md-button class="md-icon-button" ng-click="$ctrl.zoomIn($event)">
       <md-icon md-font-set="material-icons">zoom_in</md-icon>
     </md-button>
