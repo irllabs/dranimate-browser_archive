@@ -39,28 +39,53 @@ var edMod = angular.module('dran.editor', [
  * to match changes made to the more canvas-y side of the codebase.
  * (function arguments are curried because i'm FP trash)
  */
-function loadPuppetFromJSON(model, element) {
+function loadFile(model, element) {
   return function(e) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var puppetData = JSON.parse(e.target.result);
-      var image = new Image();
-      image.onload = function () {
-        var imageNoBG = new Image();
-        imageNoBG.onload = function () {
-          var p = new Puppet(image);
-          p.setImageToMeshData(imageNoBG, puppetData.controlPointPositions, puppetData.backgroundRemovalData);
-          p.generateMesh(puppetData.verts, puppetData.faces, puppetData.controlPoints);
-          dranimate.addPuppet(p);
-        };
-        imageNoBG.src = puppetData.imageNoBGData;
-      };
-      image.src = puppetData.imageData;
-    };
-    reader.readAsText(element[0].files[0]);
+    
+    var imageTypes = ["image/jpeg", "image/jpg", "image/gif", "image/png"];
+    var jsonTypes = ["application/json"];
+
+    var filetype = element[0].files[0].type;
+
+    if (jsonTypes.indexOf(filetype) !== -1) {
+      loadJSONPuppet(element, e);
+    } else if (imageTypes.indexOf(filetype) !== -1) {
+      loadImage(element, e);
+    } else {
+      console.log("loadFile() called for unsupported filetype: " + element[0].files[0].type);
+    }
   };
 };
 
+function loadJSONPuppet(element, e) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    var puppetData = JSON.parse(e.target.result);
+    var image = new Image();
+    image.onload = function () {
+      var imageNoBG = new Image();
+      imageNoBG.onload = function () {
+        var p = new Puppet(image);
+        p.setImageToMeshData(imageNoBG, puppetData.controlPointPositions, puppetData.backgroundRemovalData);
+        p.generateMesh(puppetData.verts, puppetData.faces, puppetData.controlPoints);
+        dranimate.addPuppet(p);
+      };
+      imageNoBG.src = puppetData.imageNoBGData;
+    };
+    image.src = puppetData.imageData;
+  };
+  reader.readAsText(element[0].files[0]);
+}
+
+function loadImage(element, e) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    //console.log(reader.result);
+    imageToMesh.editImage(reader.result);
+    //open puppet edit window here !!!
+  }
+  reader.readAsDataURL(element[0].files[0]);
+}
 
 /* dran-stage-container */
 
@@ -99,7 +124,7 @@ edMod.directive('dranNewPuppetFromJson', ['model', function(model) {
   return {
     restrict: 'A',
     link: function(scope, element) {
-      element.bind('change', loadPuppetFromJSON(model, element));
+      element.bind('change', loadFile(model, element));
     }
   };
 }]);
