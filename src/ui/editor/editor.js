@@ -80,9 +80,9 @@ function loadJSONPuppet(element, e) {
 function loadImage(element, e) {
   var reader = new FileReader();
   reader.onload = function (e) {
+    //open puppet edit window here !!!
     //console.log(reader.result);
     imageToMesh.editImage(reader.result);
-    //open puppet edit window here !!!
   }
   reader.readAsDataURL(element[0].files[0]);
 }

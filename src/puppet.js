@@ -13,6 +13,9 @@ var Puppet = function (image) {
 	this.prevScaleX = this.scaleX;
 	this.prevScaleY = this.scaleY;
 
+	this.isRecording = false;
+	this.recordedFrames = [];
+
 	// Setup quad image
 
 	var canvas = document.createElement('canvas');
@@ -91,6 +94,22 @@ Puppet.prototype.setImageToMeshData = function (imageNoBG, controlPointPositions
 	this.controlPointPositions = controlPointPositions;
 	this.backgroundRemovalData = backgroundRemovalData;
 }
+
+Puppet.prototype.startRecording = function () {
+	this.isRecording = true;
+}
+
+Puppet.prototype.stopRecording = function () {
+	this.isRecording = false;
+	this.recordedFrames = [];
+}
+
+Puppet.prototype.finishRecording = function () {
+	this.recordedFrames.forEach(function (recordedFrame) {
+		console.log("Frame " + this.recordedFrames.indexOf(recordedFrame));
+		console.log(recordedFrame);
+	});
+} 
 
 Puppet.prototype.generateMesh = function (verts, faces, controlPoints) {
 
@@ -269,6 +288,11 @@ Puppet.prototype.update = function() {
 
 		this.needsUpdate = false;
 
+	}
+
+	if(this.isRecording) {
+		var recordedFrame = this.threeMesh.clone();
+		recordedFrames.push(recordedFrame);
 	}
 
 };
