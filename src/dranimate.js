@@ -331,7 +331,14 @@ var Dranimate = function () {
 *****************************/
 
     document.addEventListener('keydown', function(evt) {
-        
+        if(evt.key == " " && dranimate.getSelectedPuppet()) {
+            dranimate.getSelectedPuppet().startRecording();
+        }
+    });
+    document.addEventListener('keyup', function(evt) {
+        if(evt.key == " " && dranimate.getSelectedPuppet()) {
+            dranimate.getSelectedPuppet().finishRecording();
+        }
     });
 
     window.addEventListener( 'resize', function () {

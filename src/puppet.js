@@ -105,9 +105,30 @@ Puppet.prototype.stopRecording = function () {
 }
 
 Puppet.prototype.finishRecording = function () {
+	var that = this;
 	this.recordedFrames.forEach(function (recordedFrame) {
-		console.log("Frame " + this.recordedFrames.indexOf(recordedFrame));
+		console.log("Frame " + that.recordedFrames.indexOf(recordedFrame));
 		console.log(recordedFrame);
+
+		var gif = new GIF({
+		  workers: 2,
+		  quality: 10
+		});
+
+		// add a image element
+		gif.addFrame(imageElement);
+
+		// or a canvas element
+		gif.addFrame(canvasElement, {delay: 200});
+
+		// or copy the pixels from a canvas context
+		gif.addFrame(ctx, {copy: true});
+
+		gif.on('finished', function(blob) {
+		  window.open(URL.createObjectURL(blob));
+		});
+
+		gif.render();
 	});
 } 
 
@@ -292,7 +313,7 @@ Puppet.prototype.update = function() {
 
 	if(this.isRecording) {
 		var recordedFrame = this.threeMesh.clone();
-		recordedFrames.push(recordedFrame);
+		this.recordedFrames.push(recordedFrame);
 	}
 
 };
