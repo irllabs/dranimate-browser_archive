@@ -47,6 +47,19 @@ function loadFile(model, element) {
 
     var filetype = element[0].files[0].type;
 
+    /* this section is to deal with a strange bug on some windows machines where
+     * uploaded files have their file types listed as an empty string. */
+    if (filetype == "") {
+      filetype = element[0].files[0].name.split(".");
+      filetype = filetype[filetype.length - 1];
+      if (filetype == "json") {
+      	filetype = "application/json";
+      }
+      if (["jpeg","jpg","gif","png"].indexOf(filetype) !== -1) {
+        filetype = "image/" + filetype;
+      }
+    }
+
     if (jsonTypes.indexOf(filetype) !== -1) {
       loadJSONPuppet(element, e);
     } else if (imageTypes.indexOf(filetype) !== -1) {
