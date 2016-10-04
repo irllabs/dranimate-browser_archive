@@ -29,7 +29,8 @@ var edMod = angular.module('dran.editor', [
   'ngMaterial',
   'dran.editor.puppetDashboard',
   'dran.editor.zoompanner',
-  'dran.model'
+  'dran.model',
+  'dran.editor.edit-puppet-dialog'
 ]);
 
 
